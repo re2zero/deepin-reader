@@ -1,0 +1,61 @@
+name: "[003]退出打开"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader"
+    wait: 3.0
+
+steps:
+  - name: "按Ctrl+O打开文件选择界面"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,o"
+  - name: "等待文件对话框弹出"
+    action: wait
+    action: wait
+    wait: 2.0
+  - name: "验证文件选择对话框显示"
+    action: element_visible
+    action: element_visible
+    ref: dialog_open_file
+  - name: "按ESC键退出"
+    action: keyboard_press
+    action: keyboard_press
+    keys: "Escape"
+  - name: "等待对话框关闭"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "验证文件选择对话框已关闭"
+    action: element_not_visible
+    action: element_not_visible
+    ref: dialog_open_file
+  - name: "再次按Ctrl+O打开"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,o"
+  - name: "等待文件对话框弹出"
+    action: wait
+    action: wait
+    wait: 2.0
+  - name: "验证文件选择对话框显示"
+    action: element_visible
+    action: element_visible
+    ref: dialog_open_file
+  - name: "点击取消按钮"
+    action: keyboard_press
+    action: keyboard_press
+    keys: "Escape"
+  - name: "等待对话框关闭"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "验证对话框已关闭"
+    action: element_not_visible
+    action: element_not_visible
+    ref: dialog_open_file
+
+teardown:
+  - action: session_stop

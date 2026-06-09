@@ -1,0 +1,57 @@
+name: "浅色和深色主题下查看右侧和底部进度条显示"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader"
+    wait: 3.0
+
+steps:
+  - name: "打开PDF文档"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,o"
+  - name: "等待文件对话框"
+    action: wait
+    action: wait
+    wait: 2.0
+  - name: "输入文件路径"
+    action: keyboard_type
+    action: keyboard_type
+    text: "/home/uos/测试文档.pdf"
+  - name: "确认打开"
+    action: keyboard_press
+    action: keyboard_press
+    keys: "Return"
+  - name: "等待文档加载"
+    action: wait
+    action: wait
+    wait: 3.0
+  - name: "验证右侧滚动条显示"
+    action: element_visible
+    action: element_visible
+    ref: doc_scrollbar_v
+  - name: "验证底部滚动条显示"
+    action: element_visible
+    action: element_visible
+    ref: doc_scrollbar_h
+  - name: "切换至深色主题"
+    action: main_menu_comb
+    action: main_menu_comb
+    ref: menu_display_in_fm
+  - name: "等待主题切换"
+    action: wait
+    action: wait
+    wait: 2.0
+  - name: "验证深色主题下右侧滚动条"
+    action: element_visible
+    action: element_visible
+    ref: doc_scrollbar_v
+  - name: "验证深色主题下底部滚动条"
+    action: element_visible
+    action: element_visible
+    ref: doc_scrollbar_h
+
+teardown:
+  - action: session_stop

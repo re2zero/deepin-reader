@@ -1,0 +1,25 @@
+name: "点击正文目录跳转至相应文档内容中"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "点击正文目录"
+    action: mouse_click
+    action: mouse_click
+    ref: hyperlink_area
+    wait_after: 1000
+
+  - name: "确认安全提示"
+    action: element_action
+    action: element_action
+    ref: dialog_confirm
+    do: "click"
+    wait_after: 500
+
+teardown:
+  - action: session_stop

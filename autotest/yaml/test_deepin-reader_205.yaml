@@ -1,0 +1,29 @@
+name: "点击[删除全部注释]对话框界面"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "切换到注释栏"
+    action: element_action
+    action: element_action
+    ref: "sidebar_annotation_btn"
+    do: "click"
+  - name: "按Tab键切换焦点"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "tab"
+  - name: "按Enter确认"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "enter"
+  - name: "按ESC退出"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "esc"
+teardown:
+  - action: session_stop

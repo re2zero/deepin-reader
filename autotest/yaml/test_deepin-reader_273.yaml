@@ -1,0 +1,58 @@
+name: "切换至新的用户，检查文档查看器版本和基本功能"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader"
+    wait: 3.0
+
+steps:
+  - name: "打开文档查看器"
+    action: wait
+    action: wait
+    wait: 2.0
+  - name: "验证主窗口显示"
+    action: element_visible
+    action: element_visible
+    ref: main_window
+  - name: "检查基本功能：打开文档"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,o"
+  - name: "等待文件对话框"
+    action: wait
+    action: wait
+    wait: 2.0
+  - name: "选择文档打开"
+    action: keyboard_type
+    action: keyboard_type
+    text: "/home/uos/测试文档.pdf"
+  - name: "确认打开"
+    action: keyboard_press
+    action: keyboard_press
+    keys: "Return"
+  - name: "等待文档加载"
+    action: wait
+    action: wait
+    wait: 3.0
+  - name: "验证文档正常显示"
+    action: element_visible
+    action: element_visible
+    ref: doc_view
+  - name: "检查缩放功能"
+    action: element_action
+    action: element_action
+    ref: zoom_in_btn
+    do: "click"
+  - name: "等待放大"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "验证基本功能正常"
+    action: element_visible
+    action: element_visible
+    ref: doc_view
+
+teardown:
+  - action: session_stop

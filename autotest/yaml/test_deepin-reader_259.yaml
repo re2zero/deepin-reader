@@ -1,0 +1,69 @@
+name: "[031]Ctrl+S和Ctrl+Shift+S快捷键"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader"
+    wait: 3.0
+
+steps:
+  - name: "打开docx文档"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,o"
+  - name: "等待文件对话框"
+    action: wait
+    action: wait
+    wait: 2.0
+  - name: "选择docx文档"
+    action: keyboard_type
+    action: keyboard_type
+    text: "/home/uos/测试文档.docx"
+  - name: "确认打开"
+    action: keyboard_press
+    action: keyboard_press
+    keys: "Return"
+  - name: "等待文档加载"
+    action: wait
+    action: wait
+    wait: 5.0
+  - name: "未编辑状态按Ctrl+S"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,s"
+  - name: "等待响应"
+    action: wait
+    action: wait
+    wait: 2.0
+  - name: "验证无保存对话框弹出"
+    action: element_not_visible
+    action: element_not_visible
+    ref: dialog_save
+  - name: "进行编辑操作后按Ctrl+S"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,s"
+  - name: "等待另存为对话框"
+    action: wait
+    action: wait
+    wait: 2.0
+  - name: "按Ctrl+Shift+S"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,shift,s"
+  - name: "等待另存为对话框"
+    action: wait
+    action: wait
+    wait: 2.0
+  - name: "验证另存为对话框弹出"
+    action: element_visible
+    action: element_visible
+    ref: dialog_save
+  - name: "取消保存"
+    action: keyboard_press
+    action: keyboard_press
+    keys: "Escape"
+
+teardown:
+  - action: session_stop

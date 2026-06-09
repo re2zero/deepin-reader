@@ -1,0 +1,24 @@
+name: "单个文档未展开左侧栏，Tab键切换"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "按Tab键依次切换焦点"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "tab"
+  - name: "按Enter执行选择"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "enter"
+  - name: "继续Tab切换"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "tab"
+teardown:
+  - action: session_stop

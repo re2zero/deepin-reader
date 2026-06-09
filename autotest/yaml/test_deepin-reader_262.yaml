@@ -1,0 +1,16 @@
+name: "应用内嵌帮助手册功能正常"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "该用例需检查帮助手册文件路径，暂无法全自动"
+    action: wait
+    action: wait
+    wait_after: 500
+teardown:
+  - action: session_stop

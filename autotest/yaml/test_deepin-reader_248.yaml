@@ -1,0 +1,76 @@
+name: "窗口拖动与界面显示"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader"
+    wait: 3.0
+
+steps:
+  - name: "打开PDF文档"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,o"
+  - name: "等待文件对话框"
+    action: wait
+    action: wait
+    wait: 2.0
+  - name: "选择大文档"
+    action: keyboard_type
+    action: keyboard_type
+    text: "/home/uos/大文档.pdf"
+  - name: "确认打开"
+    action: keyboard_press
+    action: keyboard_press
+    keys: "Return"
+  - name: "等待文档加载"
+    action: wait
+    action: wait
+    wait: 5.0
+  - name: "验证文档显示"
+    action: element_visible
+    action: element_visible
+    ref: doc_view
+  - name: "切换双页显示"
+    action: element_action
+    action: element_action
+    ref: double_page_btn
+    do: "click"
+  - name: "等待切换"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "验证双页显示正常"
+    action: element_visible
+    action: element_visible
+    ref: doc_view
+  - name: "点击最大化按钮"
+    action: element_action
+    action: element_action
+    ref: title_max_btn
+    do: "click"
+  - name: "等待最大化"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "验证界面显示正常"
+    action: element_visible
+    action: element_visible
+    ref: doc_view
+  - name: "恢复窗口"
+    action: element_action
+    action: element_action
+    ref: title_max_btn
+    do: "click"
+  - name: "等待恢复"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "验证界面无闪烁"
+    action: element_visible
+    action: element_visible
+    ref: doc_view
+
+teardown:
+  - action: session_stop

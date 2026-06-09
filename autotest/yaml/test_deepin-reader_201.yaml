@@ -1,0 +1,33 @@
+name: "选中书签目录按Alt+M"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "切换到书签栏"
+    action: element_action
+    action: element_action
+    ref: "sidebar_bookmark_btn"
+    do: "click"
+  - name: "选中一个书签目录"
+    action: mouse_click
+    action: mouse_click
+    ref: "bookmark_list"
+  - name: "按Alt+M弹出右键菜单"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "alt,m"
+  - name: "按上下方向键切换"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "down"
+  - name: "按ESC退出"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "esc"
+teardown:
+  - action: session_stop

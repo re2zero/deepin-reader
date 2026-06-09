@@ -1,0 +1,32 @@
+name: "delete快捷键删除注释目录"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "打开PDF文档"
+    action: element_action
+    action: element_action
+    ref: doc_view
+    do: "click"
+    wait_after: 1000
+
+  - name: "选中左侧注释目录"
+    action: element_action
+    action: element_action
+    ref: annotation_list
+    do: "click"
+    wait_after: 500
+
+  - name: "按Delete键删除注释"
+    action: keyboard_press
+    action: keyboard_press
+    keys: "Delete"
+    wait_after: 500
+
+teardown:
+  - action: session_stop

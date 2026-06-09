@@ -1,0 +1,32 @@
+name: "安全提示弹框弹出后，点击应用其他菜单不应该起作用"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+  - action: wait
+    wait: 2.0
+
+steps:
+  - name: "点击超链接弹出安全提示"
+    action: mouse_click
+    action: mouse_click
+    ref: hyperlink_area
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 1.5
+  - name: "尝试点击其他菜单（应该无作用）"
+    action: element_action
+    action: element_action
+    ref: zoom_in_btn
+    do: click
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 0.5
+
+teardown:
+  - action: session_stop

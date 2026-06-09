@@ -1,0 +1,28 @@
+name: "右击主视图界面弹出右键菜单界面"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "右键点击文档中心"
+    action: context_menu_comb
+    action: context_menu_comb
+    ref: "doc_center"
+  - name: "按上下方向键切换"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "down"
+  - name: "按Enter选择"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "enter"
+  - name: "按ESC退出"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "esc"
+teardown:
+  - action: session_stop

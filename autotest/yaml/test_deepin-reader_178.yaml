@@ -1,0 +1,59 @@
+name: "搜索结果缩略图显示后后鼠标再移出移入左侧栏"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+  - action: wait
+    wait: 2.0
+
+steps:
+  - name: "进入全屏"
+    action: keyboard_press
+    action: keyboard_press
+    keys: F11
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "唤出工具栏"
+    action: mouse_click
+    action: mouse_click
+    ref: fullscreen_toolbar
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 0.5
+  - name: "点击菜单搜索"
+    action: main_menu_comb
+    action: main_menu_comb
+    ref: menu_search
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "输入关键字"
+    action: keyboard_type
+    action: keyboard_type
+    text: the
+  - name: "按Enter搜索"
+    action: keyboard_press
+    action: keyboard_press
+    keys: Return
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 1.5
+  - name: "鼠标移出再移入左侧栏"
+    action: mouse_click
+    action: mouse_click
+    ref: fullscreen_sidebar_btn
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 1.0
+
+teardown:
+  - action: session_stop

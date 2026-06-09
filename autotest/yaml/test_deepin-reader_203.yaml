@@ -1,0 +1,33 @@
+name: "选中输入框内容按Alt+M"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "点击页码输入框"
+    action: element_action
+    action: element_action
+    ref: "page_input"
+    do: "click"
+  - name: "输入文本"
+    action: keyboard_type
+    action: keyboard_type
+    ref: "page_input"
+  - name: "按Alt+M弹出右键菜单"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "alt,m"
+  - name: "按上下方向键切换"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "down"
+  - name: "按ESC退出"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "esc"
+teardown:
+  - action: session_stop

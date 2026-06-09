@@ -1,0 +1,18 @@
+[
+  {
+    "id": "216",
+    "batch_index": 216,
+    "title": "单指双击",
+    "module": "/V25_2500（测试部专用）/B类解耦商店应用/文档查看器/交互/触摸板(#114153)",
+    "priority": "1",
+    "precondition": "1.打开pdf格式文档\n2.打开djvu格式文档\n3.打开docx格式文档",
+    "steps": "1. 应用工具栏一指双击\n2. 再次双击",
+    "expected": "1. 窗口最大化\n2. 恢复原来窗口大小",
+    "case_type": "功能测试",
+    "source_row": 218,
+    "_is_skip": false,
+    "_skip_reason": "",
+    "_category": "AUTOMATABLE",
+    "_simple_module": "触摸板"
+  }
+]

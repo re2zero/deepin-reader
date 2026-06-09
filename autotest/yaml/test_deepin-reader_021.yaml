@@ -1,0 +1,70 @@
+name: "单个窗口中标签页拖拽"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "打开单个PDF文档"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,o"
+  - name: "等待文件对话框"
+    action: wait
+    action: wait
+    wait: 2.0
+  - name: "选择文档"
+    action: keyboard_type
+    action: keyboard_type
+    text: "/home/uos/文档.pdf"
+  - name: "确认打开"
+    action: keyboard_press
+    action: keyboard_press
+    keys: "Return"
+  - name: "等待文档加载"
+    action: wait
+    action: wait
+    wait: 3.0
+  - name: "验证单个标签页"
+    action: element_visible
+    action: element_visible
+    ref: tab_bar
+  - name: "尝试点击标签栏区域"
+    action: element_action
+    action: element_action
+    ref: tab_bar
+    do: "click"
+  - name: "验证页面无变化（无法拖拽）"
+    action: element_visible
+    action: element_visible
+    ref: doc_view
+  - name: "添加第二个标签页"
+    action: main_menu_comb
+    action: main_menu_comb
+    ref: menu_new_tab
+  - name: "等待文件对话框"
+    action: wait
+    action: wait
+    wait: 2.0
+  - name: "选择第二个文档"
+    action: keyboard_type
+    action: keyboard_type
+    text: "/home/uos/文档2.djvu"
+  - name: "确认打开"
+    action: keyboard_press
+    action: keyboard_press
+    keys: "Return"
+  - name: "等待文档加载"
+    action: wait
+    action: wait
+    wait: 3.0
+  - name: "验证两个标签页"
+    action: element_visible
+    action: element_visible
+    ref: tab_bar
+
+teardown:
+  - action: session_stop

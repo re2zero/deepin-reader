@@ -1,0 +1,25 @@
+name: "打印预览显示正常"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "右键点击文档中心"
+    action: context_menu_comb
+    action: context_menu_comb
+    ref: "doc_center"
+  - name: "点击打印"
+    action: element_action
+    action: element_action
+    ref: "context_print"
+    do: "click"
+  - name: "等待打印预览"
+    action: wait
+    action: wait
+    wait_after: 2000
+teardown:
+  - action: session_stop

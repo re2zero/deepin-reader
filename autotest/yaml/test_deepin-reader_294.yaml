@@ -1,0 +1,71 @@
+name: "幻灯片播放"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "打开PDF文档"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,o"
+  - name: "等待文件对话框"
+    action: wait
+    action: wait
+    wait: 2.0
+  - name: "选择文档"
+    action: keyboard_type
+    action: keyboard_type
+    text: "/home/uos/幻灯片文档.pdf"
+  - name: "确认打开"
+    action: keyboard_press
+    action: keyboard_press
+    keys: "Return"
+  - name: "等待文档加载"
+    action: wait
+    action: wait
+    wait: 3.0
+  - name: "右击开始幻灯片放映"
+    action: context_menu_comb
+    action: context_menu_comb
+    ref: doc_center
+    menu: "SlideShow"
+  - name: "等待幻灯片启动"
+    action: wait
+    action: wait
+    wait: 3.0
+  - name: "验证幻灯片窗口"
+    action: element_visible
+    action: element_visible
+    ref: slide_widget
+  - name: "点击全屏菜单按钮"
+    action: element_action
+    action: element_action
+    ref: fullscreen_menu_btn
+    do: "click"
+  - name: "等待菜单弹出"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "点击播放按钮"
+    action: keyboard_press
+    action: keyboard_press
+    keys: "Return"
+  - name: "等待播放开始"
+    action: wait
+    action: wait
+    wait: 2.0
+  - name: "验证幻灯片正在播放"
+    action: element_visible
+    action: element_visible
+    ref: slide_widget
+
+teardown:
+  - action: keyboard_press
+    keys: "Escape"
+  - action: wait
+    wait: 1.0
+  - action: session_stop

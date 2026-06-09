@@ -1,0 +1,25 @@
+name: "按Ctrl+1，视图调整菜单同步勾选"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "按Ctrl+1默认大小"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,1"
+  - name: "点击百分比下拉框"
+    action: element_action
+    action: element_action
+    ref: "zoom_combo"
+    do: "click"
+  - name: "验证100%已勾选"
+    action: wait
+    action: wait
+    wait_after: 500
+teardown:
+  - action: session_stop

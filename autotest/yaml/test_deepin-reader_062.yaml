@@ -1,0 +1,24 @@
+name: "左键或右键单击取消高亮注释的右键菜单"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "右键高亮注释弹出菜单"
+    action: mouse_right_click
+    action: mouse_right_click
+    ref: doc_selected_text
+    wait_after: 500
+
+  - name: "左键点击其他区域取消菜单"
+    action: mouse_click
+    action: mouse_click
+    ref: doc_center
+    wait_after: 500
+
+teardown:
+  - action: session_stop

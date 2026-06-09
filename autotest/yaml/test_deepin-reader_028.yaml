@@ -1,0 +1,57 @@
+name: "快捷键"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "按Ctrl+S保存"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,s"
+  - name: "按Ctrl+P打印"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,p"
+  - name: "按Ctrl+1默认大小"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,1"
+  - name: "按Ctrl+R左旋转"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,r"
+  - name: "按Ctrl+Shift+R右旋转"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,shift,r"
+  - name: "按Ctrl++放大"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,="
+  - name: "按Ctrl+-缩小"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,-"
+  - name: "按F11全屏"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "f11"
+  - name: "按ESC退出全屏"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "esc"
+  - name: "按Ctrl+F搜索"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,f"
+  - name: "关闭搜索"
+    action: element_action
+    action: element_action
+    ref: "search_close_btn"
+    do: "click"
+teardown:
+  - action: session_stop

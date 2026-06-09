@@ -1,0 +1,18 @@
+name: "已添加文档界面菜单显示"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "右键文档空白区域查看菜单"
+    action: mouse_right_click
+    action: mouse_right_click
+    ref: doc_center
+    wait_after: 500
+
+teardown:
+  - action: session_stop

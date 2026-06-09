@@ -1,0 +1,65 @@
+name: "选中多个文档，右击打开"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader"
+    wait: 3.0
+
+steps:
+  - name: "打开文件对话框"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,o"
+  - name: "等待文件对话框"
+    action: wait
+    action: wait
+    wait: 2.0
+  - name: "选择多个PDF文档"
+    action: keyboard_type
+    action: keyboard_type
+    text: "/home/uos/文档1.pdf /home/uos/文档2.pdf"
+  - name: "确认打开"
+    action: keyboard_press
+    action: keyboard_press
+    keys: "Return"
+  - name: "等待文档加载"
+    action: wait
+    action: wait
+    wait: 3.0
+  - name: "验证标签栏显示多个标签页"
+    action: element_visible
+    action: element_visible
+    ref: tab_bar
+  - name: "关闭所有标签页"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,w"
+  - name: "重复测试DJVU格式"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,o"
+  - name: "等待文件对话框"
+    action: wait
+    action: wait
+    wait: 2.0
+  - name: "选择多个DJVU文档"
+    action: keyboard_type
+    action: keyboard_type
+    text: "/home/uos/文档1.djvu /home/uos/文档2.djvu"
+  - name: "确认打开"
+    action: keyboard_press
+    action: keyboard_press
+    keys: "Return"
+  - name: "等待文档加载"
+    action: wait
+    action: wait
+    wait: 3.0
+  - name: "验证标签栏显示多个标签页"
+    action: element_visible
+    action: element_visible
+    ref: tab_bar
+
+teardown:
+  - action: session_stop

@@ -1,0 +1,372 @@
+app: deepin-reader
+
+elements:
+  # ─── Main Window ─────────────────────────────────────
+  main_frame:
+    name: "Form_DMainWindow"
+    role: "form"
+
+  main_window:
+    name: "Form_DMainWindow"
+    role: "form"
+
+  # ─── Titlebar ────────────────────────────────────────
+  title_option_btn:
+    name: "DTitlebarDWindowOptionButton"
+    role: "button"
+
+  title_min_btn:
+    name: "DTitlebarDWindowMinButton"
+    role: "button"
+
+  title_max_btn:
+    name: "DTitlebarDWindowMaxButton"
+    role: "button"
+
+  title_close_btn:
+    name: "DTitlebarDWindowCloseButton"
+    role: "button"
+
+  title_quit_full_btn:
+    name: "DTitlebarDWindowQuitFullscreenButton"
+    role: "button"
+
+  # ─── Title Menu (DMenu) ──────────────────────────────
+  title_menu:
+    role: "popup menu"
+
+  menu_new_window:
+    menu: ["新窗口"]
+
+  menu_new_tab:
+    menu: ["新标签页"]
+
+  menu_save:
+    menu: ["保存"]
+
+  menu_save_as:
+    menu: ["另存为"]
+
+  menu_display_in_fm:
+    menu: ["在文件管理器中显示"]
+
+  menu_magnifer:
+    menu: ["放大镜"]
+
+  menu_search:
+    menu: ["搜索"]
+
+  menu_print:
+    menu: ["打印"]
+
+  menu_tools:
+    name: "工具"
+    role: "menu item"
+
+  menu_select_text:
+    menu: ["工具", "选择工具"]
+
+  menu_hand_tool:
+    menu: ["工具", "手形工具"]
+
+  menu_about:
+    menu: ["关于"]
+
+  menu_help:
+    menu: ["帮助"]
+
+  menu_exit:
+    menu: ["退出"]
+
+  menu_theme:
+    menu: ["主题"]
+
+  # ─── Context Menu (BrowserMenu - right-click) ────────
+  # Names from BrowserMenu.cpp zh_CN translations
+  context_copy:
+    menu: ["复制"]
+
+  context_copy_anno:
+    menu: ["复制"]
+
+  context_remove_annotation:
+    menu: ["删除注释"]
+
+  context_add_annotation:
+    menu: ["添加注释"]
+
+  context_add_annotation_hl:
+    menu: ["添加注释"]
+
+  context_add_bookmark:
+    menu: ["添加书签"]
+
+  context_remove_bookmark:
+    menu: ["删除书签"]
+
+  context_highlight:
+    menu: ["高亮"]
+
+  context_remove_highlight:
+    menu: ["取消高亮"]
+
+  context_change_highlight_color:
+    menu: ["高亮"]
+
+  context_fullscreen:
+    menu: ["全屏"]
+
+  context_exit_fullscreen:
+    menu: ["退出全屏"]
+
+  context_slide_show:
+    menu: ["幻灯片放映"]
+
+  context_first_page:
+    menu: ["第一页"]
+
+  context_prev_page:
+    menu: ["前一页"]
+
+  context_next_page:
+    menu: ["后一页"]
+
+  context_last_page:
+    menu: ["最后一页"]
+
+  context_rotate_left:
+    menu: ["左旋转"]
+
+  context_rotate_right:
+    menu: ["右旋转"]
+
+  context_print:
+    menu: ["打印"]
+
+  context_doc_info:
+    menu: ["文档信息"]
+
+  context_search:
+    menu: ["搜索"]
+
+  # ─── Titlebar Toolbar / Scale Widget ─────────────────
+  zoom_combo:
+    name: "DLineEditChildLineEdit"
+    role: "text"
+
+  zoom_input:
+    name: "DLineEditChildLineEdit"
+    role: "text"
+
+  zoom_in_btn:
+    role: "button"
+
+  zoom_out_btn:
+    role: "button"
+
+  fit_to_page_btn:
+    role: "button"
+    name: ""
+
+  fit_to_width_btn:
+    role: "button"
+    name: ""
+
+  fit_to_height_btn:
+    role: "button"
+    name: ""
+
+  single_page_btn:
+    role: "button"
+    name: ""
+
+  double_page_btn:
+    role: "button"
+    name: ""
+
+  # ─── Sidebar ─────────────────────────────────────────
+  sidebar:
+    name: "Form_SheetSidebar"
+    role: "form"
+
+  sidebar_thumbnail_btn:
+    name: "Button_thumbnail"
+    role: "check box"
+
+  sidebar_catalog_btn:
+    name: "Button_catalog"
+    role: "check box"
+
+  sidebar_bookmark_btn:
+    name: "Button_bookmark"
+    role: "check box"
+
+  sidebar_annotation_btn:
+    name: "Button_annotation"
+    role: "check box"
+
+  sidebar_search_btn:
+    name: "Button_search"
+    role: "check box"
+
+  sidebar_toggle_btn:
+    name: ""
+    role: "check box"
+
+  # ─── Search ──────────────────────────────────────────
+  # Search panel toggled by sidebar_search_btn (Button_search check box)
+  # Search input is inside QWebEngineView and NOT exposed via AT-SPI
+  search_input:
+    role: "text"
+    name: ""
+
+  search_prev_btn:
+    role: "button"
+    name: ""
+
+  search_next_btn:
+    role: "button"
+    name: ""
+
+  search_close_btn:
+    name: "Button_search"
+    role: "check box"
+
+  # ─── Page Navigation (thumbnail sidebar footer) ──────
+  page_input:
+    name: "pageEdit"
+    role: "text"
+
+  page_prev_btn:
+    name: "Button_ThumbnailPre"
+    role: "button"
+
+  page_next_btn:
+    name: "Button_ThumbnailNext"
+    role: "button"
+
+  # ─── Document View ───────────────────────────────────
+  doc_view:
+    role: "form"
+    name: ""
+
+  doc_scrollbar_v:
+    name: "verticalScrollBar"
+    role: "scroll bar"
+
+  doc_scrollbar_h:
+    name: "horizontalScrollBar"
+    role: "scroll bar"
+
+  # ─── Tab Bar ─────────────────────────────────────────
+  tab_bar:
+    role: "page tab list"
+    name: ""
+
+  tab_add_btn:
+    name: "DTabBarAddButton"
+    role: "button"
+
+  # ─── Dialogs ─────────────────────────────────────────
+  dialog_save:
+    role: "dialog"
+    name: "保存"
+
+  dialog_confirm:
+    role: "dialog"
+    name: ""
+
+  dialog_about:
+    role: "dialog"
+    name: "关于"
+
+  dialog_doc_info:
+    role: "dialog"
+    name: "文档信息"
+
+  dialog_print:
+    role: "dialog"
+    name: "打印"
+
+  dialog_open_file:
+    role: "dialog"
+    name: "打开文件"
+
+  dialog_hyperlink_warning:
+    role: "dialog"
+    name: "安全提示"
+
+  # ─── Fullscreen ──────────────────────────────────────
+  fullscreen_toolbar:
+    role: "tool bar"
+    name: ""
+
+  fullscreen_sidebar_btn:
+    role: "push button"
+    name: ""
+
+  fullscreen_menu_btn:
+    role: "push button"
+    name: ""
+
+  # ─── Slide Show ──────────────────────────────────────
+  slide_widget:
+    role: "window"
+    name: ""
+
+  # ─── Document Info ───────────────────────────────────
+  label_modified:
+    role: "label"
+    name: ""
+
+  label_saved:
+    role: "label"
+    name: ""
+
+  # ─── Bookmark / Annotation Sidebar Items ─────────────
+  bookmark_list:
+    role: "list"
+    name: "View_ImageList"
+
+  annotation_list:
+    role: "list"
+    name: "View_ImageList"
+
+  catalog_tree:
+    name: "View_CatalogTree"
+    role: "tree"
+
+  thumbnail_list:
+    role: "list"
+    name: "View_ImageList"
+
+  # ─── Coordinate targets (context menus on document) ──
+  doc_center:
+    x: 700
+    y: 450
+
+  doc_selected_text:
+    x: 700
+    y: 450
+
+  doc_annotation_icon:
+    x: 300
+    y: 300
+
+  # ─── Hyperlink area ──────────────────────────────────
+  hyperlink_area:
+    x: 700
+    y: 450
+
+  # ─── Slide Show Controls ─────────────────────────────
+  slide_prev_btn:
+    role: "push button"
+    name: ""
+
+  slide_next_btn:
+    role: "push button"
+    name: ""
+
+  slide_exit_btn:
+    role: "push button"
+    name: ""

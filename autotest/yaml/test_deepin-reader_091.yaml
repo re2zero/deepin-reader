@@ -1,0 +1,26 @@
+name: "目录显示"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "点击目录按钮"
+    action: element_action
+    action: element_action
+    ref: sidebar_catalog_btn
+    do: "click"
+    wait_after: 500
+
+  - name: "展开目录层级"
+    action: element_action
+    action: element_action
+    ref: catalog_tree
+    do: "click"
+    wait_after: 500
+
+teardown:
+  - action: session_stop

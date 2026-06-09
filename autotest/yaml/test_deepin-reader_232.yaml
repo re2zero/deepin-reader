@@ -1,0 +1,20 @@
+name: "打开文本按Alt+A和Alt+H"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "按Alt+A添加注释"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "alt,a"
+  - name: "按Alt+H添加高亮"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "alt,h"
+teardown:
+  - action: session_stop

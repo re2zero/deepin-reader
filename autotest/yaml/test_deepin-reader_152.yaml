@@ -1,0 +1,30 @@
+name: "编辑图标注释后左击其他区域"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "左键单击注释图标"
+    action: mouse_click
+    action: mouse_click
+    ref: doc_annotation_icon
+    wait_after: 500
+
+  - name: "编辑注释内容"
+    action: keyboard_type
+    action: keyboard_type
+    text: "编辑后内容"
+    wait_after: 500
+
+  - name: "左击其他区域"
+    action: mouse_click
+    action: mouse_click
+    ref: doc_center
+    wait_after: 500
+
+teardown:
+  - action: session_stop

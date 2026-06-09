@@ -1,0 +1,52 @@
+name: "打开DJVU文档，未选中文本右击弹出菜单"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "右键点击文档中心"
+    action: context_menu_comb
+    action: context_menu_comb
+    ref: "doc_center"
+  - name: "点击添加书签"
+    action: element_action
+    action: element_action
+    ref: "context_add_bookmark"
+    do: "click"
+  - name: "右键点击文档中心"
+    action: context_menu_comb
+    action: context_menu_comb
+    ref: "doc_center"
+  - name: "点击全屏"
+    action: element_action
+    action: element_action
+    ref: "context_fullscreen"
+    do: "click"
+  - name: "退出全屏"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "esc"
+  - name: "右键点击文档中心"
+    action: context_menu_comb
+    action: context_menu_comb
+    ref: "doc_center"
+  - name: "点击右旋转"
+    action: element_action
+    action: element_action
+    ref: "context_rotate_right"
+    do: "click"
+  - name: "右键点击文档中心"
+    action: context_menu_comb
+    action: context_menu_comb
+    ref: "doc_center"
+  - name: "点击文档信息"
+    action: element_action
+    action: element_action
+    ref: "context_doc_info"
+    do: "click"
+teardown:
+  - action: session_stop

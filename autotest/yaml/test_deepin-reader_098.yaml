@@ -1,0 +1,77 @@
+name: "多窗口多标签页时拖拽打开新窗口"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "打开文档"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,o"
+  - name: "等待文件对话框"
+    action: wait
+    action: wait
+    wait: 2.0
+  - name: "选择文档"
+    action: keyboard_type
+    action: keyboard_type
+    text: "/home/uos/文档.pdf"
+  - name: "确认打开"
+    action: keyboard_press
+    action: keyboard_press
+    keys: "Return"
+  - name: "等待文档加载"
+    action: wait
+    action: wait
+    wait: 3.0
+  - name: "打开新窗口"
+    action: main_menu_comb
+    action: main_menu_comb
+    ref: menu_new_window
+  - name: "等待新窗口"
+    action: wait
+    action: wait
+    wait: 3.0
+  - name: "在新窗口中打开文档"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,o"
+  - name: "等待文件对话框"
+    action: wait
+    action: wait
+    wait: 2.0
+  - name: "选择文档"
+    action: keyboard_type
+    action: keyboard_type
+    text: "/home/uos/文档2.djvu"
+  - name: "确认打开"
+    action: keyboard_press
+    action: keyboard_press
+    keys: "Return"
+  - name: "等待文档加载"
+    action: wait
+    action: wait
+    wait: 3.0
+  - name: "验证两个窗口"
+    action: element_visible
+    action: element_visible
+    ref: main_window
+  - name: "通过新窗口菜单再次创建新窗口"
+    action: main_menu_comb
+    action: main_menu_comb
+    ref: menu_new_window
+  - name: "等待新窗口"
+    action: wait
+    action: wait
+    wait: 3.0
+  - name: "验证多个窗口存在"
+    action: element_visible
+    action: element_visible
+    ref: doc_view
+
+teardown:
+  - action: session_stop

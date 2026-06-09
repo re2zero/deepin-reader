@@ -1,0 +1,25 @@
+name: "右击蓝色书签图标进行删除"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "右键蓝色书签图标"
+    action: mouse_right_click
+    action: mouse_right_click
+    ref: doc_center
+    wait_after: 500
+
+  - name: "选择删除书签"
+    action: context_menu_comb
+    action: context_menu_comb
+    ref: doc_center
+    menu: "RemoveBookmark"
+    wait_after: 500
+
+teardown:
+  - action: session_stop

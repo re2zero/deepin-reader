@@ -1,0 +1,42 @@
+# YAML test case for deepin-reader
+#
+# Executed via youqu run — collected by pytest and dispatched to YouQu framework APIs.
+# All element references use 'ref' to look up entries in elements.yaml.
+#
+# Actions supported: session_start, session_stop, keyboard_press, keyboard_hot_key,
+#   keyboard_type, mouse_click, mouse_right_click, mouse_double_click, mouse_scroll,
+#   mouse_drag, element_action, element_set_value, main_menu_comb, context_menu_comb,
+#   dbus_call, dbus_get_property, wait, screenshot
+# Asserts supported: element_visible, element_not_visible, element_numbers,
+#   element_text, process_running, process_not_running, file_exists, file_not_exists,
+#   image_exist, image_not_exist, ocr_exist, ocr_not_exist, window_size, dbus_property
+
+name: "deepin-reader 基础启动测试"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader"
+    wait: 3.0
+
+steps:
+  - name: "验证主窗口可见"
+    action: element_action
+    action: element_action
+    ref: main_frame
+    do: "click"
+    assert:
+      - type: element_visible
+        selector:
+          role: "frame"
+
+  - name: "验证进程运行中"
+    action: wait
+    wait: 0
+    assert:
+      - type: process_running
+        app: "deepin-reader"
+
+teardown:
+  - action: session_stop

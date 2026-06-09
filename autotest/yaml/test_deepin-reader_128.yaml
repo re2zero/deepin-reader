@@ -1,0 +1,33 @@
+name: "点击左边栏底部的缩略图图标"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "展开左边栏"
+    action: element_action
+    action: element_action
+    ref: sidebar_toggle_btn
+    do: "click"
+    wait_after: 500
+
+  - name: "点击缩略图按钮"
+    action: element_action
+    action: element_action
+    ref: sidebar_thumbnail_btn
+    do: "click"
+    wait_after: 500
+
+  - name: "点击缩略图条目跳转"
+    action: element_action
+    action: element_action
+    ref: thumbnail_list
+    do: "click"
+    wait_after: 500
+
+teardown:
+  - action: session_stop

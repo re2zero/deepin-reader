@@ -1,0 +1,64 @@
+name: "调整视图后退出全屏"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+  - action: wait
+    wait: 2.0
+
+steps:
+  - name: "进入全屏"
+    action: keyboard_press
+    action: keyboard_press
+    keys: F11
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "按Ctrl1恢复实际大小"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: ctrl,1
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 0.5
+  - name: "按Ctrl2适应高度"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: ctrl,2
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 0.5
+  - name: "按Ctrl3适应宽度"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: ctrl,3
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 0.5
+  - name: "点击双页显示"
+    action: element_action
+    action: element_action
+    ref: double_page_btn
+    do: click
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "退出全屏"
+    action: keyboard_press
+    action: keyboard_press
+    keys: Escape
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 1.0
+
+teardown:
+  - action: session_stop

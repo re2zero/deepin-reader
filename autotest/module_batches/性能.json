@@ -1,0 +1,18 @@
+[
+  {
+    "id": "139",
+    "batch_index": 139,
+    "title": "多平台测试",
+    "module": "/V25_2500（测试部专用）/B类解耦商店应用/文档查看器/性能(#114169)",
+    "priority": "2",
+    "precondition": "",
+    "steps": "1. 分别在兆芯、龙芯、ARM平台测试",
+    "expected": "1. 功能正常",
+    "case_type": "功能测试",
+    "source_row": 141,
+    "_is_skip": false,
+    "_skip_reason": "",
+    "_category": "AUTOMATABLE",
+    "_simple_module": "性能"
+  }
+]

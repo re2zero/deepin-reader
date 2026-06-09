@@ -1,0 +1,35 @@
+name: "[033]无搜索结果"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+  - action: wait
+    wait: 2.0
+
+steps:
+  - name: "打开搜索"
+    action: main_menu_comb
+    action: main_menu_comb
+    ref: menu_search
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "输入不存在的关键字"
+    action: keyboard_type
+    action: keyboard_type
+    text: zzzznonexistentkeywordxxxx
+  - name: "按Enter搜索"
+    action: keyboard_press
+    action: keyboard_press
+    keys: Return
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 1.5
+
+teardown:
+  - action: session_stop

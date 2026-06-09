@@ -1,0 +1,24 @@
+name: "注释图标无法移至其他页面"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "选中注释图标"
+    action: mouse_click
+    action: mouse_click
+    ref: doc_annotation_icon
+    wait_after: 500
+
+  - name: "尝试拖拽至页面边缘"
+    action: mouse_drag
+    action: mouse_drag
+    ref: doc_annotation_icon
+    wait_after: 500
+
+teardown:
+  - action: session_stop

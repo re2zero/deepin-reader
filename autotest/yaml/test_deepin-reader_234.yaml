@@ -1,0 +1,16 @@
+name: "debian/control文件description字段，长、短描述与文案相符"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "该用例需终端验证apt show deepin-reader描述信息，暂无法全自动"
+    action: wait
+    action: wait
+    wait_after: 500
+teardown:
+  - action: session_stop

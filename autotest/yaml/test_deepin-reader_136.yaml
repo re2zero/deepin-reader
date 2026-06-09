@@ -1,0 +1,54 @@
+# YAML test case for deepin-reader — 压力/136 "打开大量窗口"
+# AUTOMATABLE: Stress test for multiple window opening.
+# Opens several windows via title menu, verifies no crash.
+# Represents 20-window stress test with a representative sample.
+
+name: "压力/136 打开大量窗口"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "通过标题菜单打开新窗口 #1"
+    action: main_menu_comb
+    action: main_menu_comb
+    ref: menu_new_window
+    wait: 1.5
+    assert:
+      - type: process_running
+        app: "deepin-reader"
+
+  - name: "通过标题菜单打开新窗口 #2"
+    action: main_menu_comb
+    action: main_menu_comb
+    ref: menu_new_window
+    wait: 1.5
+    assert:
+      - type: process_running
+        app: "deepin-reader"
+
+  - name: "通过标题菜单打开新窗口 #3"
+    action: main_menu_comb
+    action: main_menu_comb
+    ref: menu_new_window
+    wait: 1.5
+    assert:
+      - type: process_running
+        app: "deepin-reader"
+
+  - name: "验证无卡顿 — 检查主窗口可见"
+    action: element_action
+    action: element_action
+    ref: main_frame
+    do: "click"
+    assert:
+      - type: element_visible
+        selector:
+          role: "frame"
+
+teardown:
+  - action: session_stop

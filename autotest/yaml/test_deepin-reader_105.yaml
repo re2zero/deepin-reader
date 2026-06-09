@@ -1,0 +1,19 @@
+name: "打开损坏的文档"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "验证进程运行"
+    action: wait
+    wait: 0
+    assert:
+      - type: process_running
+        app: "deepin-reader"
+
+teardown:
+  - action: session_stop

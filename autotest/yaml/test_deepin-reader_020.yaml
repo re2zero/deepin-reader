@@ -1,0 +1,32 @@
+name: "[007]保存"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "打开文档添加书签注释"
+    action: mouse_click
+    action: mouse_click
+    ref: "doc_center"
+  - name: "点击主菜单"
+    action: main_menu_comb
+    action: main_menu_comb
+    ref: "menu_save"
+  - name: "等待保存完成"
+    action: wait
+    action: wait
+    wait_after: 1000
+  - name: "按Ctrl+S保存"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,s"
+  - name: "等待保存完成"
+    action: wait
+    action: wait
+    wait_after: 1000
+teardown:
+  - action: session_stop

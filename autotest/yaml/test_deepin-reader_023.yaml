@@ -1,0 +1,84 @@
+name: "切换标签页状态显示"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "打开PDF文档"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,o"
+  - name: "等待文件对话框"
+    action: wait
+    action: wait
+    wait: 2.0
+  - name: "选择文档"
+    action: keyboard_type
+    action: keyboard_type
+    text: "/home/uos/文档.pdf"
+  - name: "确认打开"
+    action: keyboard_press
+    action: keyboard_press
+    keys: "Return"
+  - name: "等待文档加载"
+    action: wait
+    action: wait
+    wait: 3.0
+  - name: "打开第二个标签页"
+    action: main_menu_comb
+    action: main_menu_comb
+    ref: menu_new_tab
+  - name: "等待文件对话框"
+    action: wait
+    action: wait
+    wait: 2.0
+  - name: "选择第二个文档"
+    action: keyboard_type
+    action: keyboard_type
+    text: "/home/uos/文档2.djvu"
+  - name: "确认打开"
+    action: keyboard_press
+    action: keyboard_press
+    keys: "Return"
+  - name: "等待文档加载"
+    action: wait
+    action: wait
+    wait: 3.0
+  - name: "在当前标签页调整适应高度"
+    action: element_action
+    action: element_action
+    ref: fit_to_height_btn
+    do: "click"
+  - name: "等待调整"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "调整适应宽度"
+    action: element_action
+    action: element_action
+    ref: fit_to_width_btn
+    do: "click"
+  - name: "等待调整"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "切换至另一个标签页"
+    action: element_action
+    action: element_action
+    ref: tab_bar
+    do: "click"
+  - name: "等待切换"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "验证切换后显示正常"
+    action: element_visible
+    action: element_visible
+    ref: doc_view
+
+teardown:
+  - action: session_stop

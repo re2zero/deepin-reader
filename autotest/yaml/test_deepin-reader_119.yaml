@@ -1,0 +1,59 @@
+name: "取消适合高度的方法"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+  - action: wait
+    wait: 2.0
+
+steps:
+  - name: "点击适合高度"
+    action: element_action
+    action: element_action
+    ref: fit_to_height_btn
+    do: click
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 1.5
+  - name: "选择适合宽度"
+    action: element_action
+    action: element_action
+    ref: fit_to_width_btn
+    do: click
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "再次适合高度"
+    action: element_action
+    action: element_action
+    ref: fit_to_height_btn
+    do: click
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "选择百分比"
+    action: element_action
+    action: element_action
+    ref: zoom_combo
+    do: click
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 0.5
+  - name: "按Ctrl1恢复默认"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: ctrl,1
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 1.0
+
+teardown:
+  - action: session_stop

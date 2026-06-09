@@ -1,0 +1,32 @@
+name: "快捷键切换书签/注释缩略图"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "点击书签按钮"
+    action: element_action
+    action: element_action
+    ref: sidebar_bookmark_btn
+    do: "click"
+    wait_after: 500
+
+  - name: "选中书签缩略图"
+    action: element_action
+    action: element_action
+    ref: bookmark_list
+    do: "click"
+    wait_after: 500
+
+  - name: "按向下键切换"
+    action: keyboard_press
+    action: keyboard_press
+    keys: "Down"
+    wait_after: 500
+
+teardown:
+  - action: session_stop

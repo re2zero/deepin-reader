@@ -1,0 +1,101 @@
+name: "默认打开方式"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader"
+    wait: 3.0
+
+steps:
+  - name: "直接打开PDF文档（模拟默认打开）"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,o"
+  - name: "等待文件对话框"
+    action: wait
+    action: wait
+    wait: 2.0
+  - name: "选择PDF文档"
+    action: keyboard_type
+    action: keyboard_type
+    text: "/home/uos/测试文档.pdf"
+  - name: "确认打开"
+    action: keyboard_press
+    action: keyboard_press
+    keys: "Return"
+  - name: "等待文档加载"
+    action: wait
+    action: wait
+    wait: 3.0
+  - name: "验证PDF文档正常打开"
+    action: element_visible
+    action: element_visible
+    ref: doc_view
+  - name: "关闭当前标签页"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,w"
+  - name: "等待关闭"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "打开DJVU文档"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,o"
+  - name: "等待文件对话框"
+    action: wait
+    action: wait
+    wait: 2.0
+  - name: "选择DJVU文档"
+    action: keyboard_type
+    action: keyboard_type
+    text: "/home/uos/测试文档.djvu"
+  - name: "确认打开"
+    action: keyboard_press
+    action: keyboard_press
+    keys: "Return"
+  - name: "等待文档加载"
+    action: wait
+    action: wait
+    wait: 3.0
+  - name: "验证DJVU文档正常打开"
+    action: element_visible
+    action: element_visible
+    ref: doc_view
+  - name: "关闭当前标签页"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,w"
+  - name: "等待关闭"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "打开DOCX文档"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,o"
+  - name: "等待文件对话框"
+    action: wait
+    action: wait
+    wait: 2.0
+  - name: "选择DOCX文档"
+    action: keyboard_type
+    action: keyboard_type
+    text: "/home/uos/测试文档.docx"
+  - name: "确认打开"
+    action: keyboard_press
+    action: keyboard_press
+    keys: "Return"
+  - name: "等待文档加载转化"
+    action: wait
+    action: wait
+    wait: 5.0
+  - name: "验证DOCX文档正常打开"
+    action: element_visible
+    action: element_visible
+    ref: doc_view
+
+teardown:
+  - action: session_stop

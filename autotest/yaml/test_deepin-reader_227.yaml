@@ -1,0 +1,29 @@
+name: "保存替换文档"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "添加注释编辑文档"
+    action: context_menu_comb
+    action: context_menu_comb
+    ref: "doc_center"
+  - name: "点击添加注释"
+    action: element_action
+    action: element_action
+    ref: "context_add_annotation"
+    do: "click"
+  - name: "点击另存为"
+    action: main_menu_comb
+    action: main_menu_comb
+    ref: "menu_save_as"
+  - name: "等待另存对话框"
+    action: wait
+    action: wait
+    wait_after: 1000
+teardown:
+  - action: session_stop

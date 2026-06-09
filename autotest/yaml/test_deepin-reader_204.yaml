@@ -1,0 +1,29 @@
+name: "点击[删除全部书签]对话框界面"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "切换到书签栏"
+    action: element_action
+    action: element_action
+    ref: "sidebar_bookmark_btn"
+    do: "click"
+  - name: "按Tab键切换到删除全部按钮"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "tab"
+  - name: "按Enter确认"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "enter"
+  - name: "按ESC退出对话框"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "esc"
+teardown:
+  - action: session_stop

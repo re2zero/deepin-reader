@@ -1,0 +1,60 @@
+name: "宽高度不一致的文档显示"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+  - action: wait
+    wait: 2.0
+
+steps:
+  - name: "点击适合高度"
+    action: element_action
+    action: element_action
+    ref: fit_to_height_btn
+    do: click
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "点击适合宽度"
+    action: element_action
+    action: element_action
+    ref: fit_to_width_btn
+    do: click
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "调整百分比"
+    action: element_action
+    action: element_action
+    ref: zoom_in_btn
+    do: click
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 0.5
+  - name: "右击添加书签"
+    action: context_menu_comb
+    action: context_menu_comb
+    ref: doc_center
+    menu: ["Add bookmark"]
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "添加注释"
+    action: context_menu_comb
+    action: context_menu_comb
+    ref: doc_center
+    menu: ["Add annotation"]
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 1.0
+
+teardown:
+  - action: session_stop

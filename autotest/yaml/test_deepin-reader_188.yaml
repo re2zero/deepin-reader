@@ -1,0 +1,30 @@
+name: "选中一段文本，翻页后回到原位置，选中文本不会消失"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "选中文本区域"
+    action: mouse_click
+    action: mouse_click
+    ref: "doc_selected_text"
+  - name: "翻到下一页"
+    action: element_action
+    action: element_action
+    ref: "page_next_btn"
+    do: "click"
+  - name: "翻回上一页"
+    action: element_action
+    action: element_action
+    ref: "page_prev_btn"
+    do: "click"
+  - name: "验证选中文本状态"
+    action: wait
+    action: wait
+    wait_after: 500
+teardown:
+  - action: session_stop

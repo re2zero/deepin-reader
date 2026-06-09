@@ -1,0 +1,18 @@
+name: "图标注释浮窗"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "鼠标悬停在注释图标上"
+    action: mouse_click
+    action: mouse_click
+    ref: doc_annotation_icon
+    wait_after: 1000
+
+teardown:
+  - action: session_stop

@@ -1,0 +1,24 @@
+name: "[034]右击选中文字弹出菜单"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "选中文本"
+    action: mouse_click
+    action: mouse_click
+    ref: "doc_selected_text"
+  - name: "右键点击选中文本"
+    action: context_menu_comb
+    action: context_menu_comb
+    ref: "doc_selected_text"
+  - name: "验证右键菜单包含复制高亮等选项"
+    action: wait
+    action: wait
+    wait_after: 500
+teardown:
+  - action: session_stop

@@ -1,0 +1,32 @@
+name: "6、视图保持_调整页面视图后新窗口打开新文档"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+  - action: wait
+    wait: 2.0
+
+steps:
+  - name: "调整页面视图为适合页面"
+    action: element_action
+    action: element_action
+    ref: fit_to_page_btn
+    do: click
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "新窗口打开文档"
+    action: main_menu_comb
+    action: main_menu_comb
+    ref: menu_new_window
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 2.0
+
+teardown:
+  - action: session_stop

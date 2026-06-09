@@ -1,0 +1,29 @@
+name: "文档信息界面"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "右键打开文档信息"
+    action: context_menu_comb
+    action: context_menu_comb
+    ref: "doc_center"
+  - name: "点击文档信息"
+    action: element_action
+    action: element_action
+    ref: "context_doc_info"
+    do: "click"
+  - name: "按Tab键切换"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "tab"
+  - name: "按Enter关闭"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "enter"
+teardown:
+  - action: session_stop

@@ -1,0 +1,23 @@
+# NON-AUTOMATABLE: 触摸屏/224 "单指拖拽拉伸窗口大小"
+# This test case simulates a single-finger touch drag on the window edge or
+# corner to resize the window. This requires a touch drag gesture on the
+# window frame chrome, which cannot be reliably triggered by mouse actions
+# (mouse drag on window chrome behaves differently from touch drag).
+
+name: "触摸屏/224 单指拖拽拉伸窗口大小 — NON-AUTOMATABLE"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "无法自动化: touch drag to resize window requires touch gesture"
+    action: wait
+    action: wait
+    wait: 1.0
+
+teardown:
+  - action: session_stop

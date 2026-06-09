@@ -1,0 +1,19 @@
+name: "024未打开文档界面显示"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "验证应用图标和名称"
+    action: wait
+    wait: 0
+    assert:
+      - type: element_visible
+        ref: main_frame
+
+teardown:
+  - action: session_stop

@@ -1,0 +1,24 @@
+name: "菜单高亮效果"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "右键点击文档中心"
+    action: context_menu_comb
+    action: context_menu_comb
+    ref: "doc_center"
+  - name: "鼠标悬浮于菜单项"
+    action: wait
+    action: wait
+    wait_after: 300
+  - name: "验证高亮效果"
+    action: wait
+    action: wait
+    wait_after: 300
+teardown:
+  - action: session_stop

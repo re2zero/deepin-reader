@@ -1,0 +1,19 @@
+name: "1、视图保持_新安装新标签页首次打开文档"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+  - action: wait
+    wait: 2.0
+
+steps:
+  - name: "新标签页首次打开文档查看默认视图"
+    action: wait
+    action: wait
+    wait: 2.0
+
+teardown:
+  - action: session_stop

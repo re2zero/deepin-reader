@@ -1,0 +1,43 @@
+name: "双页、调整百分比、打开单页大文档时使用放大镜"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "切换双页显示"
+    action: element_action
+    action: element_action
+    ref: "double_page_btn"
+    do: "click"
+  - name: "调整最小百分比"
+    action: element_action
+    action: element_action
+    ref: "zoom_out_btn"
+    do: "click"
+  - name: "开启放大镜"
+    action: main_menu_comb
+    action: main_menu_comb
+    ref: "menu_magnifer"
+  - name: "移动鼠标查看放大效果"
+    action: mouse_click
+    action: mouse_click
+    ref: "doc_center"
+  - name: "取消放大镜"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "esc"
+  - name: "调整最大百分比"
+    action: element_action
+    action: element_action
+    ref: "zoom_in_btn"
+    do: "click"
+  - name: "再次开启放大镜"
+    action: main_menu_comb
+    action: main_menu_comb
+    ref: "menu_magnifer"
+teardown:
+  - action: session_stop

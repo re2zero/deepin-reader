@@ -1,0 +1,40 @@
+name: "1、快捷键_Ctrl+Home到首页"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "翻到中间页面"
+    action: element_action
+    action: element_action
+    ref: "page_next_btn"
+    do: "click"
+  - name: "重复翻页"
+    action: element_action
+    action: element_action
+    ref: "page_next_btn"
+    do: "click"
+  - name: "按Ctrl+Home回到首页"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,home"
+  - name: "等待页面跳转"
+    action: wait
+    action: wait
+    wait_after: 1000
+  - name: "点击缩略图按钮验证"
+    action: element_action
+    action: element_action
+    ref: "sidebar_thumbnail_btn"
+    do: "click"
+  - name: "点击书签按钮验证"
+    action: element_action
+    action: element_action
+    ref: "sidebar_bookmark_btn"
+    do: "click"
+teardown:
+  - action: session_stop

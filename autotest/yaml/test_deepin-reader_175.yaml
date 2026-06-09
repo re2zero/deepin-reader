@@ -1,0 +1,40 @@
+name: "双页显示后鼠标再移出移入左侧栏"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+  - action: wait
+    wait: 2.0
+
+steps:
+  - name: "进入全屏"
+    action: keyboard_press
+    action: keyboard_press
+    keys: F11
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "点击双页显示"
+    action: element_action
+    action: element_action
+    ref: double_page_btn
+    do: click
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "鼠标移出再移入左侧栏"
+    action: mouse_click
+    action: mouse_click
+    ref: fullscreen_sidebar_btn
+  - name: "等待"
+    action: wait
+    action: wait
+    wait: 1.0
+
+teardown:
+  - action: session_stop

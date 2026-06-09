@@ -1,0 +1,78 @@
+name: "幻灯片播放到最后一页-滚轮"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+steps:
+  - name: "打开PDF文档"
+    action: keyboard_hot_key
+    action: keyboard_hot_key
+    keys: "ctrl,o"
+  - name: "等待文件对话框"
+    action: wait
+    action: wait
+    wait: 2.0
+  - name: "选择文档"
+    action: keyboard_type
+    action: keyboard_type
+    text: "/home/uos/幻灯片文档.pdf"
+  - name: "确认打开"
+    action: keyboard_press
+    action: keyboard_press
+    keys: "Return"
+  - name: "等待文档加载"
+    action: wait
+    action: wait
+    wait: 3.0
+  - name: "右击开始幻灯片放映"
+    action: context_menu_comb
+    action: context_menu_comb
+    ref: doc_center
+    menu: "SlideShow"
+  - name: "等待幻灯片启动"
+    action: wait
+    action: wait
+    wait: 3.0
+  - name: "验证幻灯片窗口"
+    action: element_visible
+    action: element_visible
+    ref: slide_widget
+  - name: "使用滚轮向下翻页"
+    action: mouse_scroll
+    action: mouse_scroll
+    amount: -1
+  - name: "等待切换"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "继续滚轮翻页"
+    action: mouse_scroll
+    action: mouse_scroll
+    amount: -1
+  - name: "等待切换"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "继续滚轮直到最后一页"
+    action: mouse_scroll
+    action: mouse_scroll
+    amount: -1
+  - name: "等待切换"
+    action: wait
+    action: wait
+    wait: 1.0
+  - name: "验证到达最后一页"
+    action: element_visible
+    action: element_visible
+    ref: slide_widget
+
+teardown:
+  - action: keyboard_press
+    keys: "Escape"
+  - action: wait
+    wait: 1.0
+  - action: session_stop

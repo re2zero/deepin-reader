@@ -1,0 +1,106 @@
+# YAML test case for deepin-reader — 压力/145 "PDF文档中批量添加书签"
+# AUTOMATABLE: Add multiple bookmarks via context menu on document pages.
+# Tests 3 bookmarks as representative sample of 100+ stress test.
+
+name: "压力/145 PDF文档中批量添加书签"
+app: "deepin-reader"
+screenshot: false
+
+setup:
+  - action: session_start
+    command: "deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf"
+    wait: 3.0
+
+  - action: keyboard_hot_key
+    key: "ctrl+o"
+    wait: 2.0
+
+  - action: keyboard_hot_key
+    key: "ctrl+l"
+    wait: 0.5
+
+  - action: keyboard_type
+    text: "/home/uos/test/files/1.pdf"
+    wait: 0.5
+
+  - action: keyboard_press
+    key: "Return"
+    wait: 2.0
+
+steps:
+  - name: "右键文档添加书签 #1"
+    action: element_action
+    action: element_action
+    ref: doc_center
+    do: "rightClick"
+    wait: 0.5
+
+  - name: "选择添加书签菜单"
+    action: context_menu_comb
+    action: context_menu_comb
+    ref: context_add_bookmark
+    wait: 1.0
+    assert:
+      - type: element_visible
+        selector:
+          role: "drawing area"
+          name: "document"
+
+  - name: "翻到下一页"
+    action: element_action
+    action: element_action
+    ref: page_next_btn
+    do: "click"
+    wait: 1.0
+
+  - name: "右键文档添加书签 #2"
+    action: element_action
+    action: element_action
+    ref: doc_center
+    do: "rightClick"
+    wait: 0.5
+
+  - name: "选择添加书签菜单"
+    action: context_menu_comb
+    action: context_menu_comb
+    ref: context_add_bookmark
+    wait: 1.0
+
+  - name: "翻到下一页"
+    action: element_action
+    action: element_action
+    ref: page_next_btn
+    do: "click"
+    wait: 1.0
+
+  - name: "右键文档添加书签 #3"
+    action: element_action
+    action: element_action
+    ref: doc_center
+    do: "rightClick"
+    wait: 0.5
+
+  - name: "选择添加书签菜单"
+    action: context_menu_comb
+    action: context_menu_comb
+    ref: context_add_bookmark
+    wait: 1.0
+
+  - name: "打开左侧栏书签列表"
+    action: element_action
+    action: element_action
+    ref: sidebar_bookmark_btn
+    do: "click"
+    wait: 1.0
+
+  - name: "验证书签列表可见"
+    action: wait
+    wait: 0
+    assert:
+      - type: element_visible
+        selector:
+          role: "list"
+          name: "bookmark"
+
+teardown:
+  - action: session_stop
