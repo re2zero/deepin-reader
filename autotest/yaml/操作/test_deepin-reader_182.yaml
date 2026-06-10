@@ -1,0 +1,77 @@
+name: 搜索结果缩略图显示收起再展开左侧栏
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 进入全屏，点击左上角左侧栏按钮固定显示左侧栏，搜索关键字，左侧弹出搜索结果
+  2. 收起再展开左侧栏
+
+  预期结果:
+  1. 搜索结果缩略图显示，关键字黄色高亮显示，选中的关键字为绿色
+  2. 搜索结果无变化
+module: 操作
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 进入全屏
+    action: keyboard_press
+    keys: F11
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 固定显示侧边栏搜索
+    action: element_action
+    ref: fullscreen_sidebar_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 打开搜索
+    action: main_menu_comb
+    ref: menu_search
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 输入关键字搜索
+    action: keyboard_type
+    text: the
+  - name: 按Enter
+    action: keyboard_press
+    keys: Return
+  - name: 等待
+    action: wait
+    wait: 1.5
+  - name: 收起再展开侧边栏
+    action: element_action
+    ref: fullscreen_sidebar_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 再次展开
+    action: element_action
+    ref: fullscreen_sidebar_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

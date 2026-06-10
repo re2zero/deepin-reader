@@ -1,0 +1,44 @@
+name: 复制左侧栏的注释目录
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+  3.双页显示
+
+  测试步骤:
+  1. 右击左侧栏的注释目录，查看弹出的右键菜单
+  2. 点击复制，查看是否可以复制该条注释内容
+
+  预期结果:
+  1. 显示菜单：复制、删除注释、删除所有注释
+  2. 可以复制该条注释内容
+module: 注释
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 右键点击注释目录
+    action: mouse_right_click
+    ref: annotation_list
+    wait_after: 500
+  - name: 选择复制菜单
+    action: context_menu_comb
+    ref: annotation_list
+    menu: CopyAnnoText
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

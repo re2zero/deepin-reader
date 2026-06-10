@@ -1,0 +1,60 @@
+name: 点击超链接
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  打开PDF格式文档
+  打开docx格式文档
+
+  测试步骤:
+  1. 鼠标放置在超链接文本之上，弹出手形样式和详情浮窗，点击超链接，查看
+  2. 安全提示弹框弹出后，点击关闭按钮
+  3. 安全提示弹框弹出后，点击“阻止”按钮
+  4. 安全提示弹框弹出后，点击“允许”按钮
+
+  预期结果:
+  1. 弹出安全提示弹框，弹框中显示关闭、“阻止”、“允许”按钮
+  2. 关闭弹窗，不做任何操作
+  3. 关闭弹窗，不做任何操作
+  4. 关闭弹窗，打开浏览器并跳转至该链接（网页的超链接会打开浏览器，email超链接会打开邮箱应用，多媒体超链接会打开相应的应用）
+module: 操作
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 等待文档加载
+    action: wait
+    wait: 2.0
+  - name: 鼠标点击超链接文本
+    action: mouse_click
+    ref: hyperlink_area
+  - name: 等待安全提示弹框
+    action: wait
+    wait: 1.5
+  - name: 点击关闭按钮
+    action: element_action
+    ref: dialog_hyperlink_warning
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 再次点击超链接
+    action: mouse_click
+    ref: hyperlink_area
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

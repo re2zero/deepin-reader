@@ -1,0 +1,76 @@
+name: 幻灯片切换
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开文档查看器
+  2.依次打开PDF，DJVU，DOCX
+
+  测试步骤:
+  1. 依次在PDF，DJVU，DOCX任意位置右击
+  2. 点击幻灯片放映
+  3. 鼠标左击点击幻灯片任意位置
+
+  预期结果:
+  1. 弹框展示
+  2. 进入幻灯片播放界面
+  3. 切换到下一页
+module: 社区需求
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 打开PDF文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择文档
+    action: keyboard_type
+    text: /home/uos/幻灯片文档.pdf
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 右击开始幻灯片放映
+    action: context_menu_comb
+    ref: doc_center
+    menu: SlideShow
+  - name: 等待幻灯片启动
+    action: wait
+    wait: 3.0
+  - name: 验证幻灯片窗口
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: window
+  - name: 点击幻灯片切换至下一页
+    action: mouse_click
+    ref: slide_widget
+  - name: 等待切换
+    action: wait
+    wait: 1.0
+  - name: 验证幻灯片已切换
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: window
+teardown:
+  - action: keyboard_press
+    keys: Escape
+  - action: wait
+    wait: 1.0
+  - action: session_stop

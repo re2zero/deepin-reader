@@ -1,0 +1,35 @@
+name: '[001]关于'
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 点击工具栏中的菜单键，再点击关于
+
+  预期结果:
+  1. 进入关于页面，界面显示正确，最后一行为：“文档查看器是一款支持PDF，DJVU，DOCX等多种格式的文档阅读工具。”
+module: 主菜单
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 点击菜单键选择关于
+    action: main_menu_comb
+    items:
+      - 关于
+  - name: 验证关于对话框
+    action: wait
+    wait_after: 1000
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

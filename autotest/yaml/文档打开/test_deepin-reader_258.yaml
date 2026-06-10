@@ -1,0 +1,60 @@
+name: 单个窗口中打开多个标签页（仅包含docx）全部未编辑，关闭或退出
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 单个窗口中打开三份docx文档，全部未编辑，点击工具栏中的关闭，查看
+
+  预期结果:
+  1. 窗口直接关闭，无提示弹出
+module: 文档打开
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader
+    wait: 3.0
+steps:
+  - name: 打开多个docx文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择三个docx文档
+    action: keyboard_type
+    text: /home/uos/文档1.docx /home/uos/文档2.docx /home/uos/文档3.docx
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待所有文档加载
+    action: wait
+    wait: 8.0
+  - name: 验证标签栏显示三个标签页
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: page tab list
+  - name: 点击关闭按钮
+    action: element_action
+    ref: title_close_btn
+    do: click
+  - name: 等待窗口关闭
+    action: wait
+    wait: 2.0
+  - name: 验证应用已退出（无编辑无保存提示）
+    action: process_not_running
+    ref: deepin-reader
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

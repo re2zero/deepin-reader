@@ -1,0 +1,61 @@
+name: 手型工具
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开普通PDF格式文档
+  2.打开DJVU格式文档
+  3. 打开docx文档
+
+  测试步骤:
+  1. 点击选择图标，在下拉框中选择手型图标
+  2. 鼠标移动到左边栏和右侧文档并点击
+  3. 长按鼠标，查看能否拖动页面
+
+  预期结果:
+  1. 工具栏显示手型工具图标
+  2. 鼠标移动到左边栏仍显示选择样式，点击可选择任意缩略图和按钮；鼠标移动到右侧文档显示为手型样式，无法选择文本；鼠标移动到链接内容仍显示为手型样式，点击无法进入相应链接
+  3. 可以拖动页面
+module: 操作
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 通过主菜单切换到手型工具
+    action: main_menu_comb
+    ref: menu_hand_tool
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 鼠标移动到左侧栏
+    action: mouse_click
+    ref: sidebar_toggle_btn
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 鼠标点击文档区域
+    action: mouse_click
+    ref: doc_center
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 长按鼠标拖动页面
+    action: mouse_drag
+    ref: doc_center
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

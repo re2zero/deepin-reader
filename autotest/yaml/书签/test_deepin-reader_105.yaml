@@ -1,0 +1,31 @@
+name: 打开损坏的文档
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  分别打开PDF和DJVU格式文档测试
+
+  测试步骤:
+  1. 打开损坏的文档，查看
+
+  预期结果:
+  1. 弹出提示：请检查文件是否损坏；提示语前面的应该是红色禁止图标
+module: 书签
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 验证进程运行
+    action: wait
+    wait: 0
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

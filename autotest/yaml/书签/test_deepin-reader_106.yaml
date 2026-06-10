@@ -1,0 +1,38 @@
+name: 036关闭再打开
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  打开PDF或djvu文档
+
+  测试步骤:
+  1. 当前已打开文档并浏览，关闭应用后再打开
+
+  预期结果:
+  1. 进入初始界面，默认要选择文件或拖拽文件进行浏览；
+module: 书签
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 关闭应用
+    action: session_stop
+    wait_after: 1000
+  - name: 重新启动
+    action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

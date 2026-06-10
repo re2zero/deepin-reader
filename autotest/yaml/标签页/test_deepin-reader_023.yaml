@@ -1,0 +1,87 @@
+name: 切换标签页状态显示
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 打开多个标签页，点击视图调整中适合高度、适合宽度、双页、左旋转、右旋转菜单；调整百分
+  2. 点击切换另一个标签页，查看视图调整中菜单显示
+
+  预期结果:
+  1. 页面正常进入相应状态
+  2. 显示当前页的状态
+module: 标签页
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 打开PDF文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择文档
+    action: keyboard_type
+    text: /home/uos/文档.pdf
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 打开第二个标签页
+    action: main_menu_comb
+    ref: menu_new_tab
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择第二个文档
+    action: keyboard_type
+    text: /home/uos/文档2.djvu
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 在当前标签页调整适应高度
+    action: element_action
+    ref: fit_to_height_btn
+    do: click
+  - name: 等待调整
+    action: wait
+    wait: 1.0
+  - name: 调整适应宽度
+    action: element_action
+    ref: fit_to_width_btn
+    do: click
+  - name: 等待调整
+    action: wait
+    wait: 1.0
+  - name: 切换至另一个标签页
+    action: element_action
+    ref: tab_bar
+    do: click
+  - name: 等待切换
+    action: wait
+    wait: 1.0
+  - name: 验证切换后显示正常
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+teardown:
+  - action: session_stop

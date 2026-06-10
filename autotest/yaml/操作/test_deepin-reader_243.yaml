@@ -1,0 +1,88 @@
+name: 搜索过程中点击主菜单选项
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+  3.双页显示
+
+  测试步骤:
+  1. 搜索关键字，当搜索结果较多正在进行时，点新窗口菜单
+  2. 搜索关键字，当搜索结果较多正在进行时，点新标签页菜单
+  3. 搜索关键字，当搜索结果较多正在进行时，点保存菜单
+  4. 搜索关键字，当搜索结果较多正在进行时，点另存为菜单，另存为新文档
+  5. 搜索关键字，当搜索结果较多正在进行时，点击幻灯片放映菜单
+  6. 搜索关键字，当搜索结果较多正在进行时，点击放大镜菜单
+  7. 搜索关键字，当搜索结果较多正在进行时，点击在文件管理器中显示菜单
+  8. 搜索关键字，当搜索结果较多正在进行时，点击在主题菜单
+  9. 搜索关键字，当搜索结果较多正在进行时，点击在帮助菜单
+  10. 搜索关键字，当搜索结果较多正在进行时，点击在关于菜单
+  11. 搜索关键字，当搜索结果较多正在进行时，点击在退出菜单
+
+  预期结果:
+  1. 正常弹出新窗口
+  2. 正常弹出文件管理器选择界面
+  3. 正常保存文档
+  4. 可以另存成功
+  5. 进入幻灯片放映界面
+  6. 放大镜正常可以使用
+  7. 可以打开所在文件夹
+  8. 正常切换主题
+  9. 进入帮助手册界面
+  10. 打开关于弹窗
+  11. 退出应用
+module: 操作
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 切换双页显示
+    action: element_action
+    ref: double_page_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 打开搜索
+    action: main_menu_comb
+    ref: menu_search
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 输入关键字
+    action: keyboard_type
+    text: document
+  - name: 按Enter搜索
+    action: keyboard_press
+    keys: Return
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 点击新窗口菜单
+    action: main_menu_comb
+    ref: menu_new_window
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 关闭新窗口
+    action: element_action
+    ref: title_close_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

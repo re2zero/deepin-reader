@@ -1,0 +1,46 @@
+name: 目录与右侧文档对应
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开有目录的普通PDF格式文档
+  2.双页显示
+
+  测试步骤:
+  1. 进入左边栏目录界面，点击选中目录索引，查看右侧文档显示
+  2. 进入左边栏目录界面，按键盘上下键/pageup/pagedown切换目录选中，查看右侧文档页面显示
+  3. 改变右侧文档当前所在页数，查看左边栏目录显示
+
+  预期结果:
+  1. 右侧文档跳转至当前所选目录索引页，且显示为第一行；左侧目录点击后正常高亮显示，不会出现高亮定位不准现象
+  2. 右侧文档跳转至当前所选目录索引页，且显示为第一行；左侧目录点击后正常高亮显示，不会出现高亮定位不准现象
+  3. 目录会对应高亮显示
+module: 目录
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 点击目录按钮
+    action: element_action
+    ref: sidebar_catalog_btn
+    do: click
+    wait_after: 500
+  - name: 点击目录条目
+    action: element_action
+    ref: catalog_tree
+    do: click
+    wait_after: 500
+  - name: 验证文档跳转
+    action: wait
+    wait: 0
+    assert:
+      - type: element_visible
+        ref: doc_view
+teardown:
+  - action: session_stop

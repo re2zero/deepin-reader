@@ -1,0 +1,97 @@
+name: 多个英文或中文关键字均可以正常搜索到
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1. 打开PDF格式文档
+  2. 打开docx格式文档
+
+  测试步骤:
+  1. 打开文档，在输入框中输入英文关键字，如：user，按键盘enter键，查看
+  2. 点击搜索框上一个、下一个按钮
+  3. 打开文档，在输入框中输入中文关键字，如：系统，按键盘enter键，查看
+  4. 点击搜索框上一个、下一个按钮
+
+  预期结果:
+  1. 搜索结果高亮显示，左侧栏中搜索结果内容与个数显示正确
+  2. 按整个单词跳转，而不是按单个字母跳转；点击“上一个” 、“下一个”按钮均可以起作用，跳转到最后一个关键字后循环切换
+  3. 搜索结果高亮显示，左侧栏中搜索结果个数显示正确
+  4. 按整个词语跳转，而不是按单个字跳转；点击“上一个” 、“下一个”按钮均可以起作用，跳转到最后一个关键字后循环切换
+module: 操作
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 输入英文关键字user搜索
+    action: main_menu_comb
+    ref: menu_search
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 输入user
+    action: keyboard_type
+    text: user
+  - name: 按Enter
+    action: keyboard_press
+    keys: Return
+  - name: 等待
+    action: wait
+    wait: 1.5
+  - name: 点击搜索上一个
+    action: element_action
+    ref: search_prev_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 点击搜索下一个
+    action: element_action
+    ref: search_next_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 清除关键字输入中文
+    action: element_set_value
+    ref: search_input
+    text: null
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 输入中文关键字系统
+    action: keyboard_type
+    text: 系统
+  - name: 按Enter
+    action: keyboard_press
+    keys: Return
+  - name: 等待
+    action: wait
+    wait: 1.5
+  - name: 点击搜索上一个
+    action: element_action
+    ref: search_prev_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 点击搜索下一个
+    action: element_action
+    ref: search_next_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

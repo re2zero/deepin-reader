@@ -1,0 +1,94 @@
+name: 单个窗口已有文档界面添加多标签页方式
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1. 单个窗口已有文档
+  2. 打开PDF或djvu文档
+
+  测试步骤:
+  1. 点击多标签栏右侧“+”图标添加新标签页
+  2. 从文件管理器或桌面中拖拽其他文档至窗口中
+  3. 点击菜单中的“新标签页”菜单添加新标签页
+  4. 双击另一份文档
+  5. 右击另一份文档，选择文档查看器
+
+  预期结果:
+  1. 可以在已打开的窗口中添加标签页，文档显示正常
+  2. 可以在已打开的窗口中添加标签页，文档显示正常
+  3. 可以在已打开的窗口中添加标签页，文档显示正常
+  4. 可以在已打开的窗口中添加标签页，文档显示正常
+  5. 可以在已打开的窗口中添加标签页，文档显示正常
+module: 标签页
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 打开第一个文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择文档
+    action: keyboard_type
+    text: /home/uos/文档.pdf
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 方式1：点击+按钮添加新标签页
+    action: element_action
+    ref: tab_add_btn
+    do: click
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择文档
+    action: keyboard_type
+    text: /home/uos/文档2.djvu
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 验证新标签页添加
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: page tab list
+  - name: 方式2：通过菜单新标签页添加
+    action: main_menu_comb
+    ref: menu_new_tab
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择文档
+    action: keyboard_type
+    text: /home/uos/文档3.docx
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载转化
+    action: wait
+    wait: 5.0
+  - name: 验证三个标签页显示
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: page tab list
+teardown:
+  - action: session_stop

@@ -1,0 +1,65 @@
+name: '[013]手动输入关键字进行搜索'
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+
+  测试步骤:
+  1. 点击搜索框手动输入关键字，点击键盘enter键搜索，查看搜索结果显示
+  2. 点击上一个按钮
+  3. 点击下一个按钮
+
+  预期结果:
+  1. 正常显示搜索结果
+  2. 正常切换关键字，选中的关键字自动添加绿色高亮效果
+  3. 正常切换关键字，选中的关键字自动添加绿色高亮效果
+module: 操作
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 打开搜索
+    action: main_menu_comb
+    ref: menu_search
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 输入关键字
+    action: keyboard_type
+    text: document
+  - name: 按Enter搜索
+    action: keyboard_press
+    keys: Return
+  - name: 等待
+    action: wait
+    wait: 1.5
+  - name: 点击搜索上一个按钮
+    action: element_action
+    ref: search_prev_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 点击搜索下一个按钮
+    action: element_action
+    ref: search_next_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

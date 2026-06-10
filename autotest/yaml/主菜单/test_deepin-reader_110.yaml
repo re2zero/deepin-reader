@@ -1,0 +1,47 @@
+name: 使用放大镜
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+  4.双页显示
+
+  测试步骤:
+  1. 点击菜单中放大镜菜单查看是否可以使用放大镜
+  2. 鼠标移动到页面中相应区域（包括文字和图片），查看有无放大作用
+  3. 查看放大镜是否可以移动到左边栏或标题、标签栏位置
+
+  预期结果:
+  1. 可以使用放大镜
+  2. 该区域内容（包括文字和图片）放大
+  3. 无法移动至左边栏或标题、标签栏位置
+module: 主菜单
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 点击主菜单开启放大镜
+    action: main_menu_comb
+    ref: menu_magnifer
+  - name: 移动鼠标到文档区域
+    action: mouse_click
+    ref: doc_center
+  - name: 等待放大效果
+    action: wait
+    wait_after: 1000
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

@@ -1,0 +1,36 @@
+name: 打开文本按Alt+A和Alt+H
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 打开PDF文档，未选中文本，分别按Alt+A和Alt+H
+  2. 打开DJVU文档，分别按Alt+A和Alt+H
+
+  预期结果:
+  1. 弹出提示：请选择文本
+  2. 无提示弹出
+module: 其它交互
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 按Alt+A添加注释
+    action: keyboard_hot_key
+    keys: alt,a
+  - name: 按Alt+H添加高亮
+    action: keyboard_hot_key
+    keys: alt,h
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

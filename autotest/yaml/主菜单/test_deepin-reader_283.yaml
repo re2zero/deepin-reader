@@ -1,0 +1,45 @@
+name: 未连接打印机，存为PDF
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1. 打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 打开文档，点击主菜单再点击“打印”菜单
+  2. 打印预览界面默认选择“存为PDF”，页码范围是“全部”，点击保存菜单，进入选择路径界面，选择后保存
+  3. 打印预览界面默认选择“存为PDF”，页码范围选择“当前页”，点击保存菜单，进入选择路径界面，选择后保存
+  4. 打印预览界面默认选择“存为PDF”，页码范围选择“指定页面”，点击保存菜单，进入选择路径界面，选择后保存
+
+  预期结果:
+  1. 弹出打印预览界面
+  2. 打印预览界面关闭，进入文件保存的路径，打开打印后的文档，显示正确
+  3. 打印预览界面关闭，进入文件保存的路径，打开打印后的文档，仅显示当前的1页
+  4. 打印预览界面关闭，进入文件保存的路径，打开打印后的文档，仅显示指定的页面
+module: 主菜单
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 点击菜单键选择打印
+    action: main_menu_comb
+    ref: menu_print
+  - name: 等待打印预览
+    action: wait
+    wait_after: 2000
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

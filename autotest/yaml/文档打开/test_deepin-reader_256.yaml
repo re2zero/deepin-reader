@@ -1,0 +1,67 @@
+name: '[030]docx文档打开界面显示'
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 打开docx文档，查看界面显示
+
+  预期结果:
+  1.0
+module: 文档打开
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader
+    wait: 3.0
+steps:
+  - name: 打开docx文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择docx文档
+    action: keyboard_type
+    text: /home/uos/测试文档.docx
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档转化加载
+    action: wait
+    wait: 5.0
+  - name: 验证文档视图显示
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+  - name: 验证工具栏显示
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          name: DLineEditChildLineEdit
+          role: text
+  - name: 验证标签栏显示
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: page tab list
+  - name: 验证界面布局正常
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          name: Form_DMainWindow
+          role: form
+teardown:
+  - action: session_stop

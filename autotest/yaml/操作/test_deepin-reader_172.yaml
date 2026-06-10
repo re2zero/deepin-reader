@@ -1,0 +1,73 @@
+name: 弹出搜索结果后退出全屏
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 进入全屏搜索并弹出搜索结果，退出全屏查看
+
+  预期结果:
+  1. 搜索结果仍显示
+module: 操作
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 进入全屏
+    action: keyboard_press
+    keys: F11
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 唤出工具栏点击菜单
+    action: mouse_click
+    ref: fullscreen_toolbar
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 点击全屏菜单按钮
+    action: element_action
+    ref: fullscreen_menu_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 选择搜索
+    action: main_menu_comb
+    ref: menu_search
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 输入关键字搜索
+    action: keyboard_type
+    text: the
+  - name: 按Enter
+    action: keyboard_press
+    keys: Return
+  - name: 等待
+    action: wait
+    wait: 1.5
+  - name: 退出全屏
+    action: keyboard_press
+    keys: Escape
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

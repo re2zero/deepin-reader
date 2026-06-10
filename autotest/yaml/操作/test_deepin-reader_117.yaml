@@ -1,0 +1,65 @@
+name: '[021]点击百分比图标中+、-按钮'
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 百分比与比例选择列表中不匹配（大多数情况），点击+、-按钮
+  2. 百分比与比例选择列表中匹配（少部分情况），点击+、-按钮
+
+  预期结果:
+  1. 缩放比例调整为列表中最靠近该比例的比例选项进行调整
+  2. 缩放比例调整为列表中相邻比例选项进行调整
+module: 操作
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 修改百分比为非标准值
+    action: element_action
+    ref: zoom_combo
+    do: click
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 输入非标准值
+    action: keyboard_type
+    text: '123'
+  - name: 按Enter
+    action: keyboard_press
+    keys: Return
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 点击放大按钮
+    action: element_action
+    ref: zoom_in_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 点击缩小按钮
+    action: element_action
+    ref: zoom_out_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

@@ -1,0 +1,64 @@
+name: 切换至新的用户，检查文档查看器版本和基本功能
+app: deepin-reader
+screenshot: false
+description: "测试步骤:\n1. 进入设置添加新的用户\n2. 切换至新的用户，检查文档查看器版本和基本功能\n\n预期结果:\n1. \n2. 版本正确，基本功能正常\n"
+module: 文档打开
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader
+    wait: 3.0
+steps:
+  - name: 打开文档查看器
+    action: wait
+    wait: 2.0
+  - name: 验证主窗口显示
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          name: Form_DMainWindow
+          role: form
+  - name: 检查基本功能：打开文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择文档打开
+    action: keyboard_type
+    text: /home/uos/测试文档.pdf
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 验证文档正常显示
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+  - name: 检查缩放功能
+    action: element_action
+    ref: zoom_in_btn
+    do: click
+  - name: 等待放大
+    action: wait
+    wait: 1.0
+  - name: 验证基本功能正常
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+teardown:
+  - action: session_stop

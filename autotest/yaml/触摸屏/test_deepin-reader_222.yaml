@@ -1,0 +1,43 @@
+# NON-AUTOMATABLE: 触摸屏/222 "单指移动窗口的位置"
+# This test case simulates a single-finger touch gesture where the user
+# presses and drags on the titlebar or sidebar toolbar to move the window
+# position. The mouse_drag action can move the cursor but cannot distinguish
+# between a click-drag (window move) and a touch-drag gesture, nor can it
+# reliably trigger the window manager's move behavior on the titlebar.
+# Manual testing required.
+name: 触摸屏/222 单指移动窗口的位置 — NON-AUTOMATABLE
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 鼠标点击窗口的工具栏和左侧栏底部工具栏区域，不抬起手指，在屏幕上移动
+
+  预期结果:
+  1. 可以移动窗口的位置
+module: 触摸屏
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: '无法自动化: touch drag to move window requires touch gesture'
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

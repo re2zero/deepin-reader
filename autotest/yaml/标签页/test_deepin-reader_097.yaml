@@ -1,0 +1,62 @@
+name: 多窗口多标签页时窗口间文档互相拖拽
+app: deepin-reader
+screenshot: false
+description: "前置条件:\n1.打开普通PDF格式文档\n2.打开DJVU格式文档\n3.打开docx格式文档\n\n前提： 打开多个窗口，每个窗口中都有标签页\n\
+  \n测试步骤:\n1. 打开多个窗口，每个窗口中分别有多个标签页\n2. 将一个窗口标签页拖拽到另外一个窗口中任意位置\n3. .当窗口A中只有一个标签页，将此标签页拖拽至其他窗口，查看\n\
+  \n预期结果:\n1. \n2. 标签页可以正常在不同窗口之间拖拽移动，拖拽过程中鼠标显示绿色可拖拽标志\n3. 窗口A自动关闭退出\n"
+module: 标签页
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 在窗口1中打开文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择文档
+    action: keyboard_type
+    text: /home/uos/文档1.pdf
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 打开新窗口
+    action: main_menu_comb
+    ref: menu_new_window
+  - name: 等待新窗口
+    action: wait
+    wait: 3.0
+  - name: 在窗口2中打开文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择文档
+    action: keyboard_type
+    text: /home/uos/文档2.djvu
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 验证两个窗口各自有标签页
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: page tab list
+teardown:
+  - action: session_stop

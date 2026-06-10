@@ -1,0 +1,39 @@
+name: 缓慢移动放大镜，界面无抖动现象
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 打开放大镜后缓慢移动查看
+  2. 在高分屏中切换分辨率后移动放大镜查看
+
+  预期结果:
+  1. 界面显示正常，无抖动现象
+  2. 界面显示正常，无抖动现象
+module: 主菜单
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 开启放大镜
+    action: main_menu_comb
+    ref: menu_magnifer
+  - name: 在文档区域缓慢移动鼠标
+    action: mouse_click
+    ref: doc_center
+  - name: 等待观察
+    action: wait
+    wait_after: 2000
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

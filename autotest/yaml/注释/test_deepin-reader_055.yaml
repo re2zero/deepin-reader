@@ -1,0 +1,48 @@
+name: 删除高亮注释方式
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+  3.双页显示
+
+  测试步骤:
+  1. 右击高亮注释文本，选择右键菜单中的取消高亮进行删除
+  2. 点击高亮注释文本，弹出小窗口，删除窗口所有内容，点击窗口的x或窗口之外区域
+  3. 右击缩略图_注释，选择删除菜单
+  4. 单击缩略图_注释，按delete快捷键进行删除
+
+  预期结果:
+  1. 可以正常删除注释，左边栏缩略图_注释同步被删除
+  2. 可以正常删除注释，左边栏缩略图_注释同步被删除
+  3. 可以正常删除注释，左边栏缩略图_注释同步被删除
+  4. 可以正常删除注释，左边栏缩略图_注释同步被删除
+module: 注释
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 右键高亮文本选择取消高亮
+    action: mouse_right_click
+    ref: doc_selected_text
+    wait_after: 500
+  - name: 选择取消高亮
+    action: context_menu_comb
+    ref: doc_selected_text
+    menu: [取消高亮]
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

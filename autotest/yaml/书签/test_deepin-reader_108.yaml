@@ -1,0 +1,51 @@
+name: 多种打开方式
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  打开PDF或djvu文档
+
+  测试步骤:
+  1. 拖拽一个文档至初始页面
+  2. 在文件夹中双击一个文档
+  3. 在文件夹中右击一个文档，选择打开方式为：文档查看器
+  4. 点击选择文件进行选择：进入文件选择页面，选择一个文档，点击打开
+  5. 文件选择页面点击取消，或者点击ESC键，查看是否退出选择弹框
+  6. 初始界面按Ctrl+O键
+  7. 已打开文档后，点击标签栏右侧的+按钮
+
+  预期结果:
+  1. 可以打开文档，正常进行浏览
+  2. 默认使用文档查看器打开文档浏览
+  3. 可以打开文档，正常进行浏览
+  4. 可以打开文档，正常进行浏览
+  5. 会退出选择弹框
+  6. 进入文件选择页面，可以选择文件
+  7. 进入文件选择页面，可以选择文件添加
+module: 书签
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 按Ctrl+O打开文件
+    action: keyboard_hot_key
+    keys: ctrl,o
+    wait_after: 1000
+  - name: 关闭对话框
+    action: keyboard_press
+    keys: Escape
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

@@ -1,0 +1,54 @@
+# YAML test case for deepin-reader — 触摸屏/221 "单指双击"
+# AUTOMATABLE: Single-finger double-tap on titlebar = double-click with mouse.
+# Simulates touch gesture via mouse_double_click on the titlebar area.
+name: 触摸屏/221 单指双击
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 应用工具栏单指双击
+  2. 再次双击
+
+  预期结果:
+  1. 窗口最大化
+  2. 恢复原来窗口大小
+module: 触摸屏
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 双击标题栏 — 窗口最大化
+    action: element_action
+    ref: title_option_btn
+    do: doubleClick
+    wait: 1.0
+  - name: 验证进程运行中
+    action: wait
+    wait: 0
+    assert:
+      - type: process_running
+        app: deepin-reader
+  - name: 再次双击标题栏 — 恢复窗口大小
+    action: element_action
+    ref: title_option_btn
+    do: doubleClick
+    wait: 1.0
+  - name: 验证进程运行中
+    action: wait
+    wait: 0
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

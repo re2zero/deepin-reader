@@ -1,0 +1,52 @@
+name: 幻灯片放映
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开普通PDF格式文档
+  2.打开DJVU格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 点击右键菜单中“幻灯片放映”
+  2. 分别点击ESC键、鼠标右键、控制按钮中的x键
+  3. 分别在浅色和深色主题下，查看和长按控制按钮，查看UI是否与设计图一致
+  4. 打开文档，按快捷键Crtl+H，查看是否进入幻灯片播放界面
+
+  预期结果:
+  1. 进入幻灯片放映
+  2. 退出幻灯片放映
+  3. 与设计图显示一致
+  4. 进入幻灯片放映，放映到最后一页后，继续循环至第一页播放
+module: 右键菜单
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 右键点击文档中心
+    action: context_menu_comb
+    ref: doc_center
+  - name: 点击幻灯片放映
+    action: element_action
+    ref: context_slide_show
+    do: click
+  - name: 等待幻灯片播放
+    action: wait
+    wait_after: 2000
+  - name: 按下ESC退出
+    action: keyboard_hot_key
+    keys: esc
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

@@ -1,0 +1,62 @@
+name: '[016]“高亮”菜单和“取消高亮”菜单显示'
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开普通PDF文档，
+  2.打开PDF格式的单页大文档（75M）
+  3. 打开docx格式文档
+
+  测试步骤:
+  1. 添加高亮后，查看“高亮”菜单和“取消高亮”菜单显示，查看颜色圈图标是否可以继续点击切换颜色
+
+  预期结果:
+  1. “高亮”菜单置灰，“取消高亮”菜单可点击，颜色圈图标可继续点击切换颜色
+module: 操作
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 等待文档加载
+    action: wait
+    wait: 2.0
+  - name: 选中文本添加高亮
+    action: mouse_drag
+    ref: doc_center
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 右击添加高亮
+    action: context_menu_comb
+    ref: doc_selected_text
+    menu:
+      - 高亮
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 右击已高亮文本查看菜单
+    action: mouse_right_click
+    ref: doc_selected_text
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 按Esc关闭菜单
+    action: keyboard_press
+    keys: Escape
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

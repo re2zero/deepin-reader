@@ -1,0 +1,46 @@
+name: 点击缩略图_书签
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+  4.双页显示
+
+  测试步骤:
+  1. 点击左边栏任意一条缩略图_书签，查看是否跳转到相应页面
+  2. 查看右侧文档添加的书签是否与缩略图_书签同步展示
+
+  预期结果:
+  1. 跳转至相应页面
+  2. 同步展示
+module: 书签
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 点击书签按钮
+    action: element_action
+    ref: sidebar_bookmark_btn
+    do: click
+    wait_after: 500
+  - name: 点击书签条目跳转
+    action: element_action
+    ref: bookmark_list
+    do: click
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

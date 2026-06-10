@@ -1,0 +1,77 @@
+# YAML test case for deepin-reader — 压力/137 "产生大量搜索结果无卡顿"
+# AUTOMATABLE: Open a PDF, use search, verify results display without crash.
+name: 压力/137 产生大量搜索结果无卡顿
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  打开PDF文档测试
+
+  测试步骤:
+  1. 产生大量搜索结果，查看应用状态
+
+  预期结果:
+  1. 显示正常，无卡顿
+module: 压力
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+  - action: keyboard_hot_key
+    key: ctrl+o
+    wait: 2.0
+  - action: keyboard_hot_key
+    key: ctrl+l
+    wait: 0.5
+  - action: keyboard_type
+    text: /home/uos/test/files/1.pdf
+    wait: 0.5
+  - action: keyboard_press
+    key: Return
+    wait: 2.0
+steps:
+  - name: 打开搜索栏
+    action: main_menu_comb
+    ref: menu_search
+    wait: 1.0
+  - name: 输入搜索关键词
+    action: element_set_value
+    ref: search_input
+    text: the
+    wait: 1.0
+  - name: 验证搜索结果控件可见
+    action: wait
+    wait: 0
+    assert:
+      - type: element_visible
+        selector:
+          role: push button
+          name: next
+  - name: 尝试翻页搜索
+    action: element_action
+    ref: search_next_btn
+    do: click
+    wait: 0.5
+  - name: 验证上一页按钮可操作
+    action: element_action
+    ref: search_prev_btn
+    do: click
+    wait: 0.5
+  - name: 关闭搜索栏
+    action: element_action
+    ref: search_close_btn
+    do: click
+    wait: 0.5
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

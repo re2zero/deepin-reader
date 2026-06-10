@@ -1,0 +1,50 @@
+name: 焦点切换，直接跳过置灰菜单
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 打开PDF文档，选中文本并右击
+  2. 按键盘上下键，焦点切换
+
+  预期结果:
+  1. 弹出右键菜单
+  2. 焦点在每个高亮菜单切换，置灰菜单直接跳过，不会出现焦点消失现象
+module: 键盘
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 选中文本区域
+    action: mouse_click
+    ref: doc_selected_text
+  - name: 右键点击选中区域
+    action: context_menu_comb
+    ref: doc_selected_text
+  - name: 按上下键切换焦点
+    action: keyboard_hot_key
+    keys: down
+  - name: 继续切换
+    action: keyboard_hot_key
+    keys: down
+  - name: 按ESC退出
+    action: keyboard_hot_key
+    keys: esc
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

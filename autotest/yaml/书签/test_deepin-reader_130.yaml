@@ -1,0 +1,38 @@
+name: 已添加PDF/DOCX文档界面布局显示
+app: deepin-reader
+screenshot: false
+description: "测试步骤:\n1. 已添加PDF/DOCX文档，查看顶部工具栏的显示\n2. 点击菜单键，查看包含的菜单项\n3. 查看文档区域显示\n\
+  4. 展开左边栏，查看底部图标\n\n预期结果:\n1. \n2. 包含的菜单有：新窗口、新标签页、保存、另存为、在文件管理器显示、放大镜、工具、搜索、打印、主题、帮助、关于、退出\n\
+  3. 左边栏缩略图默认收起，右侧文档首次打开默认显示第一页\n4. 显示缩略图图标、目录图标、书签图标、注释图标，显示无异常\n"
+module: 书签
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 查看顶部工具栏
+    action: element_action
+    ref: doc_view
+    do: click
+    wait_after: 500
+  - name: 点击菜单键查看菜单项
+    action: main_menu_comb
+    wait_after: 500
+  - name: 展开左边栏查看底部图标
+    action: element_action
+    ref: sidebar_toggle_btn
+    do: click
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

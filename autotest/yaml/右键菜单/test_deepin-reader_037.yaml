@@ -1,0 +1,46 @@
+name: 打印(未连接打印机)
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开普通PDF文档
+  2.打开PDF格式的单页大文档（75M）
+  3.双页显示
+  4.打开docx格式文档
+
+  测试步骤:
+  1. 未连接打印机，点击主菜单中的打印菜单
+  2. 选择打印到文件（PDF）
+
+  预期结果:
+  1. 跳转到打印预览界面，
+  2. 打印正常，打印文档可以保存
+module: 右键菜单
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 右键点击文档中心
+    action: context_menu_comb
+    ref: doc_center
+  - name: 点击打印
+    action: element_action
+    ref: context_print
+    do: click
+  - name: 等待打印预览
+    action: wait
+    wait_after: 2000
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

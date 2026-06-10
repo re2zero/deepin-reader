@@ -1,0 +1,72 @@
+name: 最小化窗口后，双击其他文档重新打开窗口
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  分别测试PDF、DJVU、DOCX格式文档
+
+  测试步骤:
+  1. 仅打开一个文档查看器窗口，打开文档，点击最小化
+  2. 双击另一份文档
+
+  预期结果:
+  1. 最小化至任务栏
+  2. 窗口重新在桌面打开，另一份文档打开显示在同一个窗口中
+module: 文档打开
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader
+    wait: 3.0
+steps:
+  - name: 打开PDF文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择文档
+    action: keyboard_type
+    text: /home/uos/测试文档.pdf
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 验证文档显示
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+  - name: 点击最小化按钮
+    action: element_action
+    ref: title_min_btn
+    do: click
+  - name: 等待窗口最小化
+    action: wait
+    wait: 2.0
+  - name: 验证进程仍在运行
+    action: process_running
+    ref: deepin-reader
+  - name: 通过文件管理器双击另一文档
+    action: keyboard_press
+    keys: Return
+  - name: 等待窗口恢复
+    action: wait
+    wait: 3.0
+  - name: 验证新文档在窗口中打开
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+teardown:
+  - action: session_stop

@@ -1,0 +1,63 @@
+name: '[018]百分比图标的下拉框'
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 点击下拉框，选择百分比选项
+  2. 点击+、-按钮
+
+  预期结果:
+  1. 文档行相应百分比大小调整
+  2. 缩放比例调整为列表中相邻比例选项进行调整
+module: 操作
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 点击百分比下拉框
+    action: element_action
+    ref: zoom_combo
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 选择百分比选项
+    action: element_action
+    ref: zoom_combo
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 点击放大按钮
+    action: element_action
+    ref: zoom_in_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 点击缩小按钮
+    action: element_action
+    ref: zoom_out_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

@@ -1,0 +1,104 @@
+name: 默认打开方式
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 刷机后首次双击PDF格式文档
+  2. 刷机后首次双击DJVU格式文档
+  3. 刷机后首次双击DOCX格式文档
+
+  预期结果:
+  1. 若有其他支持的应用，可能使用文档查看器打开；如无，直接通过文档查看器应用打开。
+  2. 若有其他支持的应用，可能使用文档查看器打开；如无，直接通过文档查看器应用打开
+  3. 若有其他支持的应用，可能使用文档查看器打开；如无，直接通过文档查看器应用打开
+module: 文档打开
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader
+    wait: 3.0
+steps:
+  - name: 直接打开PDF文档（模拟默认打开）
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择PDF文档
+    action: keyboard_type
+    text: /home/uos/测试文档.pdf
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 验证PDF文档正常打开
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+  - name: 关闭当前标签页
+    action: keyboard_hot_key
+    keys: ctrl,w
+  - name: 等待关闭
+    action: wait
+    wait: 1.0
+  - name: 打开DJVU文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择DJVU文档
+    action: keyboard_type
+    text: /home/uos/测试文档.djvu
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 验证DJVU文档正常打开
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+  - name: 关闭当前标签页
+    action: keyboard_hot_key
+    keys: ctrl,w
+  - name: 等待关闭
+    action: wait
+    wait: 1.0
+  - name: 打开DOCX文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择DOCX文档
+    action: keyboard_type
+    text: /home/uos/测试文档.docx
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载转化
+    action: wait
+    wait: 5.0
+  - name: 验证DOCX文档正常打开
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+teardown:
+  - action: session_stop

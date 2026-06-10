@@ -1,0 +1,81 @@
+name: 1、最小尺寸_检查
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开文档查看器
+  2.调整当前窗口为最小化，打开多页签，文档有目录、书签、注释
+
+  测试步骤:
+  1. 检查窗口尺寸
+  2. 打开新窗口，检查新窗口尺寸
+  3. 检查各个子页面
+
+  预期结果:
+  1. 应用窗口尺寸680*300
+  2. 新窗口尺寸为默认尺寸
+  3. 无遮挡、无压缩变形
+module: 窗口管理
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 打开PDF文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择文档
+    action: keyboard_type
+    text: /home/uos/文档.pdf
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 验证主窗口显示
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          name: Form_DMainWindow
+          role: form
+  - name: 验证文档视图显示
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+  - name: 验证工具栏元素可见
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          name: DLineEditChildLineEdit
+          role: text
+  - name: 打开新窗口检查默认尺寸
+    action: main_menu_comb
+    ref: menu_new_window
+  - name: 等待新窗口
+    action: wait
+    wait: 3.0
+  - name: 验证新窗口各元素无遮挡
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+teardown:
+  - action: session_stop

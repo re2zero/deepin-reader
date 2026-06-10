@@ -1,0 +1,59 @@
+name: 跨页高亮
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开普通PDF文档
+  2. 打开docx格式文档
+
+  测试步骤:
+  1. 跨页选中文本添加高亮
+  2. 右击高亮文本选择“取消高亮”
+
+  预期结果:
+  1. 可以正常添加跨页高亮
+  2. 仅可取消当前页高亮
+module: 操作
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 等待文档加载
+    action: wait
+    wait: 2.0
+  - name: 跨页选中文本（模拟鼠标拖动选择）
+    action: mouse_drag
+    ref: doc_center
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 右击选中文本添加高亮
+    action: context_menu_comb
+    ref: doc_selected_text
+    menu:
+      - 高亮
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 右击高亮文本取消高亮
+    action: context_menu_comb
+    ref: doc_selected_text
+    menu:
+      - 取消高亮
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

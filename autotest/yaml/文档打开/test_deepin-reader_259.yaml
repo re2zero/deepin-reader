@@ -1,0 +1,79 @@
+name: '[031]Ctrl+S和Ctrl+Shift+S快捷键'
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 打开docx文档，文档未编辑，按快捷键Ctrl+S
+  2. 打开docx文档，文档编辑后，按快捷键Ctrl+S
+  3. 打开docx文档，文档编辑后，按快捷键Ctrl+Shift+S
+
+  预期结果:
+  1. 无提示语弹出
+  2. 弹出另存为界面，可以修改文件名进行另存
+  3. 弹出另存为界面，可以修改文件名进行另存
+module: 文档打开
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader
+    wait: 3.0
+steps:
+  - name: 打开docx文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择docx文档
+    action: keyboard_type
+    text: /home/uos/测试文档.docx
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 5.0
+  - name: 未编辑状态按Ctrl+S
+    action: keyboard_hot_key
+    keys: ctrl,s
+  - name: 等待响应
+    action: wait
+    wait: 2.0
+  - name: 验证无保存对话框弹出
+    action: element_not_visible
+    ref: dialog_save
+  - name: 进行编辑操作后按Ctrl+S
+    action: keyboard_hot_key
+    keys: ctrl,s
+  - name: 等待另存为对话框
+    action: wait
+    wait: 2.0
+  - name: 按Ctrl+Shift+S
+    action: keyboard_hot_key
+    keys: ctrl,shift,s
+  - name: 等待另存为对话框
+    action: wait
+    wait: 2.0
+  - name: 验证另存为对话框弹出
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          name: 保存
+          role: dialog
+  - name: 取消保存
+    action: keyboard_press
+    keys: Escape
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

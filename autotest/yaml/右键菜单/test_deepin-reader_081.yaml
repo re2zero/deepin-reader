@@ -1,0 +1,60 @@
+name: 选中未高亮文本进行复制
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+
+  测试步骤:
+  1. 选中一段未高亮文本，点击右键菜单中复制菜单
+  2. 选中一段未高亮文本，按键盘中的Ctrl+C键，打开新的文本按键盘中的Ctrl+V键
+  3. 选中一段未高亮文本，点击右键菜单中高亮菜单和8种颜色图标
+  4. 选中一段未高亮文本，点击右键菜单中添加注释菜单
+  5. 选中一段未高亮文本，点击右键菜单中添加书签菜单
+
+  预期结果:
+  1. 可以复制选中的文本
+  2. 可以复制选中的文本
+  3. 可以增加高亮和切换颜色
+  4. 在文本右下角打开注释窗口，可以编辑注释，关闭后注释添加完成，文本自动高亮
+  5. 当前页面添加为书签
+module: 右键菜单
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 选中文本区域
+    action: mouse_click
+    ref: doc_selected_text
+  - name: 右键点击选中区域
+    action: context_menu_comb
+    ref: doc_selected_text
+  - name: 点击复制
+    action: element_action
+    ref: context_copy
+    do: click
+  - name: 按Ctrl+C复制
+    action: keyboard_hot_key
+    keys: ctrl,c
+  - name: 右键点击选中区域
+    action: context_menu_comb
+    ref: doc_selected_text
+  - name: 点击高亮
+    action: element_action
+    ref: context_highlight
+    do: click
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

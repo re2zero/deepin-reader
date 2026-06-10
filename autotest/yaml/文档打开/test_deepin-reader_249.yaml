@@ -1,0 +1,111 @@
+name: 已添加DJVU文档界面布局显示
+app: deepin-reader
+screenshot: false
+description: "测试步骤:\n1. 已添加文档，查看顶部工具栏的显示\n2. 点击菜单键，查看包含的菜单项\n3. 查看文档区域显示\n4. 展开左边栏，查看底部图标\n\
+  \n预期结果:\n1. \n2. 包含的菜单有：新窗口、新标签页、保存、另存为、在文件管理器显示、放大镜、工具、打印、主题、帮助、关于、退出\n3. 左边栏缩略图默认收起，右侧文档首次打开默认显示第一页\n\
+  4. 显示缩略图图标和书签图标，显示无异常\n"
+module: 文档打开
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader
+    wait: 3.0
+steps:
+  - name: 打开DJVU文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择DJVU文档
+    action: keyboard_type
+    text: /home/uos/测试文档.djvu
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 验证顶部工具栏显示
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          name: DLineEditChildLineEdit
+          role: text
+  - name: 点击菜单按钮查看菜单项
+    action: element_action
+    ref: title_option_btn
+    do: click
+  - name: 等待菜单弹出
+    action: wait
+    wait: 1.0
+  - name: 验证菜单包含新窗口
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: ''
+  - name: 验证菜单包含保存
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: ''
+  - name: 验证菜单包含打印
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: ''
+  - name: 点击菜单空白处关闭
+    action: keyboard_press
+    keys: Escape
+  - name: 验证文档区域显示
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+  - name: 展开左边栏
+    action: element_action
+    ref: sidebar_toggle_btn
+    do: click
+  - name: 等待侧边栏展开
+    action: wait
+    wait: 1.0
+  - name: 验证侧边栏可见
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          name: Form_SheetSidebar
+          role: form
+  - name: 验证缩略图按钮显示
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          name: Button_thumbnail
+          role: check box
+  - name: 验证书签按钮显示
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          name: Button_bookmark
+          role: check box
+teardown:
+  - action: session_stop

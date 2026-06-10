@@ -1,0 +1,71 @@
+name: 3、最小尺寸_窗口最大化之后再点击最小化按钮
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开文档查看器
+  2.调整当前窗口为最小化
+
+  测试步骤:
+  1. 窗口最大化之后再点击最小化按钮
+
+  预期结果:
+  1. 窗口尺寸为最小窗口680*300
+module: 窗口管理
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 打开文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择文档
+    action: keyboard_type
+    text: /home/uos/文档.pdf
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 点击最大化按钮
+    action: element_action
+    ref: title_max_btn
+    do: click
+  - name: 等待最大化
+    action: wait
+    wait: 1.0
+  - name: 验证窗口最大化
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+  - name: 点击最小化按钮
+    action: element_action
+    ref: title_min_btn
+    do: click
+  - name: 等待最小化
+    action: wait
+    wait: 2.0
+  - name: 验证进程仍在运行
+    action: process_running
+    ref: deepin-reader
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

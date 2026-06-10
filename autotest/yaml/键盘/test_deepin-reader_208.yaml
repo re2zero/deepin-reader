@@ -1,0 +1,54 @@
+name: 搜索框界面
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 搜索框弹出，按tab键切换
+  2. focus每个按钮时分别按回车键
+
+  预期结果:
+  1. 正常切换，focus效果正确
+  2. 执行选中的按钮
+module: 键盘
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 按Ctrl+F打开搜索
+    action: keyboard_hot_key
+    keys: ctrl,f
+  - name: 按Tab键切换搜索按钮
+    action: keyboard_hot_key
+    keys: tab
+  - name: 按Enter执行
+    action: keyboard_hot_key
+    keys: enter
+  - name: 继续Tab切换
+    action: keyboard_hot_key
+    keys: tab
+  - name: 按Enter执行
+    action: keyboard_hot_key
+    keys: enter
+  - name: 关闭搜索
+    action: element_action
+    ref: search_close_btn
+    do: click
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

@@ -1,0 +1,42 @@
+# NON-AUTOMATABLE: 触摸屏/223 "单指拖拽批量文件到应用内"
+# This test case simulates selecting multiple files in a file manager and
+# dragging them into the deepin-reader window. The drag-and-drop must
+# originate from an external application (file manager) with multiple files
+# selected simultaneously — cross-application drag-and-drop with file
+# selection cannot be automated with the current framework.
+name: 触摸屏/223 单指拖拽批量文件到应用内 — NON-AUTOMATABLE
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 文件夹中有多份文档，单指拖拽批量文件到应用内
+
+  预期结果:
+  1. 应用中打开多个标签页
+module: 触摸屏
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: '无法自动化: cross-app drag-and-drop of multiple files'
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

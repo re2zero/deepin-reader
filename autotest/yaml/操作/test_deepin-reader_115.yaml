@@ -1,0 +1,45 @@
+name: '[020]工具栏中的百分比图标显示'
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 查看工具栏中的百分比图标显示
+  2. 点击编辑框中的下拉按钮，查看显示的百分比选项
+
+  预期结果:
+  1. 显示带有下拉按钮的编辑框，编辑框左右两侧显示+-按钮；显示效果与设计图一致
+  2. 点击下拉框显示12个百分比选项：10%、25%、50%、75%、100%、125%、150%、175%、200%、300%、400%、500%；显示效果与设计图一致
+module: 操作
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 查看工具栏百分比图标显示
+    action: wait
+    wait: 1.0
+  - name: 点击编辑框下拉按钮
+    action: element_action
+    ref: zoom_combo
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

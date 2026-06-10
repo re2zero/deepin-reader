@@ -1,0 +1,69 @@
+name: 全屏中的右上角菜单
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 进入全屏，点击右上角菜单按钮
+  2. 进入全屏，点击右上角退出全屏按钮
+  3. 进入全屏，点击右上角关闭按钮
+
+  预期结果:
+  1. 弹出菜单弹框
+  2. 退出全屏
+  3. 关闭文档
+module: 操作
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 进入全屏
+    action: keyboard_press
+    keys: F11
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 唤出工具栏
+    action: mouse_click
+    ref: fullscreen_toolbar
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 点击右上角菜单按钮
+    action: element_action
+    ref: fullscreen_menu_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 按Esc关闭菜单
+    action: keyboard_press
+    keys: Escape
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 点击退出全屏按钮
+    action: element_action
+    ref: title_quit_full_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

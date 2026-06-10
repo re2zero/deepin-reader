@@ -1,0 +1,46 @@
+name: 点击正文目录跳转至相应文档内容中
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开普通有目录的PDF文档
+
+  测试步骤:
+  1. 打开有目录的文档，点击正文的目录
+  2. 文档左旋转，点击正文的目录
+  3. 文档右旋转，点击正文的目录
+  4. 文档旋转180度后，击右侧正文的目录
+
+  预期结果:
+  1. 跳转至相应文档内容处
+  2. 跳转至相应文档内容处
+  3. 跳转至相应文档内容处
+  4. 跳转至相应文档内容处
+module: 目录
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 点击正文目录
+    action: mouse_click
+    ref: hyperlink_area
+    wait_after: 1000
+  - name: 确认安全提示
+    action: element_action
+    ref: dialog_confirm
+    do: click
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

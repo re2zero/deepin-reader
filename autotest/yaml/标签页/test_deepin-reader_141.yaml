@@ -1,0 +1,108 @@
+name: 文档拖拽后各功能正常
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开普通PDF格式文档
+  2.打开DJVU格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 不同窗口间文档拖拽
+  2. 窗口中拖拽添加的文档，进行视图调整操作：双页显示、适应高度、适应宽度、左旋转、右旋转
+  3. 窗口中拖拽添加的文档，添加书签、高亮、注释
+  4. 窗口中拖拽添加的文档，进行翻页操作
+  5. 窗口中拖拽添加的文档，选择选择工具和手形工具拖拽文档
+  6. 窗口中拖拽添加的文档，点击菜单中选项：新窗口、新标签页、保存、另存为、打印、幻灯片放映、放大镜、文档信息、在文件管理器中显示、主题、帮助、关于、退出
+
+  预期结果:
+  1. 正常拖拽
+  2. 功能正常
+  3. 功能正常
+  4. 功能正常
+  5. 功能正常
+  6. 功能正常
+module: 标签页
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 打开文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择文档
+    action: keyboard_type
+    text: /home/uos/文档.pdf
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 验证功能1：双页显示
+    action: element_action
+    ref: double_page_btn
+    do: click
+  - name: 等待调整
+    action: wait
+    wait: 1.0
+  - name: 验证功能2：适应高度
+    action: element_action
+    ref: fit_to_height_btn
+    do: click
+  - name: 等待调整
+    action: wait
+    wait: 1.0
+  - name: 验证功能3：适应宽度
+    action: element_action
+    ref: fit_to_width_btn
+    do: click
+  - name: 等待调整
+    action: wait
+    wait: 1.0
+  - name: 验证功能4：右键旋转
+    action: context_menu_comb
+    ref: doc_center
+    menu: RotateRight
+  - name: 等待旋转
+    action: wait
+    wait: 1.0
+  - name: 验证功能5：翻页操作
+    action: mouse_scroll
+    amount: -3
+  - name: 等待翻页
+    action: wait
+    wait: 1.0
+  - name: 验证功能6：菜单功能-保存
+    action: main_menu_comb
+    ref: menu_save
+  - name: 等待保存
+    action: wait
+    wait: 1.0
+  - name: 验证功能7：菜单-打印
+    action: main_menu_comb
+    ref: menu_print
+  - name: 等待打印对话框
+    action: wait
+    wait: 1.0
+  - name: 取消打印
+    action: keyboard_press
+    keys: Escape
+  - name: 验证所有功能正常
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+teardown:
+  - action: session_stop

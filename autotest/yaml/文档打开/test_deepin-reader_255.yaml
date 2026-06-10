@@ -1,0 +1,81 @@
+name: 同时打开三种格式文档
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 打开应用，选中三种格式文档（docx、pdf、djvu）拖拽至窗口中，查看
+  2. 打开应用，点击“选择文件”进行选择：进入文件选择页面，选中三种格式文档（docx、pdf、djvu）打开
+  3. 初始界面按Ctrl+O键,进入文件选择页面，选中三种格式文档（docx、pdf、djvu）打开
+  4. 打开应用，点击菜单列表中的“新标签页”菜单，选中三种格式文档（docx、pdf、djvu）打开
+  5. 已打开文档后，点击标签栏右侧的+菜单，三种格式文档（docx、pdf、djvu）打开
+
+  预期结果:
+  1. pdf和djvu格式直接打开，docx格式文档转化为pdf打开
+  2. pdf和djvu格式直接打开，docx格式文档转化为pdf打开
+  3. pdf和djvu格式直接打开，docx格式文档转化为pdf打开
+  4. pdf和djvu格式直接打开，docx格式文档转化为pdf打开
+  5. pdf和djvu格式直接打开，docx格式文档转化为pdf打开
+module: 文档打开
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader
+    wait: 3.0
+steps:
+  - name: 按Ctrl+O打开文件选择
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择三种格式文档
+    action: keyboard_type
+    text: /home/uos/文档.pdf /home/uos/文档.djvu /home/uos/文档.docx
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待所有文档加载
+    action: wait
+    wait: 8.0
+  - name: 验证标签栏显示多个标签页
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: page tab list
+  - name: 验证当前文档视图显示
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+  - name: 通过新标签页菜单打开三种格式
+    action: main_menu_comb
+    ref: menu_new_tab
+  - name: 等待菜单响应
+    action: wait
+    wait: 2.0
+  - name: 选择文档
+    action: keyboard_type
+    text: /home/uos/文档2.pdf /home/uos/文档2.djvu /home/uos/文档2.docx
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 8.0
+  - name: 验证更多标签页添加
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: page tab list
+teardown:
+  - action: session_stop

@@ -1,0 +1,50 @@
+name: 关于界面
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 文档信息界面弹出，按tab键切换
+  2. 按回车键
+  3. 选中任意按钮时按esc键
+
+  预期结果:
+  1. 选中关闭按钮，focus效果正确
+  2. 执行选中的按钮
+  3. 退出关于界面
+module: 键盘
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 打开关于对话框
+    action: element_action
+    ref: title_option_btn
+    do: click
+  - name: 按Tab键切换
+    action: keyboard_hot_key
+    keys: tab
+  - name: 按Enter关闭
+    action: keyboard_hot_key
+    keys: enter
+  - name: 按ESC退出
+    action: keyboard_hot_key
+    keys: esc
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

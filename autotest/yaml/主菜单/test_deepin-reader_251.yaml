@@ -1,0 +1,38 @@
+name: 未编辑进行另存
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 打开已添加过书签、高亮、注释的文档，不编辑，点击工具栏中的菜单键，再点击另存为
+  2. 点击打开新文档，查看内容显示是否正常，原有的书签、高亮、注释是否改变
+  3. 关闭旧文档
+
+  预期结果:
+  1. 弹出系统文件弹框，弹出文档选择器，输入名字可将文件保存为新的文件
+  2. 内容显示是否正常，原有的书签、高亮、注释无改变
+  3. 旧文档被直接关闭，不会弹出是否保存的提示框
+module: 主菜单
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 直接点击主菜单另存为
+    action: main_menu_comb
+    ref: menu_save_as
+  - name: 等待另存对话框
+    action: wait
+    wait_after: 1000
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

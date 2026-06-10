@@ -1,0 +1,54 @@
+name: 适应宽度后鼠标再移出移入左侧栏
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 进入全屏，未唤出左侧栏，点击适应宽度
+  2. 鼠标移出左侧栏再移入
+
+  预期结果:
+  1. 显示为适应宽度状态
+  2. 文档保持适应宽度状态，百分比数值不改变
+module: 操作
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 进入全屏
+    action: keyboard_press
+    keys: F11
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 点击适合宽度
+    action: element_action
+    ref: fit_to_width_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 鼠标移出再移入左侧栏
+    action: mouse_click
+    ref: fullscreen_sidebar_btn
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

@@ -1,0 +1,79 @@
+name: 视图调整菜单
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+  4.双页显示
+
+  测试步骤:
+  1. 默认文档比例进入双页显示，再切换大小窗口和窗口比例
+  2. 调整适合宽度，再切换大小窗口和窗口比例
+  3. 调整适合高度，再切换大小窗口和窗口比例
+  4. 左旋转，再切换大小窗口和窗口比例
+  5. 右旋转，再切换大小窗口和窗口比例
+
+  预期结果:
+  1. 保持双页显示，文档百分比显示正常，不会出现闪退等异常
+  2. 保持适合宽度，文档百分比显示正常，不会出现闪退等异常
+  3. 保持适合高度，文档百分比显示正常，不会出现闪退等异常
+  4. 保持左旋转，文档百分比显示正常，不会出现闪退等异常
+  5. 保持右旋转，文档百分比显示正常，不会出现闪退等异常
+module: 操作
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 默认比例进入双页显示
+    action: element_action
+    ref: double_page_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 适合宽度
+    action: element_action
+    ref: fit_to_width_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 适合高度
+    action: element_action
+    ref: fit_to_height_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 左旋转
+    action: context_menu_comb
+    ref: doc_center
+    menu:
+      - Rotate left
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 右旋转
+    action: context_menu_comb
+    ref: doc_center
+    menu:
+      - Rotate right
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

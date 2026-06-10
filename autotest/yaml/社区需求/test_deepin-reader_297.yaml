@@ -1,0 +1,92 @@
+name: 幻灯片自动播放
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开文档查看器
+  2.依次打开PDF，DJVU，DOCX
+
+  测试步骤:
+  1. 依次在PDF，DJVU，DOCX任意位置右击
+  2. 点击幻灯片放映
+  3. 自动播放时，播放到最后一页时，自动暂停
+
+  预期结果:
+  1. 弹框展示
+  2. 进入幻灯片播放界面
+  3. 菜单键中暂停按钮变成播放按钮，再次点击播放从第一页开始播放
+module: 社区需求
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 打开PDF文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择文档
+    action: keyboard_type
+    text: /home/uos/幻灯片文档.pdf
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 右击开始幻灯片放映
+    action: context_menu_comb
+    ref: doc_center
+    menu: SlideShow
+  - name: 等待幻灯片启动
+    action: wait
+    wait: 3.0
+  - name: 验证幻灯片窗口
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: window
+  - name: 点击全屏菜单按钮
+    action: element_action
+    ref: fullscreen_menu_btn
+    do: click
+  - name: 等待菜单
+    action: wait
+    wait: 1.0
+  - name: 启动自动播放
+    action: keyboard_press
+    keys: Return
+  - name: 等待自动播放进行
+    action: wait
+    wait: 5.0
+  - name: 验证幻灯片正在自动播放
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: window
+  - name: 等待播放到最后一页自动暂停
+    action: wait
+    wait: 3.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: keyboard_press
+    keys: Escape
+  - action: wait
+    wait: 1.0
+  - action: session_stop

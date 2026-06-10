@@ -1,0 +1,75 @@
+name: 多窗口多标签页时不支持打开相同文档
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开普通PDF格式文档
+  2.打开DJVU格式文档
+  3.打开docx格式文档
+
+  前提： 打开多个窗口，每个窗口中都有标签页
+
+  测试步骤:
+  1. 只打开一个窗口并添加文档A,双击/拖拽/点击添加标签页菜单方式打开再次添加文档A至此窗口
+  2. 打开多个窗口，文档A已在其中一个窗口打开，双击/拖拽/点击添加标签页菜单方式打开再次拖拽文档A至任意窗口，查看
+
+  预期结果:
+  1. 无法添加相同文档，激活当前页，无提示弹出
+  2. 无法添加相同文档，激活当前页，无提示弹出
+module: 标签页
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 打开文档A
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择文档A
+    action: keyboard_type
+    text: /home/uos/文档A.pdf
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 验证文档A显示
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+  - name: 再次尝试打开相同文档A
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 再次选择文档A
+    action: keyboard_type
+    text: /home/uos/文档A.pdf
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待响应
+    action: wait
+    wait: 2.0
+  - name: 验证未添加重复标签页（当前页激活）
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+teardown:
+  - action: session_stop

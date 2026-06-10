@@ -1,0 +1,45 @@
+name: 左键单击取消右键菜单
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 右击注释图标，查看
+  2. 鼠标左键点击其他区域
+  3. 右击注释图标弹出右键菜单，鼠标右键点击其他区域
+
+  预期结果:
+  1. 弹出右键菜单
+  2. 右键菜单框消失
+  3. 右键菜单框消失
+module: 注释
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 右键注释图标
+    action: mouse_right_click
+    ref: doc_annotation_icon
+    wait_after: 500
+  - name: 左键点击其他区域取消
+    action: mouse_click
+    ref: doc_center
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

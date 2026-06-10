@@ -1,0 +1,47 @@
+name: delete快捷键删除注释目录
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+  3.双页显示
+
+  测试步骤:
+  1. 选中一个左侧栏的注释目录，鼠标不点击移动至左边栏以外区域，按快捷键delete，查看是否正常删除
+
+  预期结果:
+  1. 可以正常删除
+module: 注释
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 打开PDF文档
+    action: element_action
+    ref: doc_view
+    do: click
+    wait_after: 1000
+  - name: 选中左侧注释目录
+    action: element_action
+    ref: annotation_list
+    do: click
+    wait_after: 500
+  - name: 按Delete键删除注释
+    action: keyboard_press
+    keys: Delete
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

@@ -1,0 +1,86 @@
+name: 切换单页/双页，页面需适配
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 打开文档，查看默认百分比显示
+  2. 切换到双页显示
+  3. 再切到单页显示
+  4. 单页显示时打开左边栏
+  5. 双页页显示时打开左边栏
+
+  预期结果:
+  1. 默认显示单页，100%比例
+  2. 页面适配，无截断显示
+  3. 页面适配，无截断显示
+  4. 页面适配，无截断显示
+  5. 页面适配，无截断显示
+module: 操作
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 查看默认百分比显示
+    action: wait
+    wait: 1.0
+  - name: 切换到双页显示
+    action: element_action
+    ref: double_page_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.5
+  - name: 切换到单页显示
+    action: element_action
+    ref: single_page_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.5
+  - name: 单页显示时打开左边栏
+    action: element_action
+    ref: sidebar_toggle_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 关闭左边栏
+    action: element_action
+    ref: sidebar_toggle_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 切换到双页显示
+    action: element_action
+    ref: double_page_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 双页显示时打开左边栏
+    action: element_action
+    ref: sidebar_toggle_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

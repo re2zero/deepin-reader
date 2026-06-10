@@ -1,0 +1,37 @@
+name: 已添加文档界面菜单显示
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  打开PDF、DJVU、DOCX文档
+
+  测试步骤:
+  1. 打开PDF文档，点击百分比输入框，查看弹出框中的菜单显示
+  2. 在右侧文档区域，未选中文本直接点击鼠标右键，查看右键菜单显示
+
+  预期结果:
+  1. 依次显示菜单：双页显示、默认大小、适合页面、适应高度、适应宽度；10%、25%、50%、75%、100%、125%、150%、175%、200%、300%、400%、500%
+  2. 依次显示菜单：搜索，添加书签，添加注释，全屏，幻灯片放映，第一页，前一页，后一页，最后一页；左旋转，右旋转，打印，文档信息；不可操作时，菜单置灰显示
+module: 书签
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 右键文档空白区域查看菜单
+    action: mouse_right_click
+    ref: doc_center
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

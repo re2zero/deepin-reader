@@ -1,0 +1,40 @@
+name: '[005]主题'
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 点击工具栏中的菜单键，鼠标放置在主题菜单上
+
+  预期结果:
+  1. 弹出三个主题菜单：浅色、深色、跟随主题，点击后应用相应主题
+module: 主菜单
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 打开主题菜单
+    action: main_menu_comb
+    items:
+      - 主题
+  - name: 验证主题子菜单
+    action: wait
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

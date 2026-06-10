@@ -1,0 +1,49 @@
+name: 左边栏的注释目录展示顺序
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+  2.双页显示
+
+  测试步骤:
+  1. 不同页面添加注释
+  2. 同一页面添加注释
+
+  预期结果:
+  1. 按照页面顺序展示，页面靠前则该页面的注释目录靠前
+  2. 同一页面按时间先后顺序显示
+module: 注释
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 添加多个高亮注释
+    action: mouse_right_click
+    ref: doc_center
+    wait_after: 500
+  - name: 选择高亮
+    action: context_menu_comb
+    ref: doc_center
+    menu: [高亮]
+    wait_after: 500
+  - name: 点击注释按钮查看目录顺序
+    action: element_action
+    ref: sidebar_annotation_btn
+    do: click
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

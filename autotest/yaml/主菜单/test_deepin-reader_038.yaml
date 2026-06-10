@@ -1,0 +1,39 @@
+name: '[006]在文件管理器中显示'
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 点击工具栏中的菜单键，再点击在文件管理器中显示菜单
+
+  预期结果:
+  1. 进入当前文档所在的文件夹，并显示文档查看器中当前浏览的文档
+module: 主菜单
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 点击菜单键选择在文件管理器中显示
+    action: main_menu_comb
+    ref: menu_display_in_fm
+  - name: 等待文件管理器打开
+    action: wait
+    wait_after: 2000
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

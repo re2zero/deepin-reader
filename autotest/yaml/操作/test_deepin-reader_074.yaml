@@ -1,0 +1,64 @@
+name: 高亮重叠
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开普通PDF文档，
+  2.打开PDF格式的单页大文档（75M）
+  3. 打开docx格式文档
+
+  测试步骤:
+  1. 文本已高亮显示，重叠选中另一段文本，右击未高亮区域添加颜色，查看
+
+  预期结果:
+  1. 出现两段重叠颜色，重叠部分为混合色
+module: 操作
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 等待文档加载
+    action: wait
+    wait: 2.0
+  - name: 选中文本添加高亮
+    action: mouse_drag
+    ref: doc_center
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 右击添加高亮
+    action: context_menu_comb
+    ref: doc_selected_text
+    menu:
+      - 高亮
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 选中另一段重叠文本
+    action: mouse_drag
+    ref: doc_center
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 右击未高亮区域切换颜色
+    action: context_menu_comb
+    ref: doc_selected_text
+    menu:
+      - 高亮
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

@@ -1,0 +1,46 @@
+name: 【文档查看器紧凑模式】启用紧凑模式
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.控制中心 -&gt; 个性化 -&gt; 通用，开启紧凑模式
+
+  测试步骤:
+  1. 启动【文档查看器】检查以下控件：
+  ①标题栏侧边栏按钮
+  ②查找界面的向上及向下查找
+  ③侧边栏界面的翻页按钮
+  ④侧边栏宽度
+  ⑤侧边栏tab按钮大小
+  ⑥添加书签、添加注释按钮高度
+  ⑦页码背景高度
+  ⑧退出全屏图标大小适配
+  2. 进行涉及紧凑模式调整的控件点击和跳转
+  3. 切换应用主题后，查看步骤一控件
+
+  预期结果:
+  1. 控件呈现紧凑模式
+  2. 调整后的控件点击响应正常，页面切换流畅
+  3. 主题切换后，紧凑模式控件显示正常
+module: 其它交互
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 该用例需控制中心开启紧凑模式，暂无法全自动
+    action: wait
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

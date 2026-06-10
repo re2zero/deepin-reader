@@ -1,0 +1,41 @@
+name: '[034]右击选中文字弹出菜单'
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+
+  测试步骤:
+  1. 选中页面中一段未高亮文本，查看右键菜单包含的菜单项
+
+  预期结果:
+  1. 右键菜单包含的选项为：复制、高亮、8种高亮颜色、取消高亮、添加注释、添加书签；其中“取消高亮”置灰显示，其他菜单高亮可选择
+module: 右键菜单
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 选中文本
+    action: mouse_click
+    ref: doc_selected_text
+  - name: 右键点击选中文本
+    action: context_menu_comb
+    ref: doc_selected_text
+  - name: 验证右键菜单包含复制高亮等选项
+    action: wait
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

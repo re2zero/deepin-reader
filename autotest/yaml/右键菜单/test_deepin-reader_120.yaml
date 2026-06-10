@@ -1,0 +1,54 @@
+name: '[022]窗口中显示当前页（不显示上下页）时，点击右键菜单选项'
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+  2.双页显示
+
+  测试步骤:
+  1. 分别点击右键菜单中添加书签，添加注释，第一页，上一页，下一页，最后一页菜单，查看是否正确跳转
+
+  预期结果:
+  1. 页面正确跳转
+module: 右键菜单
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 右键点击文档中心
+    action: context_menu_comb
+    ref: doc_center
+  - name: 点击添加书签
+    action: element_action
+    ref: context_add_bookmark
+    do: click
+  - name: 右键点击文档中心
+    action: context_menu_comb
+    ref: doc_center
+  - name: 点击第一页
+    action: element_action
+    ref: context_first_page
+    do: click
+  - name: 右键点击文档中心
+    action: context_menu_comb
+    ref: doc_center
+  - name: 点击前一页
+    action: element_action
+    ref: context_prev_page
+    do: click
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

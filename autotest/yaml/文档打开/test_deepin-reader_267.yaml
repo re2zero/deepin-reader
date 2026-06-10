@@ -1,0 +1,80 @@
+name: 【UI】是否保存提示语显示
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1. 打开PDF格式文档
+  2.打开DJVU格式文档
+  3.打开DOCX格式文档
+
+  测试步骤:
+  1. 打开文档，编辑后关闭，查看提示语显示
+
+  预期结果:
+  1. 弹出是否保存弹框，提示语为  是否保存对“xxx”的编辑
+module: 文档打开
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader
+    wait: 3.0
+steps:
+  - name: 打开PDF文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择PDF文档
+    action: keyboard_type
+    text: /home/uos/测试文档.pdf
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 添加注释进行编辑
+    action: context_menu_comb
+    ref: doc_center
+    menu: AddAnnotationIcon
+  - name: 等待编辑
+    action: wait
+    wait: 2.0
+  - name: 关闭标签页
+    action: keyboard_hot_key
+    keys: ctrl,w
+  - name: 等待保存提示框
+    action: wait
+    wait: 2.0
+  - name: 验证保存提示框显示
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: dialog
+  - name: 查看提示语内容（OCR验证）
+    action: ocr_exist
+    text: 是否保存
+  - name: 点击不保存
+    action: keyboard_press
+    keys: Tab
+  - name: 切换按钮
+    action: wait
+    wait: 0.5
+  - name: 确认不保存
+    action: keyboard_press
+    keys: Return
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

@@ -1,0 +1,75 @@
+name: 焦点定位与书签/注释缩略图的删除
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 选中一个书签/注释缩略图，鼠标任意移动后，按键盘delete键
+  2. 选中一个书签/注释缩略图，鼠标点击右侧文档区域后，按键盘delete键
+  3. 选中一个书签/注释缩略图，点击百分比或页数输入框，按键盘delete键
+
+  预期结果:
+  1. 正常删除书签/注释缩略图
+  2. 无法删除签/注释缩略图
+  3. 无法删除签/注释缩略图
+module: 操作
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 展开左边栏
+    action: element_action
+    ref: sidebar_toggle_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 点击书签标签页
+    action: element_action
+    ref: sidebar_bookmark_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 选中书签
+    action: mouse_click
+    ref: bookmark_list
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 按Delete键删除
+    action: keyboard_press
+    keys: Delete
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 点击文档区域
+    action: mouse_click
+    ref: doc_center
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 按Delete键（焦点不在列表）
+    action: keyboard_press
+    keys: Delete
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

@@ -1,0 +1,52 @@
+name: 重叠高亮文本添加注释
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+  3.双页显示
+
+  测试步骤:
+  1. 文本已添加高亮注释，重叠选中另一段文本，右击未高亮区域添加注释，
+  2. 文本已添加高亮注释，重叠选中另一段文本，右击高亮区域
+
+  预期结果:
+  1. 出现两段重叠颜色，添加另一条注释
+  2. 仅可修改原注释内容，无法添加注释
+module: 注释
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 选中文本
+    action: mouse_click
+    ref: doc_selected_text
+    wait_after: 500
+  - name: 右键添加高亮
+    action: mouse_right_click
+    ref: doc_center
+    wait_after: 500
+  - name: 选择高亮菜单
+    action: context_menu_comb
+    ref: doc_center
+    menu: [高亮]
+    wait_after: 500
+  - name: 重叠选中另一段文本并添加注释
+    action: mouse_click
+    ref: doc_selected_text
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

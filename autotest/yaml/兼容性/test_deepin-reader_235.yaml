@@ -1,0 +1,45 @@
+# NON-AUTOMATABLE: 兼容性/235 "切换系统语言后检查翻译"
+# This test case requires switching the system locale to multiple languages
+# (English, Traditional Chinese, Tibetan, Uyghur) and verifying that the
+# application UI translates correctly. System language switch requires root
+# privileges and a session restart, which cannot be performed within a single
+# test session without disrupting the test runner.
+name: 兼容性/235 切换系统语言后检查翻译 — NON-AUTOMATABLE
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 切换系统语言为英文，打开文档后查看各界面翻译是否正常
+  2. 切换系统语言为繁体中文（香港），打开文档后查看各界面翻译是否正常
+  3. 切换系统语言为正体中文（台湾），打开文档后查看各界面翻译是否正常
+  4. 切换系统语言为藏语（终端locale查询显示Bo则表示切换成功），打开文档后查看各界面翻译是否正常
+  5. 切换系统语言为维吾尔语，打开文档后查看各界面翻译是否正常
+
+  预期结果:
+  1. 查看各界面显示正确，基本功能使用正常
+  2. 查看各界面显示正确，基本功能使用正常
+  3. 查看各界面显示正确，基本功能使用正常
+  4. 查看各界面显示正确
+  5. 查看各界面显示正确
+module: 兼容性
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: '无法自动化: system language switch + UI translation verification'
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

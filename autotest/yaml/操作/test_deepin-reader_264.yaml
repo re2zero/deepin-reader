@@ -1,0 +1,80 @@
+name: 按快捷键翻页（1040阶段）
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开普通PDF格式文档
+  2.打开DJVU格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 打开文档，鼠标不点击，任意移动，按键盘上下键或pageup/pagedown
+  2. 点击工具栏任意菜单（除去百分比菜单）后，按键盘上下键或pageup/pagedown
+  3. 点击百分比或页数输入框后，按键盘上下键或pageup/pagedown
+  4. 展开左边栏，鼠标点击左边栏区域后任意移动，按键盘上下键或pageup/pagedown
+  5. 鼠标点击右侧文档区域后任意移动，按键盘上下键或pageup/pagedown
+  6. 鼠标点击窗口外桌面区域，，按键盘上下键或pageup/pagedown
+
+  预期结果:
+  1. 焦点默认在文档中，文档正常逐行翻页/逐页翻页
+  2. 焦点转移到工具栏
+  3. 焦点在输入框，文档不会进行翻页
+  4. 焦点在左侧，缩略图进行翻页
+  5. 焦点在右侧，文档进行翻页
+  6. 焦点在桌面中，选中桌面应用
+module: 操作
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 按键盘下键逐行翻页
+    action: keyboard_press
+    keys: Down
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 按PageDown翻页
+    action: keyboard_press
+    keys: Page_Down
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 点击百分比输入框
+    action: element_action
+    ref: zoom_combo
+    do: click
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 按PageDown
+    action: keyboard_press
+    keys: Page_Down
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 点击文档区域
+    action: mouse_click
+    ref: doc_center
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 按PageDown
+    action: keyboard_press
+    keys: Page_Down
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

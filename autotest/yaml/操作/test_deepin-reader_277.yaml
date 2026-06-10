@@ -1,0 +1,45 @@
+name: 安全提示弹框弹出后，点击应用其他菜单不应该起作用
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  打开PDF格式文档
+  打开docx格式文档
+
+  测试步骤:
+  1. 安全提示弹框弹出后，点击应用其他菜单
+
+  预期结果:
+  1. 点击均无作用
+module: 操作
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 点击超链接弹出安全提示
+    action: mouse_click
+    ref: hyperlink_area
+  - name: 等待
+    action: wait
+    wait: 1.5
+  - name: 尝试点击其他菜单（应该无作用）
+    action: element_action
+    ref: zoom_in_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

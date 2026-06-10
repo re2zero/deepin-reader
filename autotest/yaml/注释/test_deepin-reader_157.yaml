@@ -1,0 +1,41 @@
+name: 注释图标无法移至其他页面
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 按住鼠标左键移动注释图标至其他页面
+
+  预期结果:
+  1. 无法移动至其他页面，仅支持在当前页移动
+module: 注释
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 选中注释图标
+    action: mouse_click
+    ref: doc_annotation_icon
+    wait_after: 500
+  - name: 尝试拖拽至页面边缘
+    action: mouse_drag
+    ref: doc_annotation_icon
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

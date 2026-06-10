@@ -1,0 +1,77 @@
+name: 关闭再打开文档记住百分比和视图调整状态
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+  4.双页显示
+
+  测试步骤:
+  1. 窗口中只有一个标签页，分别点击调整百分比/双页视图/适应宽度/适应高度/左旋转/右旋转，关闭应用再进入查看
+  2. 窗口中有多个标签页，分别点击调整百分比/双页视图/适应宽度/适应高度/左旋转/右旋转，关闭应用再进入查看
+  3. 窗口中只有一个标签页，分别点击调整百分比/双页视图/适合宽度/适合高度/左旋转/右旋转，关闭标签页，不关闭应用，再次打开文档查看
+  4. 窗口中有多标签页，分别点击调整百分比/双页视图/适合宽度/适合高度/左旋转/右旋转，关闭标签页，不关闭应用，再次打开文档查看
+
+  预期结果:
+  1. 保持退出之前的状态
+  2. 保持退出之前的状态
+  3. 保持退出之前的状态
+  4. 保持退出之前的状态
+module: 操作
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 调整百分比
+    action: element_action
+    ref: zoom_combo
+    do: click
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 输入150%
+    action: keyboard_type
+    text: '150'
+  - name: 按Enter
+    action: keyboard_press
+    keys: Return
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 切换到双页显示
+    action: element_action
+    ref: double_page_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 点击适合宽度
+    action: element_action
+    ref: fit_to_width_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 点击适合高度
+    action: element_action
+    ref: fit_to_height_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

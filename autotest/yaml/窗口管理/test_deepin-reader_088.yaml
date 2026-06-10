@@ -1,0 +1,87 @@
+name: 窗口比例变化和左边栏宽度变化
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 调整窗口大小，查看界面显示
+  2. 手动拖拽目录边框，查看界面显示
+
+  预期结果:
+  1. 左边栏区域和右侧文档区域始终保持约1:3的比例变化，左边栏文档、书签、注释、搜索结果缩略图大小跟随变化，左边栏宽度范围：266px~380px
+  2. 左边栏文档、书签、注释、搜索结果缩略图大小跟随变化，左边栏宽度范围：266px~380px
+module: 窗口管理
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 打开PDF文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择文档
+    action: keyboard_type
+    text: /home/uos/文档.pdf
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 展开左边栏
+    action: element_action
+    ref: sidebar_toggle_btn
+    do: click
+  - name: 等待侧边栏展开
+    action: wait
+    wait: 1.0
+  - name: 验证侧边栏可见
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          name: Form_SheetSidebar
+          role: form
+  - name: 最大化窗口
+    action: element_action
+    ref: title_max_btn
+    do: click
+  - name: 等待最大化
+    action: wait
+    wait: 1.0
+  - name: 验证左边栏和文档区域比例显示
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+  - name: 恢复窗口大小
+    action: element_action
+    ref: title_max_btn
+    do: click
+  - name: 等待恢复
+    action: wait
+    wait: 1.0
+  - name: 验证调整后界面显示正常
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+teardown:
+  - action: session_stop

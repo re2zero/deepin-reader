@@ -1,0 +1,46 @@
+name: 左边栏的注释目录显示
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+
+  测试步骤:
+  1. 添加图标注释和高亮注释，查看左边栏注释目录显示
+
+  预期结果:
+  1.0
+module: 注释
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 添加图标注释
+    action: mouse_right_click
+    ref: doc_center
+    wait_after: 500
+  - name: 选择添加注释图标
+    action: context_menu_comb
+    ref: doc_center
+    menu: [添加注释]
+    wait_after: 500
+  - name: 点击注释按钮查看左侧栏目录
+    action: element_action
+    ref: sidebar_annotation_btn
+    do: click
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

@@ -1,0 +1,31 @@
+name: debian/control文件description字段，长、短描述与文案相符
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 打开终端，输入 apt show deepin-reader，查看debian/control文件description字段，长、短描述
+
+  预期结果:
+  1. 描述与文案相符
+module: 主菜单
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 该用例需终端验证apt show deepin-reader描述信息，暂无法全自动
+    action: wait
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

@@ -1,0 +1,38 @@
+name: 点击注释目录
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+  3.双页显示
+
+  测试步骤:
+  1. 点击左边栏任意一个注释，查看是否跳转到该页相应注释内容处
+
+  预期结果:
+  1. 正确跳转到该页相应注释内容处，注释目录与文档注释页面同步展示
+module: 注释
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 点击左侧栏注释条目
+    action: element_action
+    ref: annotation_list
+    do: click
+    wait_after: 500
+  - name: 验证跳转到对应页面
+    action: wait
+    wait: 0
+    assert:
+      - type: element_visible
+        ref: doc_view
+teardown:
+  - action: session_stop

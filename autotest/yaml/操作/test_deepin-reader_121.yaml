@@ -1,0 +1,55 @@
+name: 关闭再打开文档记住所在页数和左边栏状态
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+  4.双页显示
+
+  测试步骤:
+  1. 打开一份PDF文档，未展开左边栏，关闭应用再打开
+  2. 打开一份PDF文档，展开左边栏，关闭应用再打开
+  3. 打开一份PDF文档，浏览文档，如当前页数为：5，关闭应用再打开
+
+  预期结果:
+  1. 左边栏保持隐藏状态
+  2. 左边栏保持展开状态
+  3. 页面仍停留在页数5
+module: 操作
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 展开左边栏
+    action: element_action
+    ref: sidebar_toggle_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 点击页数输入框跳转到第5页
+    action: element_set_value
+    ref: page_input
+    text: '5'
+  - name: 按Enter
+    action: keyboard_press
+    keys: Return
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

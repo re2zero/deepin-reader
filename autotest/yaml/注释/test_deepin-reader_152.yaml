@@ -1,0 +1,49 @@
+name: 编辑图标注释后左击其他区域
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 鼠标左键单击注释图标，查看显示
+  2. 编辑注释内容
+  3. 鼠标左击其他区域（非注释图标和注释框），查看
+
+  预期结果:
+  1. 图标为选中状态，同时弹出注释框，输入光标显示在注释内容后方
+  2. 可以正常修改
+  3. 注释框消失，注释内容编辑成功，注释图标选中状态被取消
+module: 注释
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 左键单击注释图标
+    action: mouse_click
+    ref: doc_annotation_icon
+    wait_after: 500
+  - name: 编辑注释内容
+    action: keyboard_type
+    text: 编辑后内容
+    wait_after: 500
+  - name: 左击其他区域
+    action: mouse_click
+    ref: doc_center
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

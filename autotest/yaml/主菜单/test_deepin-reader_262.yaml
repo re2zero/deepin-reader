@@ -1,0 +1,37 @@
+name: 应用内嵌帮助手册功能正常
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 检查如下路径下 /usr/share/deepin-manual/manual-assets/application下是否存在deepin-reader文件夹
+  2. 打开deepin-reader文件夹进入document-viewer/zh_CN ,查看document-viewer.md中内容显示
+  3. 帮助手册更新到最新版本，查看应用图标显示是否正确
+  4. 打开文档查看器，点击帮助菜单，查看文案是否正确
+
+  预期结果:
+  1. 存在deepin-reader文件夹
+  2. 首行显示为：# 文档查看器 | deepin-reader
+  3. 显示正确
+  4. 文案正确
+module: 主菜单
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 该用例需检查帮助手册文件路径，暂无法全自动
+    action: wait
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

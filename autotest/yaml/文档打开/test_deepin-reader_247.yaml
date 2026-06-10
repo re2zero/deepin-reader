@@ -1,0 +1,97 @@
+name: 拖拽窗口界面显示顺畅
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  分别打开PDF、DJVU、DOCX格式文档测试
+
+  测试步骤:
+  1. 打开文档，双页显示，拖拽窗口，查看
+  2. 打开文档，适应高度，拖拽窗口，查看
+  3. 打开文档，适应宽度，拖拽窗口，查看
+  4. 打开文档，左旋转，拖拽窗口，查看
+  5. 打开文档，右旋转，拖拽窗口，查看
+
+  预期结果:
+  1. 界面显示顺畅，无闪烁、重影现象
+  2. 界面显示顺畅，无闪烁、重影现象
+  3. 界面显示顺畅，无闪烁、重影现象
+  4. 界面显示顺畅，无闪烁、重影现象
+  5. 界面显示顺畅，无闪烁、重影现象
+module: 文档打开
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader
+    wait: 3.0
+steps:
+  - name: 打开PDF文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择文档
+    action: keyboard_type
+    text: /home/uos/测试文档.pdf
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 切换双页显示
+    action: element_action
+    ref: double_page_btn
+    do: click
+  - name: 等待切换
+    action: wait
+    wait: 1.0
+  - name: 点击标题栏
+    action: element_action
+    ref: main_window
+    do: click
+  - name: 拖拽窗口调整位置（模拟鼠标拖动）
+    action: mouse_click
+    ref: main_window
+  - name: 验证界面显示顺畅
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+  - name: 切换适应高度
+    action: element_action
+    ref: fit_to_height_btn
+    do: click
+  - name: 等待切换
+    action: wait
+    wait: 1.0
+  - name: 验证显示正常
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+  - name: 切换适应宽度
+    action: element_action
+    ref: fit_to_width_btn
+    do: click
+  - name: 等待切换
+    action: wait
+    wait: 1.0
+  - name: 验证显示正常
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+teardown:
+  - action: session_stop

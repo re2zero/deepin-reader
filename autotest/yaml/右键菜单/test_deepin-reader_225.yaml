@@ -1,0 +1,49 @@
+name: '[029]选中文本后右击'
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+
+  测试步骤:
+  1. 打开PDF文档，选中一段文本，鼠标在选中区域右击
+  2. 打开PDF文档，选中一段文本，鼠标在非选中区域右击
+
+  预期结果:
+  1. 弹出高亮相关的右键菜单
+  2. 弹出进行上下页跳转相关的右键菜单
+module: 右键菜单
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 选中文本区域
+    action: mouse_click
+    ref: doc_selected_text
+  - name: 右键点击选中区域
+    action: context_menu_comb
+    ref: doc_selected_text
+  - name: 验证高亮相关菜单
+    action: wait
+    wait_after: 500
+  - name: 右键点击非选中区域
+    action: context_menu_comb
+    ref: doc_center
+  - name: 验证页面跳转菜单
+    action: wait
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

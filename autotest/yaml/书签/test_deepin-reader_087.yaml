@@ -1,0 +1,48 @@
+name: 点击书签图标添加书签
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+  4.双页显示
+
+  测试步骤:
+  1. 进入缩略图_书签页面，查看未添加任何书签时检查界面显示
+  2. 点击书签图标上方的添加书签按钮
+  3. 查看加入书签后的页面显示
+
+  预期结果:
+  1. 界面显示正确
+  2. 当前浏览的页面可以加入书签
+  3. 左边栏列出加入书签的页面：以页面缩略图和页面数（如页面20）形式显示；按照页面顺序展示
+module: 书签
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 点击书签按钮
+    action: element_action
+    ref: sidebar_bookmark_btn
+    do: click
+    wait_after: 500
+  - name: 添加当前页为书签
+    action: element_action
+    ref: bookmark_list
+    do: click
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

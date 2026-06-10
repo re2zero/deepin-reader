@@ -1,0 +1,92 @@
+name: 视图调整菜单
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+  4.双页显示
+
+  测试步骤:
+  1. 选择任意百分比（如：35%），再切换窗口大小
+  2. 点击适合宽度，再切换窗口大小
+  3. 点击适合高度，再切换窗口大小
+  4. 选择任意百分比（如：35%），左旋转，且未选择适合高度/适合宽度，再切换窗口大小
+  5. 选择任意百分比（如：35%），右旋转，且未选择适合高度/适合宽度，再切换窗口大小
+  6. 选择任意百分比（如：35%），左旋转，且选择适合高度/适合宽度，再切换窗口大小
+  7. 选择任意百分比（如：35%），右旋转，且选择适合高度/适合宽度，再切换窗口大小
+
+  预期结果:
+  1. 百分比大小不会改变，界面显示正常
+  2. 保持适合宽度，文档百分比相应改变，不会出现闪退等异常
+  3. 保持适合高度，文档百分比相应改变，不会出现闪退等异常
+  4. 百分比大小不会改变，界面显示正常
+  5. 百分比大小不会改变，界面显示正常
+  6. 保持适合高/宽度，文档百分比相应改变，不会出现闪退等异常
+  7. 保持适合高/宽度，文档百分比相应改变，不会出现闪退等异常
+module: 操作
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 选择35%百分比
+    action: element_action
+    ref: zoom_combo
+    do: click
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 输入35
+    action: keyboard_type
+    text: '35'
+  - name: 按Enter
+    action: keyboard_press
+    keys: Return
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 点击适合宽度
+    action: element_action
+    ref: fit_to_width_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 点击适合高度
+    action: element_action
+    ref: fit_to_height_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 左旋转
+    action: context_menu_comb
+    ref: doc_center
+    menu:
+      - Rotate left
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 右旋转
+    action: context_menu_comb
+    ref: doc_center
+    menu:
+      - Rotate right
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

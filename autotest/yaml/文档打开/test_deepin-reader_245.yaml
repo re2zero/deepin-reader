@@ -1,0 +1,107 @@
+name: 放大缩小文档，过程流畅，无闪烁
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  分别打开PDF、DJVU、DOCX格式文档测试
+
+  测试步骤:
+  1. 打开文档，按Ctrl+鼠标滚轮，上滑
+  2. 打开文档，按Ctrl+鼠标滚轮，下滑
+  3. 打开文档，按Ctrl+“+”，
+  4. 打开文档，按Ctrl+“-”，
+
+  预期结果:
+  1. 文档正常进行放大，放大过程流畅，无闪烁
+  2. 文档正常进行缩小，缩小过程流畅，无闪烁
+  3. 文档正常进行放大，放大过程流畅，无闪烁
+  4. 文档正常进行缩小，缩小过程流畅，无闪烁
+module: 文档打开
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader
+    wait: 3.0
+steps:
+  - name: 打开PDF文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择文档
+    action: keyboard_type
+    text: /home/uos/测试文档.pdf
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 点击放大按钮
+    action: element_action
+    ref: zoom_in_btn
+    do: click
+  - name: 等待放大
+    action: wait
+    wait: 1.0
+  - name: 再次点击放大按钮
+    action: element_action
+    ref: zoom_in_btn
+    do: click
+  - name: 等待放大
+    action: wait
+    wait: 1.0
+  - name: 验证文档视图正常
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+  - name: 点击缩小按钮
+    action: element_action
+    ref: zoom_out_btn
+    do: click
+  - name: 等待缩小
+    action: wait
+    wait: 1.0
+  - name: 再次点击缩小按钮
+    action: element_action
+    ref: zoom_out_btn
+    do: click
+  - name: 等待缩小
+    action: wait
+    wait: 1.0
+  - name: 验证文档视图正常
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+  - name: 使用Ctrl+=放大
+    action: keyboard_hot_key
+    keys: ctrl,=
+  - name: 等待放大
+    action: wait
+    wait: 1.0
+  - name: 使用Ctrl+-缩小
+    action: keyboard_hot_key
+    keys: ctrl,-
+  - name: 等待缩小
+    action: wait
+    wait: 1.0
+  - name: 验证文档视图显示正常
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+teardown:
+  - action: session_stop

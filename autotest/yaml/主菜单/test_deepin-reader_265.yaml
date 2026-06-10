@@ -1,0 +1,48 @@
+name: 打开多个窗口，窗口A中点击关于并关闭，再点击窗口B中的关于无异常
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 打开窗口A和窗口B-> 在窗口A中打开关于窗口，并关闭窗口A
+  2. 窗口B中点击“关于”菜单，查看
+
+  预期结果:
+  1. 窗口A关闭
+  2. 正常查看
+module: 主菜单
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 打开新窗口
+    action: main_menu_comb
+    ref: menu_new_window
+  - name: 等待新窗口打开
+    action: wait
+    wait_after: 2000
+  - name: 在窗口A打开关于
+    action: element_action
+    ref: title_option_btn
+    do: click
+  - name: 关闭窗口A
+    action: element_action
+    ref: title_close_btn
+    do: click
+  - name: 在窗口B打开关于
+    action: element_action
+    ref: title_option_btn
+    do: click
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

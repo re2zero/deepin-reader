@@ -1,0 +1,80 @@
+name: 新开启的窗口中文档打开正常
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 打开文档查看器后，点击“新窗口”菜单
+  2. 拖拽文档至新打开的窗口中
+  3. 在新窗口中点击“选择文件”按钮打开文档
+  4. 在新窗口中点击“新标签页”添加文档
+  5. 关闭旧窗口，双击桌面或文件夹的一份文档
+
+  预期结果:
+  1. 打开一个新的窗口
+  2. 文档在新窗口中正常打开
+  3. 文档在新窗口中正常打开
+  4. 文档在新窗口中正常打开
+  5. 文档在新窗口中正常打开
+module: 标签页
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 点击新窗口菜单
+    action: main_menu_comb
+    ref: menu_new_window
+  - name: 等待新窗口打开
+    action: wait
+    wait: 3.0
+  - name: 在新窗口中打开文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择文档
+    action: keyboard_type
+    text: /home/uos/文档.pdf
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 验证文档在新窗口中正常打开
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+  - name: 在新窗口中点击新标签页添加文档
+    action: main_menu_comb
+    ref: menu_new_tab
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择另一个文档
+    action: keyboard_type
+    text: /home/uos/文档2.djvu
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 验证第二个标签页打开
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: page tab list
+teardown:
+  - action: session_stop

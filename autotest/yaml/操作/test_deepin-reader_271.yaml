@@ -1,0 +1,59 @@
+name: 进入全屏再退出，窗口大小需保持之前的状态
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 打开文档，点击最大化按钮
+  2. 点击右键菜单中的“全屏”菜单
+  3. 右击主视图界面弹出右键菜单，点击“退出全屏”菜单
+  4. 打开文档，显示为默认窗口大小，点击右键菜单中的“全屏”菜单
+  5. 右击主视图界面弹出右键菜单，点击“退出全屏”菜单
+
+  预期结果:
+  1. 窗口最大化显示
+  2. 进入全屏显示
+  3. 可以退出全屏显示，窗口需保持最大化显示
+  4. 进入全屏显示
+  5. 可以退出全屏显示，窗口需保持默认大小显示
+module: 操作
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 点击最大化按钮
+    action: element_action
+    ref: title_max_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 右击进入全屏
+    action: context_menu_comb
+    ref: doc_center
+    menu:
+      - Fullscreen
+  - name: 等待
+    action: wait
+    wait: 1.5
+  - name: 退出全屏
+    action: context_menu_comb
+    ref: doc_center
+    menu:
+      - Exit fullscreen
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

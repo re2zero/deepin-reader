@@ -1,0 +1,50 @@
+name: 百分比框和页码框输入数值，按键盘enter键
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 百分比框输入数值，按键盘enter键
+  2. 页码框输入数值，按键盘enter键
+
+  预期结果:
+  1. 页面跳转，焦点仍然在百分比框
+  2. 页面跳转，焦点仍然在页码框
+module: 键盘
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 点击百分比框
+    action: element_action
+    ref: zoom_combo
+    do: click
+  - name: 输入数值100
+    action: keyboard_type
+    ref: zoom_combo
+  - name: 按Enter确认
+    action: keyboard_hot_key
+    keys: enter
+  - name: 点击页码框
+    action: element_action
+    ref: page_input
+    do: click
+  - name: 输入页码2
+    action: keyboard_type
+    ref: page_input
+  - name: 按Enter跳转
+    action: keyboard_hot_key
+    keys: enter
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

@@ -1,0 +1,53 @@
+name: 每次点击超链接都会弹出安全提示弹框
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  打开PDF格式文档
+  打开docx格式文档
+
+  测试步骤:
+  1. 点击超链接文本，点击安全提示弹框中的“允许”按钮
+  2. 再次点击此超链接
+
+  预期结果:
+  1. 关闭弹窗，打开浏览器并跳转至该链接
+  2. 继续弹出安全提示弹框，点击“允许”按钮，浏览器中重新打开另一个标签页
+  备注：每次点击超链接都会弹出安全提示弹框
+module: 操作
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 点击超链接
+    action: mouse_click
+    ref: hyperlink_area
+  - name: 等待
+    action: wait
+    wait: 1.5
+  - name: 按Esc关闭弹框
+    action: keyboard_press
+    keys: Escape
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 再次点击超链接
+    action: mouse_click
+    ref: hyperlink_area
+  - name: 等待
+    action: wait
+    wait: 1.5
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

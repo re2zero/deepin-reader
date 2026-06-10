@@ -1,0 +1,109 @@
+name: docx文档打开方式
+app: deepin-reader
+screenshot: false
+description: "测试步骤:\n1. 在文件夹中双击一个docx文档\n2. 在文件夹中右击一个docx文档，选择打开方式为：文档查看器\n3. 拖拽一个docx文档至初始页面\n\
+  4. 打开应用，点击“选择文件”进行选择：进入文件选择页面，选择一个docx文档，点击打开\n5. 初始界面按Ctrl+O键,选择一个docx文档打开\n6.\
+  \ 打开应用，点击菜单列表中的“新标签页”菜单，选择一个docx文档打开\n7. 已打开文档后，点击标签栏右侧的+菜单\n\n预期结果:\n1. \n2. \n\
+  3. \n4. \n5. \n6. \n7.\n"
+module: 文档打开
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader
+    wait: 3.0
+steps:
+  - name: 方式4：点击选择文件打开docx
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择docx文档
+    action: keyboard_type
+    text: /home/uos/测试文档.docx
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载转化
+    action: wait
+    wait: 5.0
+  - name: 验证docx文档显示
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+  - name: 方式5：Ctrl+O打开docx
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择另一个docx文档
+    action: keyboard_type
+    text: /home/uos/测试文档2.docx
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 5.0
+  - name: 验证新标签页打开
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: page tab list
+  - name: 方式6：通过菜单新标签页打开docx
+    action: main_menu_comb
+    ref: menu_new_tab
+  - name: 等待菜单响应
+    action: wait
+    wait: 2.0
+  - name: 选择docx文档
+    action: keyboard_type
+    text: /home/uos/测试文档3.docx
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 5.0
+  - name: 验证三个标签页显示
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: page tab list
+  - name: 方式7：点击标签栏+按钮
+    action: element_action
+    ref: tab_add_btn
+    do: click
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择docx文档
+    action: keyboard_type
+    text: /home/uos/测试文档4.docx
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 5.0
+  - name: 验证四个标签页显示
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: page tab list
+teardown:
+  - action: session_stop

@@ -1,0 +1,49 @@
+name: 点击左边栏底部的缩略图图标
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.分别打开PDF和DJVU文档测试
+  2. 打开docx文档
+
+  测试步骤:
+  1. 点击左边栏任意一个文档缩略图标，查看右侧文档是否跳转到相应页面
+  2. 左边栏页面超过一页时，滑动鼠标中间滑轮，查看页面是否正常滑动显示
+
+  预期结果:
+  1. 右侧文档是否跳转到相应页面
+  2. 页面是否正常滑动显示
+module: 缩略图
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 展开左边栏
+    action: element_action
+    ref: sidebar_toggle_btn
+    do: click
+    wait_after: 500
+  - name: 点击缩略图按钮
+    action: element_action
+    ref: sidebar_thumbnail_btn
+    do: click
+    wait_after: 500
+  - name: 点击缩略图条目跳转
+    action: element_action
+    ref: thumbnail_list
+    do: click
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

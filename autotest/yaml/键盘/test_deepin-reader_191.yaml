@@ -1,0 +1,56 @@
+name: 首页Tab键切换
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 打开文档查看器进入首页界面，按tab键查看菜单按钮切换顺序
+  2. 按enter或空格键
+  3. 主菜单弹出后按enter或空格键和上下方向键
+  4. 主菜单弹出后按左右方向键
+  5. 主菜单弹出后按esc键交互操作
+
+  预期结果:
+  1. 依次选中主菜单、最小化、最大化、选择文件按钮，focus效果正确
+  2. 执行选择
+  3. 切换和执行选择
+  4. 按左方向键收起子菜单，按右方向键展开子菜单
+  5. 退出菜单，返回到主菜单按钮的选中
+module: 键盘
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 按Tab键切换焦点
+    action: keyboard_hot_key
+    keys: tab
+  - name: 按Enter键执行选择
+    action: keyboard_hot_key
+    keys: enter
+  - name: 按Tab切换焦点
+    action: keyboard_hot_key
+    keys: tab
+  - name: 按Enter执行
+    action: keyboard_hot_key
+    keys: enter
+  - name: 按ESC退出菜单
+    action: keyboard_hot_key
+    keys: esc
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

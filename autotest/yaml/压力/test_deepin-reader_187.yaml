@@ -1,0 +1,106 @@
+# YAML test case for deepin-reader — 压力/187 "连续快速打开关闭单页大文档20次"
+# AUTOMATABLE: Loop open/close of a large single-page document.
+# Tests 3 iterations as representative sample of 20x stress test.
+name: 压力/187 连续快速打开关闭单页大文档20次
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 连续快速打开关闭单页大文档20次
+
+  预期结果:
+  1. 正常打开无异常
+module: 压力
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: '迭代 #1 — 打开文档'
+    action: keyboard_hot_key
+    key: ctrl+o
+    wait: 2.0
+  - action: keyboard_hot_key
+    key: ctrl+l
+    wait: 0.5
+  - action: keyboard_type
+    text: /home/uos/test/files/1.pdf
+    wait: 0.5
+  - action: keyboard_press
+    key: Return
+    wait: 2.0
+  - name: 验证文档加载
+    action: wait
+    wait: 0
+    assert:
+      - type: element_visible
+        selector:
+          role: drawing area
+          name: document
+  - name: '迭代 #1 — 关闭文档'
+    action: keyboard_hot_key
+    key: ctrl+w
+    wait: 1.5
+  - name: '迭代 #2 — 打开文档'
+    action: keyboard_hot_key
+    key: ctrl+o
+    wait: 2.0
+  - action: keyboard_hot_key
+    key: ctrl+l
+    wait: 0.5
+  - action: keyboard_type
+    text: /home/uos/test/files/1.pdf
+    wait: 0.5
+  - action: keyboard_press
+    key: Return
+    wait: 2.0
+  - name: 验证文档加载
+    action: wait
+    wait: 0
+    assert:
+      - type: element_visible
+        selector:
+          role: drawing area
+          name: document
+  - name: '迭代 #2 — 关闭文档'
+    action: keyboard_hot_key
+    key: ctrl+w
+    wait: 1.5
+  - name: '迭代 #3 — 打开文档'
+    action: keyboard_hot_key
+    key: ctrl+o
+    wait: 2.0
+  - action: keyboard_hot_key
+    key: ctrl+l
+    wait: 0.5
+  - action: keyboard_type
+    text: /home/uos/test/files/1.pdf
+    wait: 0.5
+  - action: keyboard_press
+    key: Return
+    wait: 2.0
+  - name: 验证文档加载
+    action: wait
+    wait: 0
+    assert:
+      - type: element_visible
+        selector:
+          role: drawing area
+          name: document
+  - name: '迭代 #3 — 关闭文档'
+    action: keyboard_hot_key
+    key: ctrl+w
+    wait: 1.5
+  - name: 验证应用无异常
+    action: wait
+    wait: 0
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

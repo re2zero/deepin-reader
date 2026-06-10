@@ -1,0 +1,53 @@
+name: 删除书签
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+  4.双页显示
+
+  测试步骤:
+  1. 点击右侧已出现的的书签标志
+  2. 鼠标放在缩略图_书签上面，点击鼠标右键，出现右键菜单：删除书签，点击此菜单
+  3. 鼠标选中该缩略图_书签，直接按键盘上Delete键
+
+  预期结果:
+  1. 点击右侧已出现的的书签图标，则删除该页书签，书签图标变成空心实线图标且无填充色；
+  说明：鼠标移到书签位置附近才会显示虚线的书签图标，鼠标移出书签区域，虚线书签图标消失；再次点击此图标则可以添加书签
+  2. 可以删除该页书签,书签缩略图消失，该页右上角书签图标变成空心实线图标且无填充色
+  3. 可以删除该页书签,书签缩略图消失，该页右上角书签图标变成空心实线图标且无填充色
+module: 书签
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 点击书签按钮
+    action: element_action
+    ref: sidebar_bookmark_btn
+    do: click
+    wait_after: 500
+  - name: 右键书签选择删除
+    action: mouse_right_click
+    ref: bookmark_list
+    wait_after: 500
+  - name: 选择删除书签
+    action: context_menu_comb
+    ref: bookmark_list
+    menu: RemoveBookmark
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

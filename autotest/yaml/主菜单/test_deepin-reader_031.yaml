@@ -1,0 +1,45 @@
+name: '[010]退出'
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+
+  测试步骤:
+  1. 打开一份文档，不作任何修改，点击菜单中退出，查看
+  2. 修改文档中内容，点击菜单中的退出，弹出弹框提示是否同意保存，分别点击取消、不保存、保存
+  3. 打开一份文档，不作任何修改，按快捷键Alt+F4或Alt+空格并选择关闭，查看
+  4. 修改文档中内容，按快捷键Alt+F4或Alt+空格并选择关闭，弹出弹框提示是否同意保存，分别点击取消、不保存、保存
+
+  预期结果:
+  1. 直接退出，无提示
+  2. 可以正常取消退出、保存并关闭、不保存并关闭
+  3. 直接退出，无提示
+  4. 可以正常取消退出、保存并关闭、不保存并关闭
+module: 主菜单
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 点击菜单键选择退出
+    action: main_menu_comb
+    items:
+      - 退出
+  - name: 按Alt+F4退出
+    action: keyboard_hot_key
+    keys: alt,f4
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

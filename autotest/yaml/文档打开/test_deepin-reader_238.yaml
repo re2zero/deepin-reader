@@ -1,0 +1,94 @@
+name: 快速滑动页面
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  分别打开PDF、DJVU、DOCX格式文档测试
+
+  测试步骤:
+  1. 打开文档，默认百分比100%，快速滑动页面，查看
+  2. 打开文档，调整百分比为10%，快速滑动页面，查看
+
+  预期结果:
+  1. 界面显示正常，不会出现加载时长过长现象
+  2. 界面显示正常，不会出现加载时长过长现象
+module: 文档打开
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader
+    wait: 3.0
+steps:
+  - name: 打开PDF文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择文档
+    action: keyboard_type
+    text: /home/uos/测试文档.pdf
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 快速向下滚动页面
+    action: mouse_scroll
+    amount: -5
+  - name: 等待界面刷新
+    action: wait
+    wait: 1.0
+  - name: 验证文档视图正常
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+  - name: 快速向上滚动页面
+    action: mouse_scroll
+    amount: 5
+  - name: 等待界面刷新
+    action: wait
+    wait: 1.0
+  - name: 验证文档视图正常
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+  - name: 调整缩放为10%
+    action: element_action
+    ref: zoom_combo
+    do: click
+  - name: 输入缩放值
+    action: keyboard_type
+    text: '10'
+  - name: 确认缩放
+    action: keyboard_press
+    keys: Return
+  - name: 等待缩放生效
+    action: wait
+    wait: 2.0
+  - name: 快速滚动页面
+    action: mouse_scroll
+    amount: -5
+  - name: 等待界面刷新
+    action: wait
+    wait: 1.0
+  - name: 验证界面显示正常
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+teardown:
+  - action: session_stop

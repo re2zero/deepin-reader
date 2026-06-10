@@ -1,0 +1,50 @@
+name: 复制图标注释
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+  3.双页显示
+
+  测试步骤:
+  1. 右键点击已添加的注释小图标
+  2. 点击复制菜单并粘贴至txt等文档中，查看
+  3. 点击添加注释菜单，查看
+  4. 点击删除注释菜单，查看
+  5. 点击添加书签菜单，查看
+
+  预期结果:
+  1. 显示右键菜单：复制，删除注释，添加注释，添加书签
+  2. 注释内容被正确复制
+  3. 展开注释窗口，可以进行注释编辑
+  4. 注释小图标被正确删除
+  5. 当前页面正确添加为书签页
+module: 注释
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 右键点击注释图标
+    action: mouse_right_click
+    ref: doc_annotation_icon
+    wait_after: 500
+  - name: 选择复制
+    action: context_menu_comb
+    ref: doc_annotation_icon
+    menu: [复制]
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

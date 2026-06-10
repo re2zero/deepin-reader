@@ -1,0 +1,38 @@
+name: 目录显示
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开有目录的普通PDF格式文档
+
+  测试步骤:
+  1. 点击左边栏底部目录图标
+  2. 查看目录显示
+
+  预期结果:
+  1. 左边栏显示文档目录
+  2.
+module: 目录
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 点击目录按钮
+    action: element_action
+    ref: sidebar_catalog_btn
+    do: click
+    wait_after: 500
+  - name: 验证目录显示
+    action: wait
+    wait: 0
+    assert:
+      - type: element_visible
+        ref: catalog_tree
+teardown:
+  - action: session_stop

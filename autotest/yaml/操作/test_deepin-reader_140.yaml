@@ -1,0 +1,70 @@
+name: 宽高度不一致的文档显示
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  准备宽高度不一致的文档
+
+  测试步骤:
+  1. 点击适合高度/适合宽度/调整百分比，查看
+  2. 添加书签和注释
+
+  预期结果:
+  1. 界面显示正常
+  2. 显示正常
+module: 操作
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 点击适合高度
+    action: element_action
+    ref: fit_to_height_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 点击适合宽度
+    action: element_action
+    ref: fit_to_width_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 调整百分比
+    action: element_action
+    ref: zoom_in_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 右击添加书签
+    action: context_menu_comb
+    ref: doc_center
+    menu:
+      - Add bookmark
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 添加注释
+    action: context_menu_comb
+    ref: doc_center
+    menu:
+      - Add annotation
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

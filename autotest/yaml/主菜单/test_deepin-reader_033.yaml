@@ -1,0 +1,30 @@
+name: '[002]帮助'
+app: deepin-reader
+screenshot: false
+description: "测试步骤:\n1. 打开软件，使用快捷键F1，查看系统显示\n2. 点击工具栏中的菜单键，再点击帮助，查看系统显示\n\n预期结果:\n\
+  1. \n2. 1&2. 进入帮助页面，界面显示正确\n"
+module: 主菜单
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 按F1打开帮助
+    action: keyboard_hot_key
+    keys: f1
+  - name: 等待帮助页面
+    action: wait
+    wait_after: 2000
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

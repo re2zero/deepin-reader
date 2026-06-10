@@ -1,0 +1,53 @@
+name: 搜索完成后按钮置灰，不应该有hover效果
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+
+  测试步骤:
+  1. 搜索完成后，鼠标放置在左侧栏底部四个按钮之上
+
+  预期结果:
+  1. 按钮置灰，不应该有hover效果
+module: 操作
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 打开搜索搜索关键字
+    action: main_menu_comb
+    ref: menu_search
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 输入关键字搜索
+    action: keyboard_type
+    text: the
+  - name: 按Enter
+    action: keyboard_press
+    keys: Return
+  - name: 等待
+    action: wait
+    wait: 1.5
+  - name: 鼠标放置左侧栏底部按钮
+    action: mouse_click
+    ref: sidebar_thumbnail_btn
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

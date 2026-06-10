@@ -1,0 +1,53 @@
+name: 翻页后退出全屏
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 进入全屏翻页（如：第5页），左侧栏选中第5页文档缩略图，退出全屏查看
+
+  预期结果:
+  1. 退出全屏显示后仍显示在第5页
+module: 操作
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 进入全屏
+    action: keyboard_press
+    keys: F11
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 点击右键菜单下一页
+    action: context_menu_comb
+    ref: doc_center
+    menu:
+      - Next page
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 退出全屏
+    action: keyboard_press
+    keys: Escape
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

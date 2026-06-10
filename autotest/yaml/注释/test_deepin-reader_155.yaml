@@ -1,0 +1,50 @@
+name: 选中图标注释进行移动
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+  4.双页显示
+
+  测试步骤:
+  1. 选中图标状态，鼠标左键长按注释图标移动
+  2. 移动到目标区域，松开鼠标
+  3. 鼠标左键点击其他区域（非注释图标和注释框）
+
+  预期结果:
+  1. 注释图标保持选中状态，可以移动
+  2. 松开鼠标完成移动，注释图标显示为选中状态
+  3. 注释图标选中状态吧被取消
+module: 注释
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 单击选中注释图标
+    action: mouse_click
+    ref: doc_annotation_icon
+    wait_after: 500
+  - name: 长按移动注释图标
+    action: mouse_drag
+    ref: doc_annotation_icon
+    wait_after: 1000
+  - name: 点击其他区域取消选中
+    action: mouse_click
+    ref: doc_center
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

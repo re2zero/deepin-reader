@@ -43,3 +43,7 @@ obj-x86_64-linux-gnu/
 .cursor/
 .cache/
 .claude/
+
+# autotest reports
+autotest/report/
+__pycache__

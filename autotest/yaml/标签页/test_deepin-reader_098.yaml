@@ -1,0 +1,88 @@
+name: 多窗口多标签页时拖拽打开新窗口
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开普通PDF格式文档
+  2.打开DJVU格式文档
+  3.打开docx格式文档
+
+  前提： 打开多个窗口，每个窗口中都有标签页
+
+  测试步骤:
+  1. 拖拽标签页移至另一个窗口中标签栏和文档区域，查看
+  2. 拖拽标签页至另一个窗口中工具栏区域或移出当前窗口，查看是否创建一个新的窗口
+
+  预期结果:
+  1. 标签页合并至另一个窗口中，拖拽过程中鼠标显示绿色可拖拽标志；拖动过程中界面显示正确
+  2. 正常创建一个新的窗口，拖拽过程中鼠标显示绿色可拖拽标志
+module: 标签页
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 打开文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择文档
+    action: keyboard_type
+    text: /home/uos/文档.pdf
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 打开新窗口
+    action: main_menu_comb
+    ref: menu_new_window
+  - name: 等待新窗口
+    action: wait
+    wait: 3.0
+  - name: 在新窗口中打开文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择文档
+    action: keyboard_type
+    text: /home/uos/文档2.djvu
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 验证两个窗口
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          name: Form_DMainWindow
+          role: form
+  - name: 通过新窗口菜单再次创建新窗口
+    action: main_menu_comb
+    ref: menu_new_window
+  - name: 等待新窗口
+    action: wait
+    wait: 3.0
+  - name: 验证多个窗口存在
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+teardown:
+  - action: session_stop

@@ -1,0 +1,55 @@
+name: 选中高亮注释文本进行复制
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+
+  测试步骤:
+  1. 选中已添加高亮注释的文本，右击弹出右键菜单，点击复制菜单
+  2. 分别点击高亮、8种高亮图标、取消高亮、添加注释、添加书签，查看
+  3. 选中已添加高亮的文本（未加注释），右击弹出右键菜单，点击复制菜单
+  4. 分别点击高亮、8种高亮图标、取消高亮、添加注释、添加书签，查看
+
+  预期结果:
+  1. 可以复制选中的文本（注释内容无法复制）
+  2. 各菜单正常可用
+  3. 可以复制选中的文本
+  4. 各菜单正常可用
+module: 右键菜单
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 选中高亮文本区域
+    action: mouse_click
+    ref: doc_selected_text
+  - name: 右键点击选中文本
+    action: context_menu_comb
+    ref: doc_selected_text
+  - name: 点击复制
+    action: element_action
+    ref: context_copy
+    do: click
+  - name: 右键点击选中文本
+    action: context_menu_comb
+    ref: doc_selected_text
+  - name: 取消高亮
+    action: element_action
+    ref: context_remove_highlight
+    do: click
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

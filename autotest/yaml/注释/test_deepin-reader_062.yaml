@@ -1,0 +1,43 @@
+name: 左键或右键单击取消高亮注释的右键菜单
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+  3.双页显示
+
+  测试步骤:
+  1. 右击高亮注释，弹出右键菜单；鼠标左键点击其他区域
+  2. 右击高亮注释，弹出右键菜单；鼠标右键点击其他区域
+
+  预期结果:
+  1. 右键菜单框消失
+  2. 右键菜单框消失
+module: 注释
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 右键高亮注释弹出菜单
+    action: mouse_right_click
+    ref: doc_selected_text
+    wait_after: 500
+  - name: 左键点击其他区域取消菜单
+    action: mouse_click
+    ref: doc_center
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

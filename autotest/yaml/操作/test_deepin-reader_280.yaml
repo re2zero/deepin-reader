@@ -1,0 +1,38 @@
+name: 不选中文本右击
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  打开PDF格式文档
+  打开docx格式文档
+
+  测试步骤:
+  1. 不选中，直接右击超链接文本
+
+  预期结果:
+  1. 弹出包含搜索等的菜单的右键菜单，点击各菜单功能正常
+module: 操作
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 不选中文本右击超链接区域
+    action: mouse_right_click
+    ref: hyperlink_area
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

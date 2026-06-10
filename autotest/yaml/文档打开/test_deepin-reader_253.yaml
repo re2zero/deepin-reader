@@ -1,0 +1,51 @@
+name: 选中多个docx文档，右击打开
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 1.选中多个docx文档，右键菜单选择打开
+
+  预期结果:
+  1. 正常打开所有选择的文档
+module: 文档打开
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader
+    wait: 3.0
+steps:
+  - name: 打开文件对话框
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择多个docx文档
+    action: keyboard_type
+    text: /home/uos/文档1.docx /home/uos/文档2.docx /home/uos/文档3.docx
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待所有文档加载转化
+    action: wait
+    wait: 8.0
+  - name: 验证标签栏显示多个标签页
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: page tab list
+  - name: 验证每个标签页对应一个文档
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+teardown:
+  - action: session_stop

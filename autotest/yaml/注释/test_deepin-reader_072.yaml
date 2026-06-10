@@ -1,0 +1,56 @@
+name: 添加图标注释方式（显示注释小图标，无高亮显示）
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+  3.双页显示
+
+  测试步骤:
+  1. 未选中文本，点击左边栏添加注释按钮，点击页面区域任意位置，查看是否弹出图标注释窗口
+  2. 输入注释内容，点击窗口外其他区域
+  3. 未选中文本，右键点击在非图标注释及非高亮注释的空白区域，点击右键菜单的“添加注释”，查看是否弹出图标注释窗口
+  4. 输入注释内容，点击窗口外其他区域
+
+  预期结果:
+  1. 弹出图标注释窗口
+  2. 窗口关闭，图标注释正常显示，图标注释添加成功
+  3. 弹出图标注释窗口
+  4. 窗口关闭，图标注释正常显示，图标注释添加成功
+module: 注释
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 右键空白区域添加注释
+    action: mouse_right_click
+    ref: doc_center
+    wait_after: 500
+  - name: 选择添加注释图标
+    action: context_menu_comb
+    ref: doc_center
+    menu: [添加注释]
+    wait_after: 500
+  - name: 输入注释内容
+    action: keyboard_type
+    text: 图标注释内容
+    wait_after: 500
+  - name: 点击其他区域完成
+    action: mouse_click
+    ref: doc_center
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

@@ -1,0 +1,46 @@
+name: 按快捷键Windows+D进入桌面，注释浮窗不会单独显示桌面
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+
+  测试步骤:
+  1. 鼠标悬停在图标注释或高亮注释之上
+  2. 按快捷键Windows+D进入桌面查看
+  3. 鼠标悬停在图标注释或高亮注释之上
+  4. 鼠标移出注释区域
+
+  预期结果:
+  1. 注释浮窗显示
+  2. 应用最小化，浮窗不会单独显示桌面
+  3. 注释浮窗显示注释浮窗显示
+  4. 注释浮窗应该消失
+module: 注释
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 鼠标悬停在注释上
+    action: mouse_click
+    ref: doc_annotation_icon
+    wait_after: 500
+  - name: 按Windows+D进入桌面
+    action: keyboard_hot_key
+    keys: super,d
+    wait_after: 1000
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

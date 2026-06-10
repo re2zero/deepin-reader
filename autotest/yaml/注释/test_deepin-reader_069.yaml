@@ -1,0 +1,45 @@
+name: 不输入内容点击其他位置，取消添加注释
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+
+  测试步骤:
+  1. 点击“添加注释”，再点击文档界面，展开空白小窗口，不输入内容，直接点击右上角关闭图标或文档中其他位置
+
+  预期结果:
+  1. 注释自动取消；
+module: 注释
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 右键添加注释
+    action: mouse_right_click
+    ref: doc_center
+    wait_after: 500
+  - name: 选择添加注释图标
+    action: context_menu_comb
+    ref: doc_center
+    menu: [添加注释]
+    wait_after: 500
+  - name: 不输入内容直接点击其他区域
+    action: mouse_click
+    ref: doc_center
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

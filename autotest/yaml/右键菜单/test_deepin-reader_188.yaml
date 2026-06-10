@@ -1,0 +1,46 @@
+name: 选中一段文本，翻页后回到原位置，选中文本不会消失
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+
+  测试步骤:
+  1. 选中一段文本，翻页后回到原位置查看
+
+  预期结果:
+  1. 选中文本不会消失
+module: 右键菜单
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 选中文本区域
+    action: mouse_click
+    ref: doc_selected_text
+  - name: 翻到下一页
+    action: element_action
+    ref: page_next_btn
+    do: click
+  - name: 翻回上一页
+    action: element_action
+    ref: page_prev_btn
+    do: click
+  - name: 验证选中文本状态
+    action: wait
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

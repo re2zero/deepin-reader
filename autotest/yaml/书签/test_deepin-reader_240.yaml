@@ -1,0 +1,44 @@
+name: 右击蓝色书签图标进行删除
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 添加书签
+  2. 右击蓝色书签图标，点击右键菜单中删除书签菜单
+
+  预期结果:
+  1. 右上角正常显示蓝色书签图标
+  2. 可以正常删除，鼠标移走后文档右上角不显示任何书签图标
+module: 书签
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 右键蓝色书签图标
+    action: mouse_right_click
+    ref: doc_center
+    wait_after: 500
+  - name: 选择删除书签
+    action: context_menu_comb
+    ref: doc_center
+    menu: RemoveBookmark
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

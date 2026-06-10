@@ -1,0 +1,40 @@
+name: 高亮注释方式
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+
+  测试步骤:
+  1. 编辑注释界面，鼠标滑动注释小窗口中内容
+
+  预期结果:
+  1. 可以滑动
+module: 注释
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 单击高亮注释
+    action: mouse_click
+    ref: doc_selected_text
+    wait_after: 500
+  - name: 滑动注释窗口内容
+    action: mouse_scroll
+    amount: -3
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

@@ -1,0 +1,52 @@
+name: 点击[删除全部书签]对话框界面
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 点击“删除全部书签”
+  2. 对话框界面按tab键切换
+  3. 按回车键
+  4. 选中任意菜单时按esc键
+
+  预期结果:
+  1. 弹出对话框界面
+  2. 可以在对话框界面循环切换，focus效果正确
+  3. 执行选中的按钮
+  4. 关闭对话框，焦点返回至选中的书签目录
+module: 键盘
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 切换到书签栏
+    action: element_action
+    ref: sidebar_bookmark_btn
+    do: click
+  - name: 按Tab键切换到删除全部按钮
+    action: keyboard_hot_key
+    keys: tab
+  - name: 按Enter确认
+    action: keyboard_hot_key
+    keys: enter
+  - name: 按ESC退出对话框
+    action: keyboard_hot_key
+    keys: esc
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

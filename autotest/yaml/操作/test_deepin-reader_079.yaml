@@ -1,0 +1,52 @@
+name: '[017]添加高亮的方式'
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开普通PDF文档，
+  2.打开PDF格式的单页大文档（75M）
+  3. 打开docx格式文档
+
+  测试步骤:
+  1. 选中一段未高亮文字,查看取消高亮菜单是否置灰
+  2. 点击右键菜单中的高亮菜单添加
+
+  预期结果:
+  1. 取消高亮菜单置灰
+  2. 可以添加高亮，添加的高亮颜色为当前颜色圈图标选中的颜色
+module: 操作
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 等待文档加载
+    action: wait
+    wait: 2.0
+  - name: 选中未高亮文字
+    action: mouse_drag
+    ref: doc_center
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 右击通过高亮菜单添加
+    action: context_menu_comb
+    ref: doc_selected_text
+    menu:
+      - 高亮
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

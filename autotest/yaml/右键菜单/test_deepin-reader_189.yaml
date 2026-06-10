@@ -1,0 +1,49 @@
+name: 菜单高亮效果
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+
+  测试步骤:
+  1. 选中一段文本，右击文本
+  2. 鼠标分别放置在任意一个菜单
+  3. 右侧主视图区域，右击弹出右键菜单，鼠标放置在任意菜单
+  4. 鼠标放置在百分比下拉框菜单任意位置
+  5. 点击菜单键，鼠标放置在任意菜单位置
+
+  预期结果:
+  1. 弹出右键菜单
+  2. 正常高亮显示
+  3. 正常高亮显示
+  4. 正常高亮显示
+  5. 正常高亮显示
+module: 右键菜单
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 右键点击文档中心
+    action: context_menu_comb
+    ref: doc_center
+  - name: 鼠标悬浮于菜单项
+    action: wait
+    wait_after: 300
+  - name: 验证高亮效果
+    action: wait
+    wait_after: 300
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

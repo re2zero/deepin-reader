@@ -1,0 +1,55 @@
+name: 点击、滑动搜索结果缩略图
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+
+  测试步骤:
+  1. 点击左边栏任意一个搜索结果缩略图，查看页面显示
+  2. 左边栏页面超过一页时，滑动滑鼠，查看页面显示
+
+  预期结果:
+  1. 点击的搜索结果缩略图显示选中状态，右侧文档跳转到相应页面，页面中所有关键字保持高亮
+  2. 页面正常滑动显示
+module: 操作
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 打开搜索
+    action: main_menu_comb
+    ref: menu_search
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 输入关键字并搜索
+    action: keyboard_type
+    text: the
+  - name: 按Enter搜索
+    action: keyboard_press
+    keys: Return
+  - name: 等待
+    action: wait
+    wait: 1.5
+  - name: 点击搜索结果缩略图
+    action: mouse_click
+    ref: thumbnail_list
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

@@ -1,0 +1,53 @@
+name: 快捷键切换书签/注释缩略图
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 添加多个书签
+  2. 选择一个书签缩略图，按键盘上下/pageup/pagedown
+  3. 双页显示时，添加多个书签
+  4. 选择一个书签缩略图，按键盘上下/pageup/pagedown
+
+  预期结果:
+  1. 展开左边栏，显示多个书签缩略图
+  2. 正确切换，右侧文档跟随变化
+  3. 展开左边栏，显示多个书签缩略图
+  4. 正确切换，右侧文档跟随变化
+module: 书签
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 点击书签按钮
+    action: element_action
+    ref: sidebar_bookmark_btn
+    do: click
+    wait_after: 500
+  - name: 选中书签缩略图
+    action: element_action
+    ref: bookmark_list
+    do: click
+    wait_after: 500
+  - name: 按向下键切换
+    action: keyboard_press
+    keys: Down
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

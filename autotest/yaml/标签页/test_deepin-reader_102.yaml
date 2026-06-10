@@ -1,0 +1,82 @@
+name: 单个窗口中多标签页管理
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1. 单个窗口中已添加多个标签页
+  2.打开pdf格式文档
+  3.打开djvu格式文档
+  4.打开docx格式文档
+
+  测试步骤:
+  1. 长按任意一个标签页拖拽，查看是否正常调整标签页排序
+  2. 在标签栏滚动鼠标，查看是否可以滚动切换标签页
+  3. 点击切换标签页
+
+  预期结果:
+  1. 可以调整标签页排序
+  2. 可以滚动切换标签页
+  3. 正常切换无异常
+module: 标签页
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 打开多个文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择多个文档
+    action: keyboard_type
+    text: /home/uos/文档1.pdf /home/uos/文档2.pdf /home/uos/文档3.pdf
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 5.0
+  - name: 验证多个标签页
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: page tab list
+  - name: 点击切换至第二个标签页
+    action: element_action
+    ref: tab_bar
+    do: click
+  - name: 等待切换
+    action: wait
+    wait: 1.0
+  - name: 验证切换后页面显示正常
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+  - name: 点击切换至第三个标签页
+    action: element_action
+    ref: tab_bar
+    do: click
+  - name: 等待切换
+    action: wait
+    wait: 1.0
+  - name: 验证切换正常无异常
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+teardown:
+  - action: session_stop

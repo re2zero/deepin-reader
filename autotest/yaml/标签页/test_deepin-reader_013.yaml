@@ -1,0 +1,91 @@
+name: 多个标签页的显示
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 打开多个标签页，查看显示
+  2. 已打开多个标签页，添加其他标签页
+  3. 点击左移右移按钮
+
+  预期结果:
+  1. 标签栏需全部占满，无空出区域；标签页最小140px；显示效果与设计图一致
+  2. 新添加的标签页高亮显示
+  3. 正常显示
+module: 标签页
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 打开第一个PDF文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择第一个文档
+    action: keyboard_type
+    text: /home/uos/文档.pdf
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 通过新标签页添加第二个文档
+    action: main_menu_comb
+    ref: menu_new_tab
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择第二个文档
+    action: keyboard_type
+    text: /home/uos/文档2.djvu
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 通过+按钮添加第三个文档
+    action: element_action
+    ref: tab_add_btn
+    do: click
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择第三个文档
+    action: keyboard_type
+    text: /home/uos/文档3.docx
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载转化
+    action: wait
+    wait: 5.0
+  - name: 验证标签栏显示多个标签页
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: page tab list
+  - name: 验证新添加的标签页高亮
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+teardown:
+  - action: session_stop

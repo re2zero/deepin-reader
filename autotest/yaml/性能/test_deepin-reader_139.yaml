@@ -1,0 +1,36 @@
+# NON-AUTOMATABLE: 性能/139 "多平台测试"
+# This test case requires running the same application on 兆芯/龙芯/ARM
+# hardware platforms to verify functionality. This requires separate physical
+# machines or emulators that cannot be provisioned from the current test runner.
+# Manual testing required across each target platform.
+name: 性能/139 多平台测试 — NON-AUTOMATABLE
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 分别在兆芯、龙芯、ARM平台测试
+
+  预期结果:
+  1. 功能正常
+module: 性能
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: '无法自动化: requires 兆芯/龙芯/ARM platforms'
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

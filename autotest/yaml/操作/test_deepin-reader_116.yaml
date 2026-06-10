@@ -1,0 +1,88 @@
+name: ctrl1、ctrl2、ctrl3快捷键切换规则
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+  4.双页显示
+
+  测试步骤:
+  1. 调整文档百分比大小，按ctrl1查看
+  2. 调整文档百分比大小为任意值，且双页显示/左旋转/右旋转,按ctrl1查看
+  3. 调整文档百分比大小为任意值，且双页显示/左旋转/右旋转,按ctrl2或适应高度菜单查看
+  4. 调整文档百分比大小为任意值，且双页显示/左旋转/右旋转,按ctrl3或适应宽度菜单查看
+  5. 分别按ctrl1、ctrl2、ctrl3
+
+  预期结果:
+  1. 文档显示为100%大小
+  2. 文档显示为100%大小,双页显示/左旋转/右旋转状态不会变化
+  3. 文档高度全部显示在当前页面,双页显示/左旋转/右旋转状态不会变化
+  4. 文档宽度全部显示在当前页面,双页显示/左旋转/右旋转状态不会变化
+  5. 文档在实际大小、适应高度、适应宽度菜状态之间正常切换
+module: 操作
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 等待文档加载
+    action: wait
+    wait: 2.0
+  - name: 切换到双页显示
+    action: element_action
+    ref: double_page_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 按Ctrl1恢复实际大小
+    action: keyboard_hot_key
+    keys: ctrl,1
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 按Ctrl2适应高度
+    action: keyboard_hot_key
+    keys: ctrl,2
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 按Ctrl3适应宽度
+    action: keyboard_hot_key
+    keys: ctrl,3
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 分别按Ctrl1/Ctrl2/Ctrl3切换
+    action: keyboard_hot_key
+    keys: ctrl,1
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 按Ctrl2
+    action: keyboard_hot_key
+    keys: ctrl,2
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 按Ctrl3
+    action: keyboard_hot_key
+    keys: ctrl,3
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

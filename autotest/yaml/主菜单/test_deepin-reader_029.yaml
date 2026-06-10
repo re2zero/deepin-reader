@@ -1,0 +1,54 @@
+name: 关闭按钮
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 添加或删除书签、高亮、注释，点击右上角关闭按钮
+  2. 点击弹框中的“不保存”
+  3. 点击弹框中的“保存”
+
+  预期结果:
+  1. 弹出是否保存的弹框，点击取消，停留在当前页面
+  2. 应用关闭，编辑的内容不会被保存
+  3. 应用关闭，编辑的内容都会被保存
+module: 主菜单
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 添加书签编辑文档
+    action: mouse_click
+    ref: doc_center
+  - name: 右键添加书签
+    action: context_menu_comb
+    ref: doc_center
+  - name: 点击添加书签
+    action: element_action
+    ref: context_add_bookmark
+    do: click
+  - name: 点击关闭按钮
+    action: element_action
+    ref: title_close_btn
+    do: click
+  - name: 等待对话框弹出
+    action: wait
+    wait_after: 1000
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

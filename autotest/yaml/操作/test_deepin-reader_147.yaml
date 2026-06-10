@@ -1,0 +1,53 @@
+name: '[038]全屏显示后1秒内呼唤/隐藏出工具栏'
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 进入全屏，鼠标移到窗口顶端，查看是否在1秒内呼唤出工具栏；
+  2. 鼠标移出标题栏区域，查看是否在1秒内隐藏出工具栏；
+
+  预期结果:
+  1. 1秒内可以呼唤出工具栏；
+  2. 1秒内自动隐藏工具栏；
+module: 操作
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 进入全屏
+    action: keyboard_press
+    keys: F11
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 鼠标移到窗口顶端呼唤工具栏
+    action: mouse_click
+    ref: fullscreen_toolbar
+  - name: 等待
+    action: wait
+    wait: 1.5
+  - name: 鼠标移出工具栏区域
+    action: mouse_click
+    ref: doc_center
+  - name: 等待
+    action: wait
+    wait: 2.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

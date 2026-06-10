@@ -1,0 +1,64 @@
+name: 单个窗口中只打开一个docx标签页，关闭或退出
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 在文档查看器应用中打开一份docx文档
+  2. 文档未编辑，点击工具栏关闭按钮或“退出”菜单
+  3. 文档编辑后，点击工具栏关闭按钮或“退出”菜单
+
+  预期结果:
+  1. 检查所有保存的文档，编辑内容都正确保存
+  2. 是否保存弹框的文案改为“是否保存对文档xxx的编辑”
+  3.
+module: 文档打开
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader
+    wait: 3.0
+steps:
+  - name: 打开docx文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择docx文档
+    action: keyboard_type
+    text: /home/uos/测试文档.docx
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 5.0
+  - name: 验证文档已打开
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+  - name: 未编辑状态下点击关闭按钮
+    action: element_action
+    ref: title_close_btn
+    do: click
+  - name: 等待关闭
+    action: wait
+    wait: 2.0
+  - name: 验证进程已退出
+    action: process_not_running
+    ref: deepin-reader
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

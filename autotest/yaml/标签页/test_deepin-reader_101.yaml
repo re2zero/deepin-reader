@@ -1,0 +1,79 @@
+name: 单个窗口中多标签页管理
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 窗口中打开多个标签页直到超过标签栏范围，窗口界面显示
+  2. 点击左翻按钮
+  3. 点击右翻按钮
+  4. 选择首个标签页或左侧无隐藏文件时，查看左翻按钮是否置灰
+  5. 选择最后一个标签页右侧无隐藏文件时，查看右翻按钮是否置灰
+
+  预期结果:
+  1. 左翻箭头高亮显示，可以点击
+  2. 左侧隐藏的文档左移
+  3. 右侧隐藏的文档右移
+  4. 左翻按钮置灰显示
+  5. 右翻按钮置灰显示
+module: 标签页
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 打开多个文档直到标签超出范围
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择多个文档
+    action: keyboard_type
+    text: /home/uos/文档1.pdf /home/uos/文档2.pdf /home/uos/文档3.pdf /home/uos/文档4.pdf
+      /home/uos/文档5.pdf /home/uos/文档6.pdf
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待所有文档加载
+    action: wait
+    wait: 8.0
+  - name: 验证标签栏显示
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: page tab list
+  - name: 点击左侧翻页按钮
+    action: element_action
+    ref: tab_bar
+    do: click
+  - name: 等待滚动
+    action: wait
+    wait: 1.0
+  - name: 点击右侧翻页按钮
+    action: element_action
+    ref: tab_bar
+    do: click
+  - name: 等待滚动
+    action: wait
+    wait: 1.0
+  - name: 验证界面显示正常
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+teardown:
+  - action: session_stop

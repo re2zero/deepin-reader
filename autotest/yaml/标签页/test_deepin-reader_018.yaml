@@ -1,0 +1,69 @@
+name: 关闭所有标签页界面显示
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 打开文档，添加多个标签页
+  2. 点击标题栏的x，关闭所有标签页
+  3. 关闭所有标签页后查看界面显示
+
+  预期结果:
+  1. 正常添加
+  2. 正常关闭，若有编辑内容会弹出是否保存的提示弹框
+  3.
+module: 标签页
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 打开多个文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择多个文档
+    action: keyboard_type
+    text: /home/uos/文档1.pdf /home/uos/文档2.djvu /home/uos/文档3.docx
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待所有文档加载
+    action: wait
+    wait: 8.0
+  - name: 验证多个标签页显示
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: page tab list
+  - name: 关闭所有标签页（关闭窗口）
+    action: element_action
+    ref: title_close_btn
+    do: click
+  - name: 等待关闭
+    action: wait
+    wait: 2.0
+  - name: 验证应用退出
+    action: process_not_running
+    ref: deepin-reader
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

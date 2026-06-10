@@ -1,0 +1,43 @@
+name: 目录显示
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开有目录的普通PDF格式文档
+
+  测试步骤:
+  1. 调整左边栏宽度，查看目录显示
+  2. 点击收起及展开目录层级索引
+
+  预期结果:
+  1. 目录显示内容相应调整，超出省略，不省略页数
+  2. 可以正常收起及展开目录层级索引，最多显示三级
+module: 目录
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 点击目录按钮
+    action: element_action
+    ref: sidebar_catalog_btn
+    do: click
+    wait_after: 500
+  - name: 展开目录层级
+    action: element_action
+    ref: catalog_tree
+    do: click
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

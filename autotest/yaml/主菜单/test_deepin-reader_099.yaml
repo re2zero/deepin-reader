@@ -1,0 +1,45 @@
+name: 添加新窗口
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 打开一个文档查看器窗口进入初始界面，点击菜单中的“新窗口”菜单查看是否添加新窗口
+  2. 打开一份文档，点击菜单中的“新窗口”菜单查看是否添加新窗口
+  3. 新窗口中未添加文档时查看各菜单显示并点击
+  4. 新窗口中添加文档后查看各菜单显示并点击
+
+  预期结果:
+  1. 正常添加新窗口
+  2. 正常添加新窗口，前一个打开的文档仍保留开启状态
+  3. 工具栏左侧按钮均置灰显示点击无作用；右侧菜单中新窗口、新标签页、主题、帮助、关于、退出菜单高亮显示点击后功能正常，其他菜单置灰显示点击无作用
+  4. 工具栏、左边栏菜单均可点击，功能正常，文档中高亮和图标方式添加注释功能正常
+module: 主菜单
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 点击菜单键选择新窗口
+    action: main_menu_comb
+    ref: menu_new_window
+  - name: 等待新窗口打开
+    action: wait
+    wait_after: 2000
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

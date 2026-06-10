@@ -1,0 +1,50 @@
+name: 切换至手形工具点击超链接
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  打开PDF格式文档
+  打开docx格式文档
+
+  测试步骤:
+  1. 切换至手形工具，放置在超链接文本之上
+  2. 切换至手形工具，点击超链接文本
+  3. 切换至手形工具，选中超链接文本或普通文本
+  4. 切换至手形工具，右击超链接文本
+
+  预期结果:
+  1. 会显示超链接浮窗
+  2. 弹出安全提示弹框，弹框中显示关闭、“阻止”、“允许”按钮，点击各按钮功能正常
+  3. 无法选中超链接文本或普通文本
+  4. 弹出搜索相关的右键菜单
+module: 操作
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 切换到手型工具
+    action: main_menu_comb
+    ref: menu_hand_tool
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 鼠标放置在超链接文本上
+    action: mouse_click
+    ref: hyperlink_area
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

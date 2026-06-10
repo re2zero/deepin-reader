@@ -1,0 +1,54 @@
+name: '[025]多次保存'
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 编辑文档，点击保存或按Ctrl+S，查看
+  2. 不关闭文档，再次编辑文档，点击保存或按Ctrl+S，查看
+
+  预期结果:
+  1. 正常保存
+  2. 正常保存
+module: 主菜单
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 添加书签
+    action: context_menu_comb
+    ref: doc_center
+  - name: 点击添加书签
+    action: element_action
+    ref: context_add_bookmark
+    do: click
+  - name: 点击主菜单保存
+    action: main_menu_comb
+    ref: menu_save
+  - name: 等待保存
+    action: wait
+    wait_after: 500
+  - name: 再次按Ctrl+S保存
+    action: keyboard_hot_key
+    keys: ctrl,s
+  - name: 等待保存
+    action: wait
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

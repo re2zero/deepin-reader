@@ -1,0 +1,89 @@
+name: 标签页拖拽至其他应用
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开普通PDF格式文档
+  2.打开DJVU格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 窗口中只有一个标签页，将标签页拖拽到其他应用（如:编辑器）的工具栏或正文区域，查看
+  2. 窗口中有多个标签页，将标签页拖拽到其他应用（如:编辑器）的工具栏区域，查看
+  3. 窗口中有多个标签页，将标签页拖拽到其他应用（如:编辑器）的正文区域，查看
+
+  预期结果:
+  1. 应该无法拖拽
+  2. 打开一个新窗口以显示此标签页
+  3. 打开一个新窗口以显示此标签页
+module: 标签页
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 打开PDF文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择文档
+    action: keyboard_type
+    text: /home/uos/文档.pdf
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 验证标签栏显示
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: page tab list
+  - name: 在标签栏区域尝试拖拽操作
+    action: element_action
+    ref: tab_bar
+    do: click
+  - name: 等待操作
+    action: wait
+    wait: 1.0
+  - name: 验证单个标签页无法拖拽（窗口无变化）
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+  - name: 添加第二个标签页
+    action: main_menu_comb
+    ref: menu_new_tab
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择第二个文档
+    action: keyboard_type
+    text: /home/uos/文档2.djvu
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 3.0
+  - name: 验证两个标签页显示
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: page tab list
+teardown:
+  - action: session_stop

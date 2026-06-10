@@ -1,0 +1,76 @@
+name: '[003]退出打开'
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 初始界面按Ctrl+O键
+  2. 文件选择页面点击取消，或者点击ESC键，查看是否退出文件选择界面
+
+  预期结果:
+  1. 弹出文件选择界面
+  2. 退出文件选择界面
+module: 文档打开
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader
+    wait: 3.0
+steps:
+  - name: 按Ctrl+O打开文件选择界面
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框弹出
+    action: wait
+    wait: 2.0
+  - name: 验证文件选择对话框显示
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          name: 打开文件
+          role: dialog
+  - name: 按ESC键退出
+    action: keyboard_press
+    keys: Escape
+  - name: 等待对话框关闭
+    action: wait
+    wait: 1.0
+  - name: 验证文件选择对话框已关闭
+    action: element_not_visible
+    ref: dialog_open_file
+  - name: 再次按Ctrl+O打开
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框弹出
+    action: wait
+    wait: 2.0
+  - name: 验证文件选择对话框显示
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          name: 打开文件
+          role: dialog
+  - name: 点击取消按钮
+    action: keyboard_press
+    keys: Escape
+  - name: 等待对话框关闭
+    action: wait
+    wait: 1.0
+  - name: 验证对话框已关闭
+    action: element_not_visible
+    ref: dialog_open_file
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

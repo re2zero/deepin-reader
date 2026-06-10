@@ -1,0 +1,79 @@
+name: 单个窗口中多标签页管理
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 在不同标签页中进行搜索
+  2. 切换产生搜索结果的标签页
+  3. 点击当前页搜索框中的关闭按钮
+
+  预期结果:
+  1. 每个标签页分别显示搜索结果，
+  2. 每个标签页的搜索结果和搜索弹框正常显示不会被关闭
+  3. 仅当前页搜索结果被正常关闭，其他标签页搜索弹框和搜索结果仍正常显示
+module: 标签页
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 打开多个文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择多个文档
+    action: keyboard_type
+    text: /home/uos/文档1.pdf /home/uos/文档2.pdf /home/uos/文档3.pdf
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待所有文档加载
+    action: wait
+    wait: 5.0
+  - name: 验证多个标签页
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: page tab list
+  - name: 在标签页1中进行搜索
+    action: main_menu_comb
+    ref: menu_search
+  - name: 等待搜索栏
+    action: wait
+    wait: 1.0
+  - name: 输入搜索关键词
+    action: keyboard_type
+    text: test
+  - name: 等待搜索结果
+    action: wait
+    wait: 1.0
+  - name: 切换至另一个标签页
+    action: element_action
+    ref: tab_bar
+    do: click
+  - name: 等待切换
+    action: wait
+    wait: 1.0
+  - name: 验证切换正常
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+teardown:
+  - action: session_stop

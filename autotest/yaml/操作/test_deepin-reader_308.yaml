@@ -1,0 +1,56 @@
+name: 18、视图保持_修改页面视图后在多窗口打开调整过页面视图的文档
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开文档A调整页面视图为A（双页显示、默认大小），关闭文档A
+  2.打开文档B调整页面视图为B（双页显示、500%），关闭文档B
+
+  测试步骤:
+  1. 窗口1查看文档C且调整页面视图C（300%），窗口2查看文档D且调整页面视图D（75%）
+  2. 分别在两个新窗口打开文档A、文档B
+
+  预期结果:
+  1. 调整页面视图成功
+  2. 文档A页面视图为A（双页显示、默认大小），文档B页面视图为B（双页显示、500%）
+module: 操作
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 调整页面视图C为300%
+    action: element_action
+    ref: zoom_combo
+    do: click
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 输入300
+    action: keyboard_type
+    text: '300'
+  - name: 按Enter
+    action: keyboard_press
+    keys: Return
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 在新窗口打开文档
+    action: main_menu_comb
+    ref: menu_new_window
+  - name: 等待
+    action: wait
+    wait: 2.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

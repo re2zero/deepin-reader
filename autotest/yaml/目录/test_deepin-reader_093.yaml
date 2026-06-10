@@ -1,0 +1,47 @@
+name: 打开不可读取页数的文档
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开普通PDF格式文档
+  2.打开DJVU格式文档
+
+  测试步骤:
+  1. 打开一份不可读取页数的文档，查看输入框一行的显示
+  2. 输入框中输入页码（包括数字和字母），查看是否正常跳转
+  3. 输入非有效内容，查看提示
+  4. 点击页数右侧的上翻、下翻按钮
+
+  预期结果:
+  1. 显示为：输入框和文档总页数；文档翻页时页数显示正确
+  2. 跳转至对应页面
+  3. 提示“请输入有效页码”
+  4. 点击上翻按钮，页数上翻；点击下翻按钮，页数下翻
+module: 目录
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 在页数输入框输入页码
+    action: element_set_value
+    ref: page_input
+    text: '5'
+    wait_after: 500
+  - name: 按回车跳转
+    action: keyboard_press
+    keys: Return
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

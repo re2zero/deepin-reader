@@ -1,0 +1,52 @@
+name: 快捷键切换注释目录
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+
+  测试步骤:
+  1. 添加多个注释
+  2. 选择一个注释目录，按键盘上下键/pageup、pagedown，查看
+  3. 双页显示时，添加多个注释
+  4. 选择一个注释目录，按键盘上下键/pageup、pagedown，查看
+
+  预期结果:
+  1. 展开左边栏，显示多个注释目录
+  2. 切换正常，右侧文档对应跳转
+  3. 展开左边栏，显示多个注释目录
+  4. 切换正常，右侧文档对应跳转
+module: 注释
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 添加多个注释后点击注释按钮
+    action: element_action
+    ref: sidebar_annotation_btn
+    do: click
+    wait_after: 500
+  - name: 选中一个注释目录
+    action: element_action
+    ref: annotation_list
+    do: click
+    wait_after: 500
+  - name: 按向下键切换
+    action: keyboard_press
+    keys: Down
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

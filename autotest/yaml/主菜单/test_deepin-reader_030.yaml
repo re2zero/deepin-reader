@@ -1,0 +1,51 @@
+name: '[004]最小化. 最大化. 关闭'
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 打开文档，分别点击最小化. 最大化. 关闭菜单
+
+  预期结果:
+  1. 当前页面正常最小化. 最大化. 关闭退出
+module: 主菜单
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 点击最小化按钮
+    action: element_action
+    ref: title_min_btn
+    do: click
+  - name: 等待窗口最小化
+    action: wait
+    wait_after: 500
+  - name: 恢复窗口
+    action: element_action
+    ref: title_max_btn
+    do: click
+  - name: 等待窗口恢复
+    action: wait
+    wait_after: 500
+  - name: 点击关闭按钮
+    action: element_action
+    ref: title_close_btn
+    do: click
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

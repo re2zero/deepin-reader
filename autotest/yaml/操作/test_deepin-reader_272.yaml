@@ -1,0 +1,53 @@
+name: 鼠标放置在屏幕顶端或左侧边缘，按快捷键F11，工具栏和左侧栏正常弹出可点击
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 打开文档，点击最大化显示
+  2. 鼠标放置在屏幕顶端，按快捷键F11
+  3. 打开文档，点击最大化显示
+  4. 鼠标放置在屏幕左侧边缘，按快捷键F11
+
+  预期结果:
+  1. 文档最大化显示
+  2. 工具栏自动弹出，按钮可点击，不会置灰显示
+  3. 文档最大化显示
+  4. 左侧栏自动弹出，按钮可点击，不会置灰显示
+module: 操作
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 最大化显示
+    action: element_action
+    ref: title_max_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 鼠标放顶端按F11
+    action: mouse_click
+    ref: fullscreen_toolbar
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 按F11
+    action: keyboard_press
+    keys: F11
+  - name: 等待
+    action: wait
+    wait: 2.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

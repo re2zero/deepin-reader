@@ -1,0 +1,55 @@
+name: '[014]开启搜索'
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+
+  测试步骤:
+  1. 在主菜单中选择搜索，查看界面显示
+  2. 右击未选中文本或空白区域，弹出右键菜单项，选择搜索，查看界面显示
+
+  预期结果:
+  1. 弹出搜索弹框，搜索框中显示搜索字样、搜索框右侧显示上一个、下一个按钮、关闭图标
+  2. 弹出搜索弹框，搜索框中显示搜索字样、搜索框右侧显示上一个、下一个按钮、关闭图标
+module: 操作
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 通过主菜单打开搜索
+    action: main_menu_comb
+    ref: menu_search
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 关闭搜索
+    action: element_action
+    ref: search_close_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 右击文档空白区域
+    action: context_menu_comb
+    ref: doc_center
+    menu:
+      - 搜索
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

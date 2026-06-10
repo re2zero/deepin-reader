@@ -1,0 +1,84 @@
+name: 视图调整菜单
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+  4.双页显示
+
+  测试步骤:
+  1. 文档单页显示时，改变工具栏百分比大小，查看文档内容变化
+  2. 文档单页显示时，使用Ctrl+滚轮或Ctrl++/Ctrl--改变文档大小，查看工具栏百分比数值变化
+  3. 文档双页显示时，改变工具栏百分比大小，查看文档内容变化
+  4. 文档双页显示时，使用Ctrl+滚轮或Ctrl++/Ctrl--改变文档大小，查看工具栏百分比数值变化
+
+  预期结果:
+  1. 文档内容大小同步变化
+  2. 工具栏百分比数值同步变化
+  3. 文档内容大小同步变化
+  4. 工具栏百分比数值同步变化
+module: 操作
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 单页显示时改变百分比
+    action: element_action
+    ref: zoom_combo
+    do: click
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 选择200%
+    action: keyboard_type
+    text: '200'
+  - name: 按Enter
+    action: keyboard_press
+    keys: Return
+  - name: 等待
+    action: wait
+    wait: 1.5
+  - name: 按Ctrl+滚轮放大
+    action: mouse_scroll
+    ref: doc_center
+    amount: 3
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 切换到双页显示
+    action: element_action
+    ref: double_page_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 双页时改变百分比
+    action: element_action
+    ref: zoom_in_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 双页时Ctrl+滚轮
+    action: mouse_scroll
+    ref: doc_center
+    amount: 3
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

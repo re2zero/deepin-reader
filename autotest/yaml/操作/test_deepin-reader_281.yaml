@@ -1,0 +1,42 @@
+name: 安全提示弹框弹出后按tab键
+app: deepin-reader
+screenshot: false
+description: "前置条件:\n打开PDF格式文档\n打开docx格式文档\n\n测试步骤:\n1. 点击超链接弹出安全提示弹框\n2. 按tab键切换\n\
+  \n预期结果:\n1. \n2.\n"
+module: 操作
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 点击超链接弹出安全提示
+    action: mouse_click
+    ref: hyperlink_area
+  - name: 等待
+    action: wait
+    wait: 1.5
+  - name: 按Tab切换焦点
+    action: keyboard_press
+    keys: Tab
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 再次按Tab切换
+    action: keyboard_press
+    keys: Tab
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

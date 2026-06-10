@@ -1,0 +1,48 @@
+name: 编辑高亮注释
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+
+  测试步骤:
+  1. 单击高亮注释
+  2. 编辑修改输入框中内容
+  3. 鼠标左击或右击注释框外其他区域，查看
+
+  预期结果:
+  1. 显示注释输入框，输入光标显示在内容后方
+  2. 可以修改
+  3. 注释框关闭，注释编辑成功
+module: 注释
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 单击高亮注释
+    action: mouse_click
+    ref: doc_selected_text
+    wait_after: 500
+  - name: 输入注释内容
+    action: keyboard_type
+    text: 编辑高亮注释内容
+    wait_after: 500
+  - name: 点击其他区域完成编辑
+    action: mouse_click
+    ref: doc_center
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

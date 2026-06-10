@@ -1,0 +1,37 @@
+name: 打开多途径获取的PDF、DOCX文档
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 从FTP服务器中拖拽PDF、DOCX格式文档至UOS系统中，使用文档查看器打开此文档
+  2. 从U盘中拖拽PDF、DOCX格式文档至UOS系统中，使用文档查看器打开此文档
+  3. 从网页端下载PDF、DOCX格式文档，使用文档查看器打开此文档
+
+  预期结果:
+  1. 可以正常打开
+  2. 可以正常打开
+  3. 可以正常打开
+module: 书签
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 打开PDF文档
+    action: element_action
+    ref: doc_view
+    do: click
+    wait_after: 1000
+  - name: 验证进程运行
+    action: wait
+    wait: 0
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

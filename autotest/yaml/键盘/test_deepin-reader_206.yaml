@@ -1,0 +1,55 @@
+name: 编辑文档后关闭或退出，弹出是否保存对话框
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 编辑文档后关闭或退出
+  2. 对话框界面按tab键切换
+  3. 按回车键
+  4. 选中任意按钮时按esc键
+
+  预期结果:
+  1. 弹出是否保存对话框
+  2. 可以在对话框界面循环切换，focus效果正确
+  3. 执行选中的按钮
+  4. 关闭对话框
+module: 键盘
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 编辑文档添加注释
+    action: context_menu_comb
+    ref: doc_center
+  - name: 点击关闭按钮
+    action: element_action
+    ref: title_close_btn
+    do: click
+  - name: 按Tab键切换焦点
+    action: keyboard_hot_key
+    keys: tab
+  - name: 按Enter确认
+    action: keyboard_hot_key
+    keys: enter
+  - name: 按ESC取消
+    action: keyboard_hot_key
+    keys: esc
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

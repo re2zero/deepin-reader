@@ -1,0 +1,64 @@
+name: 全屏中菜单功能
+app: deepin-reader
+screenshot: false
+description: "前置条件:\n1.打开pdf格式文档\n2.打开djvu格式文档\n3.打开docx格式文档\n\n测试步骤:\n1. 进入全屏，点击右键菜单中的第一页菜单\n\
+  2. 进入全屏，点击右键菜单中的前一页菜单\n3. 进入全屏，点击右键菜单中的后一页菜单\n4. 进入全屏，点击右键菜单中的最后一页菜单\n5. 进入全屏，点击右键菜单中的保存菜单\n\
+  6. 进入全屏，点击右键菜单中的另存为菜单\n7. 进入全屏，点击右键菜单中的打印菜单\n8. 进入全屏，点击右键菜单中的幻灯片放映菜单\n9. 进入全屏，点击右键菜单中的退出菜单\n\
+  \n预期结果:\n1. \n2. \n3. \n4. \n5. \n6. \n7. \n8. \n9. 1~9.功能正常\n"
+module: 操作
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 进入全屏
+    action: keyboard_press
+    keys: F11
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 右击选择第一页
+    action: context_menu_comb
+    ref: doc_center
+    menu:
+      - 第一页
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 右击选择前一页
+    action: context_menu_comb
+    ref: doc_center
+    menu:
+      - 前一页
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 右击选择后一页
+    action: context_menu_comb
+    ref: doc_center
+    menu:
+      - 后一页
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 右击选择最后一页
+    action: context_menu_comb
+    ref: doc_center
+    menu:
+      - 最后一页
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

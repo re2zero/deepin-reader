@@ -1,0 +1,85 @@
+# YAML test case for deepin-reader — 压力/286 "打开PDF和DOCX大文档无异常"
+# AUTOMATABLE: Open large PDF and DOCX documents via file dialog.
+# Verifies that the app handles large format documents without issues.
+name: 压力/286 打开PDF和DOCX大文档无异常
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 打开50M、100M、200M、300M左右的PDF大文档
+  2. 打开10M、20M、50M、100M左右的DOCX大文档
+
+  预期结果:
+  1. 正常打开，点击菜单无异常
+  2. 正常打开，点击菜单无异常
+module: 压力
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 打开PDF大文档
+    action: keyboard_hot_key
+    key: ctrl+o
+    wait: 2.0
+  - action: keyboard_hot_key
+    key: ctrl+l
+    wait: 0.5
+  - action: keyboard_type
+    text: /home/uos/test/files/1.pdf
+    wait: 0.5
+  - action: keyboard_press
+    key: Return
+    wait: 3.0
+  - name: 验证PDF文档加载
+    action: wait
+    wait: 0
+    assert:
+      - type: element_visible
+        selector:
+          role: drawing area
+          name: document
+  - name: 验证菜单操作正常
+    action: element_action
+    ref: zoom_in_btn
+    do: click
+    wait: 0.5
+  - name: 打开DOCX大文档
+    action: keyboard_hot_key
+    key: ctrl+o
+    wait: 2.0
+  - action: keyboard_hot_key
+    key: ctrl+l
+    wait: 0.5
+  - action: keyboard_type
+    text: /home/uos/test/files/normal.docx
+    wait: 0.5
+  - action: keyboard_press
+    key: Return
+    wait: 3.0
+  - name: 验证DOCX文档加载
+    action: wait
+    wait: 0
+    assert:
+      - type: element_visible
+        selector:
+          role: drawing area
+          name: document
+  - name: 验证菜单操作正常
+    action: element_action
+    ref: zoom_out_btn
+    do: click
+    wait: 0.5
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

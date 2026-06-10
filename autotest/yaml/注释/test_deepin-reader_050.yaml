@@ -1,0 +1,51 @@
+name: 发送文档保留注释
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+
+  测试步骤:
+  1. 添加高亮注释或图标注释，保存关闭文档，再进行重命名，打开查看
+  2. UOS系统中，文档添加高亮注释或图标注释后，发送至另一台UOS电脑，使用文档查看器应用打开查看
+  3. UOS系统中文档查看器，添加高亮、高亮注释和图标注释并保存，再使用wps打开此文档
+  4. UOS系统中文档查看器，添加高亮、高亮注释和图标注释并保存，发送至Windows/苹果电脑中，打开此文档
+
+  预期结果:
+  1. 添加的高亮或注释不会消失
+  2. 添加的高亮或注释不会消失
+  3. 添加的高亮或注释不会消失
+  4. 添加的高亮或注释不会消失
+module: 注释
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 添加高亮注释
+    action: mouse_right_click
+    ref: doc_center
+    wait_after: 500
+  - name: 选择添加高亮
+    action: context_menu_comb
+    ref: doc_center
+    menu: [高亮]
+    wait_after: 500
+  - name: 保存文档
+    action: main_menu_comb
+    ref: menu_save
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

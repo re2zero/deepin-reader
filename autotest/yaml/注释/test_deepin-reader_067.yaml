@@ -1,0 +1,54 @@
+name: 编辑图标注释内容
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+
+  测试步骤:
+  1. 注释添加完成后，鼠标左键单击注释图标，查看显示
+  2. 编辑注释内容
+  3. 鼠标左击其他区域（非注释图标和注释框），查看
+  4. 左击注释图标，查看
+  5. 编辑注释内容
+  6. 鼠标右击其他区域（非注释图标和注释框），查看
+
+  预期结果:
+  1. 图标为选中状态，同时弹出注释框，输入光标显示在注释内容后方
+  2. 可以正常修改
+  3. 注释框消失，注释图标选中状态被取消，注释内容编辑成功
+  4. 图标为选中状态，同时弹出注释框，输入光标显示在注释内容后方
+  5. 可以正常修改
+  6. 注释框消失，注释图标选中状态被取消，注释内容编辑成功
+module: 注释
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 左键单击注释图标
+    action: mouse_click
+    ref: doc_annotation_icon
+    wait_after: 500
+  - name: 编辑注释内容
+    action: keyboard_type
+    text: 编辑图标注释内容
+    wait_after: 500
+  - name: 点击其他区域完成编辑
+    action: mouse_click
+    ref: doc_center
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

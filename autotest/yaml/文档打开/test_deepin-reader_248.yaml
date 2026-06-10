@@ -1,0 +1,96 @@
+name: 窗口拖动与界面显示
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1. 分别打开PDF/DJVU/双页显示/单页大文档（75M）
+  2. 打开docx文档
+
+  测试步骤:
+  1. 打开文档，分别从上下左右、四个边角拖动改变窗口大小
+  2. 打开文档，双页显示，分别从上下左右、四个边角拖动改变窗口大小
+  3. 打开文档，适应高度，分别从上下左右、四个边角拖动改变窗口大小
+  4. 打开文档，适应宽度，分别从上下左右、四个边角拖动改变窗口大小
+
+  预期结果:
+  1. 窗口变化正常，界面显示正常，不会出现闪烁等异常
+  2. 窗口变化正常，界面显示正常，不会出现闪烁等异常
+  3. 窗口变化正常，界面显示正常，不会出现闪烁等异常；页面始终适应高度显示
+  4. 窗口变化正常，界面显示正常，不会出现闪烁等异常；页面始终适应宽度显示
+module: 文档打开
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader
+    wait: 3.0
+steps:
+  - name: 打开PDF文档
+    action: keyboard_hot_key
+    keys: ctrl,o
+  - name: 等待文件对话框
+    action: wait
+    wait: 2.0
+  - name: 选择大文档
+    action: keyboard_type
+    text: /home/uos/大文档.pdf
+  - name: 确认打开
+    action: keyboard_press
+    keys: Return
+  - name: 等待文档加载
+    action: wait
+    wait: 5.0
+  - name: 验证文档显示
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+  - name: 切换双页显示
+    action: element_action
+    ref: double_page_btn
+    do: click
+  - name: 等待切换
+    action: wait
+    wait: 1.0
+  - name: 验证双页显示正常
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+  - name: 点击最大化按钮
+    action: element_action
+    ref: title_max_btn
+    do: click
+  - name: 等待最大化
+    action: wait
+    wait: 1.0
+  - name: 验证界面显示正常
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+  - name: 恢复窗口
+    action: element_action
+    ref: title_max_btn
+    do: click
+  - name: 等待恢复
+    action: wait
+    wait: 1.0
+  - name: 验证界面无闪烁
+    action: wait
+    wait: 0.3
+    assert:
+      - type: element_visible
+        selector:
+          role: form
+teardown:
+  - action: session_stop

@@ -1,0 +1,39 @@
+name: 高亮注释浮窗
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+  3.双页显示
+
+  测试步骤:
+  1. 鼠标悬停在高亮注释上，浮窗显示部分注释文案
+  2. 滚动滑鼠或按键盘上下键查看是否可以滑动浮窗中内容
+
+  预期结果:
+  1. 浮框显示部分注释文案
+  2. 浮窗中内容无法滑动
+module: 注释
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 鼠标悬停在高亮注释上
+    action: mouse_click
+    ref: doc_selected_text
+    wait_after: 1000
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

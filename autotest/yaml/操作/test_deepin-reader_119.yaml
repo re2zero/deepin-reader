@@ -1,0 +1,73 @@
+name: 取消适合高度的方法
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 文档已调整为适合高度状态，选择适合宽度或按快捷键Ctrl3
+  2. 文档已调整为适合高度状态，在工具栏缩放比例图标中选择一个比例
+  3. 文档已调整为适合高度状态，在工具栏缩放比例图标中手动编辑一个比例
+  4. 文档已调整为适合高度状态，按快捷键Ctrl1
+
+  预期结果:
+  1. 进入适合宽度状态，适合高度被勾选
+  2. 文档显示选择的比例，适合高度取消勾选
+  3. 文档显示编辑的比例，适合高度取消勾选
+  4. 文档恢复默认大小，适合高度取消勾选
+module: 操作
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 点击适合高度
+    action: element_action
+    ref: fit_to_height_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.5
+  - name: 选择适合宽度
+    action: element_action
+    ref: fit_to_width_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 再次适合高度
+    action: element_action
+    ref: fit_to_height_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 选择百分比
+    action: element_action
+    ref: zoom_combo
+    do: click
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 按Ctrl1恢复默认
+    action: keyboard_hot_key
+    keys: ctrl,1
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

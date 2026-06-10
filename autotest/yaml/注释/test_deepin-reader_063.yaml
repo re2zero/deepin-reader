@@ -1,0 +1,51 @@
+name: 输入高亮注释达到上限
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+
+  测试步骤:
+  1. 选中一段文本并右击弹出右键菜单，点击“添加注释”
+  2. 注释输入窗口，输入内容，查看是否可以自动换行
+  3. 注释输入窗口，查看是否支持滚动或按上下键、pageup、pagedown查看全部信息
+  4. 当输入框内容输入超过1500字符（中文或英文）限制，查看是否弹出提示
+
+  预期结果:
+  1. 弹出注释小窗口，固定显示在点击位置
+  2. 可以自动换行
+  3. 支持滚动或按键查看全部信息
+  4. 正确弹出提示：输入已达上限
+module: 注释
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 选中文本右键添加注释
+    action: mouse_right_click
+    ref: doc_center
+    wait_after: 500
+  - name: 选择添加注释
+    action: context_menu_comb
+    ref: doc_center
+    menu: [添加注释]
+    wait_after: 500
+  - name: 输入超长注释内容
+    action: keyboard_type
+    text: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

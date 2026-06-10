@@ -1,0 +1,55 @@
+name: 删除所有书签
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 打开文档，右击任意一个书签目录，查看菜单显示
+  2. 点击“删除所有书签”菜单，查看弹出的提示
+  3. 点击提示框中的取消
+  4. 点击提示框中的确定
+  5. 弹框弹出时，点击应用中其他菜单
+
+  预期结果:
+  1. 显示“删除书签”和“删除所有书签”菜单
+  2. 弹出提示：您确定要删除所有书签吗？
+  3. 弹框关闭，所有书签均不会被被删除
+  4. 弹框关闭，所有书签被删除
+  5. 其他菜单均无法被点击
+module: 书签
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 右键书签目录
+    action: mouse_right_click
+    ref: bookmark_list
+    wait_after: 500
+  - name: 选择删除所有书签
+    action: context_menu_comb
+    ref: bookmark_list
+    menu: RemoveBookmark
+    wait_after: 500
+  - name: 确认删除
+    action: element_action
+    ref: dialog_confirm
+    do: click
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

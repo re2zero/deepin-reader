@@ -1,0 +1,71 @@
+name: 左边栏底部按钮功能
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.分别打开PDF和DJVU文档测试
+  2. 打开docx文档
+
+  测试步骤:
+  1. 展开左边栏，查看左边栏界面显示
+  2. 点击缩略图图标查看左边栏界面显示
+  3. 点击目录图标查看左边栏界面显示
+  4. 点击书签图标查看左边栏界面显示
+  5. 点击注释图标查看左边栏界面显示
+
+  预期结果:
+  1. 底部显示4个按钮：缩略图图标、目录图标、书签图标、注释图标；界面显示正常
+  2. 显示页数输入框、总页数，上下翻页按钮；输入页数正确跳转，上下翻页正常；左边栏宽度范围在266px~380px之间，界面显示正常
+  3. 显示目录界面，无目录文档则显示空白；界面显示正常
+  4. 显示添加书签按钮，点击可将当前浏览页面添加书签；界面显示正常
+  5. .显示添加注释按钮，点击添加注释按钮再点击文档任意位置，可弹出添加注释小窗口界面；界面显示正常
+module: 缩略图
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 展开左边栏
+    action: element_action
+    ref: sidebar_toggle_btn
+    do: click
+    wait_after: 500
+  - name: 点击缩略图图标
+    action: element_action
+    ref: sidebar_thumbnail_btn
+    do: click
+    wait_after: 500
+  - name: 验证缩略图列表可见
+    action: wait
+    wait: 0
+    assert:
+      - type: element_visible
+        ref: thumbnail_list
+  - name: 点击目录图标
+    action: element_action
+    ref: sidebar_catalog_btn
+    do: click
+    wait_after: 500
+  - name: 点击书签图标
+    action: element_action
+    ref: sidebar_bookmark_btn
+    do: click
+    wait_after: 500
+  - name: 点击注释图标
+    action: element_action
+    ref: sidebar_annotation_btn
+    do: click
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

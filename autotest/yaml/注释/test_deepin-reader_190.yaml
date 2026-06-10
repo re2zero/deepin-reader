@@ -1,0 +1,74 @@
+name: 快捷键编辑注释内容
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 弹出注释编辑窗口，输入内容
+  2. 按Ctrl+A快捷键
+  3. 按Ctrl+C快捷键
+  4. 按Ctrl+V快捷键
+  5. 按Ctrl+X快捷键
+  6. 按Ctrl+Z快捷键
+  7. 按Ctrl+S快捷键
+  8. 按delete快捷键
+
+  预期结果:
+  1. 内容正常显示
+  2. 全选内容
+  3. 复制内容
+  4. 粘贴内容
+  5. 剪切内容
+  6. 撤销操作
+  7. 保存内容
+  8. 删除选中的内容
+module: 注释
+feature: ''
+tags:
+  - L2
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 打开注释编辑窗口输入内容
+    action: mouse_click
+    ref: doc_annotation_icon
+    wait_after: 500
+  - name: 按Ctrl+A全选
+    action: keyboard_hot_key
+    keys: ctrl,a
+    wait_after: 500
+  - name: 按Ctrl+C复制
+    action: keyboard_hot_key
+    keys: ctrl,c
+    wait_after: 500
+  - name: 按Ctrl+V粘贴
+    action: keyboard_hot_key
+    keys: ctrl,v
+    wait_after: 500
+  - name: 按Ctrl+X剪切
+    action: keyboard_hot_key
+    keys: ctrl,x
+    wait_after: 500
+  - name: 按Ctrl+Z撤销
+    action: keyboard_hot_key
+    keys: ctrl,z
+    wait_after: 500
+  - name: 按Ctrl+S保存
+    action: keyboard_hot_key
+    keys: ctrl,s
+    wait_after: 500
+  - name: 按Delete删除
+    action: keyboard_press
+    keys: Delete
+    wait_after: 500
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

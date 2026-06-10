@@ -1,0 +1,53 @@
+name: 【UI】搜索框界面显示
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 打开文档，打开搜索框，未输入关键词查看界面显示
+  2. 打开文档，打开搜索框，输入关键词未按enter键，查看界面显示
+  3. 打开文档，打开搜索框，输入关键词并按enter键，查看界面显示
+
+  预期结果:
+  1. 向上、向下切换按键置灰显示
+  2. 向上、向下切换按键置灰显示
+  3. 向上、向下切换按键高亮显示
+module: 操作
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 打开搜索框
+    action: main_menu_comb
+    ref: menu_search
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 未输入关键词查看界面
+    action: wait
+    wait: 0.5
+  - name: 输入关键词未按Enter
+    action: keyboard_type
+    text: test
+  - name: 等待
+    action: wait
+    wait: 0.5
+  - name: 按Enter键搜索
+    action: keyboard_press
+    keys: Return
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

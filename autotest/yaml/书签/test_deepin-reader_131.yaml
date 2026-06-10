@@ -1,0 +1,32 @@
+name: 023未打开文档界面显示
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 未添加文档界面，点击工具栏左侧图标
+  2. 未添加文档界面，点击菜单图标
+  3. 未添加文档界面，分别点击最小化、还原、关闭图标
+
+  预期结果:
+  1. 缩略图图标、百分比输入框图标均置灰显示，点击无作用
+  2. 弹出菜单弹框，显示菜单：新窗口、新标签页、保存、另存为、在文件管理器显示、放大镜、选择工具、搜索、打印、主题、帮助、关于、退出。其中仅新窗口、新标签页、主题、帮助、关于、退出菜单高亮显示可以点击进入，其余菜单置灰显示
+  3. 最小化、还原、关闭功能正常
+module: 书签
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 验证主界面显示
+    action: wait
+    wait: 0
+    assert:
+      - type: element_visible
+        ref: main_frame
+teardown:
+  - action: session_stop

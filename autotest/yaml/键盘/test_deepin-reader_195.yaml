@@ -1,0 +1,49 @@
+name: 多个文档展开左侧栏，Tab键切换
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 打开多个文档，展开左侧栏，按tab键
+  2. 按enter或空格键
+
+  预期结果:
+  1. 焦点从工具栏开始，从上至下，从左至右依次切换
+  2. 执行选择
+module: 键盘
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 展开左侧栏
+    action: element_action
+    ref: sidebar_toggle_btn
+    do: click
+  - name: 打开多个标签
+    action: element_action
+    ref: tab_add_btn
+    do: click
+  - name: 按Tab键切换焦点
+    action: keyboard_hot_key
+    keys: tab
+  - name: 按Enter执行选择
+    action: keyboard_hot_key
+    keys: enter
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

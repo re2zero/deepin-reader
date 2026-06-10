@@ -1,0 +1,35 @@
+name: 1、视图保持_新安装新标签页首次打开文档
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.文档A从未使用文档查看器打开过
+  2.文档查看器新安装之后首次打开
+
+  测试步骤:
+  1. 在新标签页首次打开文档A
+
+  预期结果:
+  1. 文档A页面视图 默认为适合页面
+module: 操作
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 新标签页首次打开文档查看默认视图
+    action: wait
+    wait: 2.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

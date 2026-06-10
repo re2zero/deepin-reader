@@ -1,0 +1,70 @@
+name: 上下页面均有一部分显示在当前窗口时，未选中文本右击弹出菜单
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开docx格式文档
+  3.双页显示
+
+  测试步骤:
+  1. 上下页面均有一部分显示在当前窗口时，右击鼠标，点击第一页
+  2. 上下页面均有一部分显示在当前窗口时，右击鼠标，点击前一页
+  3. 上下页面均有一部分显示在当前窗口时，右击鼠标，点击后一页，查看
+  4. 上下页面均有一部分显示在当前窗口时，右击鼠标，点击最后一页，查看
+
+  预期结果:
+  1. 页面跳转正确
+  2. 页面跳转正确
+  3. 页面跳转正确
+  4. 页面跳转正确
+module: 右键菜单
+feature: ''
+tags:
+  - L3
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 右键点击文档中心区域
+    action: context_menu_comb
+    ref: doc_center
+  - name: 点击第一页
+    action: element_action
+    ref: context_first_page
+    do: click
+  - name: 等待页面跳转
+    action: wait
+    wait_after: 500
+  - name: 右键点击文档中心
+    action: context_menu_comb
+    ref: doc_center
+  - name: 点击前一页
+    action: element_action
+    ref: context_prev_page
+    do: click
+  - name: 右键点击文档中心
+    action: context_menu_comb
+    ref: doc_center
+  - name: 点击后一页
+    action: element_action
+    ref: context_next_page
+    do: click
+  - name: 右键点击文档中心
+    action: context_menu_comb
+    ref: doc_center
+  - name: 点击最后一页
+    action: element_action
+    ref: context_last_page
+    do: click
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

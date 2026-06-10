@@ -1,0 +1,69 @@
+name: '[042]侧边栏和工具栏同时唤出'
+app: deepin-reader
+screenshot: false
+description: |
+  前置条件:
+  1.打开pdf格式文档
+  2.打开djvu格式文档
+  3.打开docx格式文档
+
+  测试步骤:
+  1. 进入全屏显示，先唤出侧边栏，再将鼠标移至左侧栏顶端区域
+  2. 点击工具栏中的“侧边栏”按钮
+  3. 再次点击“侧边栏”按钮，查看
+
+  预期结果:
+  1. 侧边栏和工具栏同时唤出
+  2. “侧边栏”按钮高亮显示，左侧栏固定显示，鼠标移出左侧栏不会隐藏左侧栏
+  3. 左侧栏被隐藏
+module: 操作
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 1.0
+steps:
+  - name: 进入全屏
+    action: keyboard_press
+    keys: F11
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 唤出侧边栏
+    action: mouse_click
+    ref: fullscreen_sidebar_btn
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 鼠标移至顶端唤出工具栏
+    action: mouse_click
+    ref: fullscreen_toolbar
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 点击工具栏侧边栏按钮
+    action: element_action
+    ref: fullscreen_sidebar_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 再次点击侧边栏按钮
+    action: element_action
+    ref: fullscreen_sidebar_btn
+    do: click
+  - name: 等待
+    action: wait
+    wait: 1.0
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

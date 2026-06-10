@@ -1,0 +1,110 @@
+name: 打开PDF文档，未选中文本右击弹出菜单
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 未选中文本，点击鼠标右键，查看右键菜单显示
+  2. 点击搜索菜单，查看
+  3. 点击添加书签，查看
+  4. 点击添加注释，查看
+  5. 点击全屏，查看
+  6. 点击幻灯片放映，查看
+  7. 点击第一页，查看
+  8. 点击前一页，查看
+  9. 点击后一页，查看
+  10. 点击最后一页，查看
+  11. 点击左旋转，查看
+  12. 点击右旋转，查看
+  13. 点击打印，查看
+  14. 点击文档信息，查看
+
+  预期结果:
+  1. 显示：搜索、添加书签、添加注释、全屏、幻灯片放映、第一页、前一页、后一页、最后一页、左旋转、右旋转、打印、文档信息
+  2. 弹出搜索弹框，可以正常进行搜索
+  3. 当前页面正常添加后书签，右上角显示书签图标，左边栏显示书签缩略图
+  4. 弹出注释小窗口，可以正常添加注释，左边栏和右侧文档中注释显示正确
+  5. 进入全屏显示
+  6. 正常播放幻灯片
+  7. 跳转至第一页，如当前文档已在第一页，则“第一页”菜单置灰显示
+  8. 跳转至前一页，如当前文档已在第一页，则“前一页”菜单置灰显示
+  9. 跳转至后一页，如当前文档已在最后一页，则“后一页”菜单置灰显示
+  10. 跳转至最后一页，如当前文档已在最后一页，则“最后一页”菜单置灰显示
+  11. 文档正常左旋转，界面显示正常
+  12. 文档正常右旋转，界面显示正常
+  13. 跳转到打印预览界面
+  14. 显示文档信息界面，界面显示无异常
+module: 右键菜单
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 右键点击文档中心
+    action: context_menu_comb
+    ref: doc_center
+  - name: 点击搜索
+    action: element_action
+    ref: context_search
+    do: click
+  - name: 关闭搜索
+    action: element_action
+    ref: search_close_btn
+    do: click
+  - name: 右键点击文档中心
+    action: context_menu_comb
+    ref: doc_center
+  - name: 点击添加书签
+    action: element_action
+    ref: context_add_bookmark
+    do: click
+  - name: 右键点击文档中心
+    action: context_menu_comb
+    ref: doc_center
+  - name: 点击全屏
+    action: element_action
+    ref: context_fullscreen
+    do: click
+  - name: 退出全屏
+    action: keyboard_hot_key
+    keys: esc
+  - name: 右键点击文档中心
+    action: context_menu_comb
+    ref: doc_center
+  - name: 点击第一页
+    action: element_action
+    ref: context_first_page
+    do: click
+  - name: 右键点击文档中心
+    action: context_menu_comb
+    ref: doc_center
+  - name: 点击右旋转
+    action: element_action
+    ref: context_rotate_right
+    do: click
+  - name: 右键点击文档中心
+    action: context_menu_comb
+    ref: doc_center
+  - name: 点击左旋转
+    action: element_action
+    ref: context_rotate_left
+    do: click
+  - name: 右键点击文档中心
+    action: context_menu_comb
+    ref: doc_center
+  - name: 点击文档信息
+    action: element_action
+    ref: context_doc_info
+    do: click
+  - name: 等待操作生效并验证
+    action: wait
+    wait: 0.3
+    assert:
+      - type: process_running
+        app: deepin-reader
+teardown:
+  - action: session_stop

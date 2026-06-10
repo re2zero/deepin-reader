@@ -1,0 +1,32 @@
+name: 024未打开文档界面显示
+app: deepin-reader
+screenshot: false
+description: |
+  测试步骤:
+  1. 查看应用的图标和名称是否正确
+  2. 打开应用，未添加文档界面，查看左上角logo显示是否正确
+  3. 打开应用，未添加文档界面，查看文档区域显示
+
+  预期结果:
+  1. 应用的图标和名称显示正确
+  2. 显示正确
+  3. 显示：“拖拽文件到此 支持格式：PDF,DJVU，DOCX””提示语和“选择文件”按钮
+module: 书签
+feature: ''
+tags:
+  - L1
+vars:
+  test_file: /home/uos/work/deepin-reader/tests/files/normal.pdf
+setup:
+  - action: session_start
+    command: deepin-reader /home/uos/work/deepin-reader/tests/files/normal.pdf
+    wait: 3.0
+steps:
+  - name: 验证应用图标和名称
+    action: wait
+    wait: 0
+    assert:
+      - type: element_visible
+        ref: main_frame
+teardown:
+  - action: session_stop
