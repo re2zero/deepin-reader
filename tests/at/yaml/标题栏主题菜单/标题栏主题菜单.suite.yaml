@@ -4,6 +4,8 @@ description: ''
 module: 标题栏主题菜单
 tags: []
 fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
 env_check: []
 setup:
 - action: session_start

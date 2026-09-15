@@ -1,0 +1,103 @@
+name: 翻页导航_suite
+app: deepin-reader
+description: ''
+module: 翻页导航
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_paging_navigation_s1
+  name: 翻页导航 — 上一页/下一页/总页数
+  description: 底部翻页控件：上一页、下一页按钮与总页数/当前页标签
+  tags: []
+  steps:
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+    wait: 2.0
+  - action: mouse_click
+    ref: n14
+    selector:
+      name: Button_thumbnail
+  # 下一页：定位底部翻页控件的下一页按钮
+  - action: mouse_click
+    ref: n159
+    selector:
+      name: Button_ThumbnailNext
+  - action: mouse_click
+    ref: n159
+    selector:
+      name: Button_ThumbnailNext
+  # 上一页：回退两页
+  - action: mouse_click
+    ref: n158
+    selector:
+      name: Button_ThumbnailPre
+  - action: mouse_click
+    ref: n158
+    selector:
+      name: Button_ThumbnailPre
+  assert_steps:
+  # 总页数标签存在且可见
+  - action: assert_element
+    ref: n259
+    selector:
+      name: Label_TotalPage
+      role: label
+  # 当前页标签存在且可见
+  - action: assert_element
+    ref: n260
+    selector:
+      name: CurrentPage
+      role: label
+  # 上一页/下一页按钮均可定位
+  - action: assert_element
+    ref: n158
+    selector:
+      name: Button_ThumbnailPre
+  - action: assert_element
+    ref: n159
+    selector:
+      name: Button_ThumbnailNext
+- id: suite_paging_navigation_s2
+  name: 翻页导航 — 跳转页码
+  description: 在翻页跳转输入框输入页码并回车跳转
+  tags: []
+  steps:
+  # 定位翻页跳转输入框（分页控件的外层 DLineEdit）
+  - action: mouse_click
+    ref: n155
+    selector:
+      name: Page
+      role: text
+  - action: mouse_click
+    ref: n156
+    selector:
+      name: pageEdit
+      role: text
+  - action: keyboard_type_text
+    text: '3'
+  - action: keyboard_press
+    key: return
+  wait: 2.0
+  assert_steps:
+  # 跳转后总页数标签仍在
+  - action: assert_element
+    ref: n259
+    selector:
+      name: Label_TotalPage
+      role: label
+  - action: assert_element
+    ref: n155
+    selector:
+      name: Page
+      role: form
+teardown:
+- action: session_stop

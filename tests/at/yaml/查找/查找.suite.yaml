@@ -1,0 +1,60 @@
+name: 查找_suite
+app: deepin-reader
+description: ''
+module: 查找
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_find_s1
+  name: 查找 — 关键字输入与上/下查找
+  description: 主菜单"搜索"打开查找控件；输入关键字后启用上一页(FindPrevButton)/下一页(FindNextButton)按钮
+  tags: []
+  steps:
+  # 主菜单 -> 搜索，打开查找控件
+  - action: dtk_main_menu
+    items:
+    - 搜索
+    wait: 1.0
+  # 定位查找输入框（DSearchEdit 外层，扫描命名 Form_findSearchEdit_P）
+  # - action: mouse_click
+  #   ref: n242
+  #   selector:
+  #     name: Form_findSearchEdit_P
+  - action: keyboard_type_text
+    text: normal
+  - action: keyboard_press
+    key: return
+    wait: 1.0
+  # 输入关键字后，上/下查找按钮由禁用转为可用，点击验证定位
+  - action: mouse_click
+    ref: n257
+    selector:
+      name: FindPrevButton
+  - action: mouse_click
+    ref: n258
+    selector:
+      name: FindNextButton
+  assert_steps:
+  # 查找输入框存在
+  - action: assert_element
+    ref: n227
+    selector:
+      name: DLineEditChildLineEdit
+  # 上/下查找按钮均可定位
+  - action: assert_element
+    ref: n257
+    selector:
+      name: FindPrevButton
+  - action: assert_element
+    ref: n258
+    selector:
+      name: FindNextButton
+teardown:
+- action: session_stop

@@ -167,3 +167,36 @@ elements:
   n256:
     name: 跟随系统
     role: menu item
+  n257:
+    name: FindPrevButton
+    role: button
+  n258:
+    name: FindNextButton
+    role: button
+  n259:
+    name: Label_TotalPage
+    role: label
+  n260:
+    name: CurrentPage
+    role: label
+  n261:
+    name: Page
+    role: text
+  n262:
+    name: PlayBtn
+    role: button
+  n263:
+    name: PreBtn
+    role: button
+  n264:
+    name: NextBtn
+    role: button
+  n265:
+    name: PTextEdit
+    role: text
+  n266:
+    name: LineEdit
+    role: text
+  n267:
+    name: ArrowBtn
+    role: button

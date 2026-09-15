@@ -4,6 +4,8 @@ description: ''
 module: 标题栏缩放输入框
 tags: []
 fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
 env_check: []
 setup:
 - action: session_start
@@ -28,5 +30,36 @@ suites:
     ref: n227
     selector:
       name: DLineEditChildLineEdit
+- id: suite_titlebar_scale_s2
+  name: 标题栏缩放输入框 — 缩放输入框与箭头菜单
+  description: 缩放输入框外层 DLineEdit(LineEdit) 与箭头按钮(ArrowBtn，点开缩放比例菜单)
+  tags: []
+  steps:
+  # 点击缩放输入框外层 DLineEdit（扫描命名 LineEdit）
+  # - action: mouse_click
+  #   ref: n266
+  #   selector:
+  #     name: LineEdit
+  #     role: text
+  - action: keyboard_type_text
+    text: '120'
+  - action: keyboard_press
+    key: return
+    wait: 1.0
+  # 箭头按钮点开缩放比例菜单
+  - action: mouse_click
+    ref: n267
+    selector:
+      name: ArrowBtn
+  assert_steps:
+  # - action: assert_element
+  #   ref: n266
+  #   selector:
+  #     name: LineEdit
+  #     role: text
+  - action: assert_element
+    ref: n267
+    selector:
+      name: ArrowBtn
 teardown:
 - action: session_stop

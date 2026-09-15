@@ -1,0 +1,47 @@
+name: 注释文本框_suite
+app: deepin-reader
+description: ''
+module: 注释文本框
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_note_text_edit_s1
+  name: 注释文本框 — 添加文本注释并输入
+  description: 文档右键菜单"添加注释"打开注释文本框(PTextEdit)，在其中输入文字
+  tags: []
+  steps:
+  # 文档区域右键菜单
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 添加注释
+    wait: 3.0
+  # 注释文本框 PTextEdit 出现，输入文字
+  - action: mouse_click
+    ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+  - action: keyboard_type_text
+    text: test-note
+    wait: 1.0
+  assert_steps:
+  # 注释文本框存在且可定位
+  - action: assert_element
+    ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+  # 关闭注释文本框
+  - action: keyboard_press
+    key: escape
+teardown:
+- action: session_stop
