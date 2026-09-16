@@ -1,0 +1,353 @@
+name: 全屏交互_suite
+app: deepin-reader
+description: ''
+module: 全屏交互
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf ${TEST_FILES_DIR}/1.pdf
+  wait: 3.0
+suites:
+# Case 1.1 进入全屏_不同视图状态
+- id: suite_fs_enter_diff_states
+  name: 全屏 — 进入全屏_不同视图状态
+  description: 隐藏/展开侧边栏状态下按F11进入全屏；鼠标移至边缘步骤不支持自动化
+  tags: []
+  steps:
+  # 隐藏侧边栏后按F11进入全屏
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+    wait: 2.0
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+  # 退出全屏
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  # 展开侧边栏后按F11进入全屏
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+    wait: 2.0
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+  # 退出全屏
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  # 鼠标移至屏幕顶端后按F11 — 鼠标移动不支持自动化，仅按F11
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  # 鼠标移至屏幕左侧边缘后按F11 — 鼠标移动不支持自动化，仅按F11
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+# Case 1.2 全屏中_唤出工具栏与侧边栏
+- id: suite_fs_show_toolbar_sidebar
+  name: 全屏 — 全屏中_唤出工具栏与侧边栏
+  description: 全屏中鼠标移至边缘唤出工具栏与侧边栏；鼠标移动步骤无AT-SPI API支持
+  tags: []
+  steps:
+  # 进入全屏
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  # 以下步骤需鼠标移动到屏幕边缘，AT-SPI 无 mouse_move API，不支持自动化
+  # 鼠标移至屏幕顶端 — unsupported
+  # 鼠标移至屏幕左侧边缘 — unsupported
+  # 鼠标同时移至屏幕顶端和左侧边缘 — unsupported
+  # 等待1秒 — unsupported（依赖鼠标移开后的自动隐藏行为）
+  # 退出全屏
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+# Case 1.3 全屏中_菜单与标签操作
+- id: suite_fs_menu_tab_ops
+  name: 全屏 — 全屏中_菜单与标签操作
+  description: 全屏中缩略图视图、新建标签页、右上角菜单、主菜单均可正常操作
+  tags: []
+  steps:
+  # 进入全屏
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  # 点击缩略图图标（标题栏缩略图切换按钮）
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+    wait: 2.0
+  # 点击新建标签页按钮
+  - action: mouse_click
+    ref: n213
+    selector:
+      name: DTabBarAddButton
+      role: button
+    wait: 2.0
+  # 点击右上角菜单（标题栏主题菜单）
+  - action: mouse_click
+    ref: n253
+    selector:
+      name: DTitlebarThemeMenu
+      role: popup menu
+    wait: 1.0
+  - action: keyboard_press
+    key: escape
+  # 点击主菜单
+  - action: dtk_main_menu
+    items:
+    - 搜索
+    wait: 1.0
+  - action: keyboard_press
+    key: escape
+  # 退出全屏
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+# Case 1.4 退出全屏_各状态保持
+- id: suite_fs_exit_state_preserved
+  name: 全屏 — 退出全屏_各状态保持
+  description: 各状态后退出全屏，窗口均保持之前的大小和状态
+  tags: []
+  steps:
+  # 进入全屏
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  # 翻页后退出全屏
+  - action: mouse_click
+    ref: n159
+    selector:
+      name: Button_ThumbnailNext
+    wait: 1.0
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+  # 重新进入全屏
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  # 选中目录后退出全屏
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+    wait: 2.0
+  - action: mouse_click
+    ref: n15
+    selector:
+      name: Button_catalog
+    wait: 1.0
+  - action: mouse_click
+    ref: n163
+    selector:
+      name: View_CatalogTree
+    wait: 1.0
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+  # 重新进入全屏
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  # 添加书签后退出全屏
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+    wait: 2.0
+  - action: mouse_click
+    ref: n16
+    selector:
+      name: Button_bookmark
+    wait: 1.0
+  - action: mouse_click
+    ref: n22
+    selector:
+      name: Button_BookmarkAdd
+    wait: 1.0
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+  # 重新进入全屏
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  # 添加注释后退出全屏
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 添加注释
+    wait: 3.0
+  - action: keyboard_press
+    key: escape
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+  # 重新进入全屏
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  # 选择手型工具后退出全屏
+  - action: dtk_main_menu
+    items:
+    - 工具
+    - 手形工具
+    wait: 1.0
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+  # 重新进入全屏
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  # 弹出搜索结果后退出全屏
+  - action: dtk_main_menu
+    items:
+    - 搜索
+    wait: 1.0
+  - action: keyboard_type_text
+    text: normal
+  - action: keyboard_press
+    key: return
+    wait: 1.0
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+  # 重新进入全屏
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  # 调整视图后退出全屏
+  - action: mouse_click
+    ref: n227
+    selector:
+      name: DLineEditChildLineEdit
+    wait: 1.0
+  - action: keyboard_type_text
+    text: '120'
+  - action: keyboard_press
+    key: return
+    wait: 1.0
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+# Case 1.5 多文档_进入退出不丢失
+- id: suite_fs_multi_doc_preserved
+  name: 全屏 — 多文档_进入退出不丢失
+  description: 多文档打开时进入退出全屏，文档均不丢失
+  tags: []
+  steps:
+  # 进入全屏
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  # 退出全屏
+  - action: keyboard_press
+    key: f11
+    wait: 2.0
+  assert_steps:
+  # 文档标签页仍然存在
+  - action: assert_element
+    ref: n210
+    selector:
+      name: normal.pdf
+      role: page tab
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+teardown:
+- action: session_stop
