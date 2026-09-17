@@ -1,0 +1,123 @@
+name: kb_tab_suite
+app: deepin-reader
+description: ''
+module: kb_tab
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_kb_tab_s1
+  name: kb_tab — Tab焦点在工具栏依序循环
+  description: Tab键焦点从工具栏开始依序循环切换，Enter执行选中按钮
+  tags: []
+  steps:
+  # Tab聚焦到工具栏第一个控件（缩略图按钮 Thumbnails）
+  - action: keyboard_press
+    key: tab
+    wait: 1.0
+  # Tab到缩放减小按钮
+  - action: keyboard_press
+    key: tab
+    wait: 1.0
+  # Tab到缩放输入框
+  - action: keyboard_press
+    key: tab
+    wait: 1.0
+  # Tab到缩放增大按钮
+  - action: keyboard_press
+    key: tab
+    wait: 1.0
+  # Enter执行当前焦点按钮（QAbstractButton触发click）
+  - action: keyboard_press
+    key: return
+    wait: 1.0
+  assert_steps:
+  # 工具栏缩略图按钮可定位
+  - action: assert_element
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+  # 缩放减小按钮可定位
+  - action: assert_element
+    selector:
+      accessible_id: SP_DecreaseElement
+  # 缩放增大按钮可定位
+  - action: assert_element
+    selector:
+      accessible_id: SP_IncreaseElement
+- id: suite_kb_tab_s2
+  name: kb_tab — 展开左侧栏后Tab焦点循环
+  description: 展开左侧栏后按Tab焦点依序循环切换
+  tags: []
+  steps:
+  # 点击缩略图按钮展开左侧栏
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 2.0
+  # Tab焦点切换
+  - action: keyboard_press
+    key: tab
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+    wait: 1.0
+  # Enter执行当前焦点控件
+  - action: keyboard_press
+    key: return
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+- id: suite_kb_tab_s3
+  name: kb_tab — 多文档打开后Tab焦点循环
+  description: 打开多个文档后按Tab焦点依序循环切换
+  tags: []
+  steps:
+  # 确保左侧栏已展开
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 2.0
+  # Tab焦点在多标签页间循环
+  - action: keyboard_press
+    key: tab
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+    wait: 1.0
+  # Enter执行选中
+  - action: keyboard_press
+    key: return
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+teardown:
+- action: session_stop

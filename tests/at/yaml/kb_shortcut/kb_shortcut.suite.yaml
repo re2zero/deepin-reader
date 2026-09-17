@@ -1,0 +1,77 @@
+name: kb_shortcut_suite
+app: deepin-reader
+description: ''
+module: kb_shortcut
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_kb_shortcut_s1
+  name: kb_shortcut — Ctrl+Home/Ctrl+End跳转首页末页
+  description: Ctrl+Home定位首页，Ctrl+End定位末页
+  tags: []
+  steps:
+  # Ctrl+Home跳转首页（快捷键在CentralDocPage应用级处理）
+  - action: keyboard_hot_key
+    key: ctrl+home
+    wait: 2.0
+  # Ctrl+End跳转末页
+  - action: keyboard_hot_key
+    key: ctrl+end
+    wait: 2.0
+  assert_steps:
+  - action: assert_element
+    ref: n259
+    selector:
+      name: Label_TotalPage
+      role: label
+- id: suite_kb_shortcut_s2
+  name: kb_shortcut — Ctrl+1恢复100%缩放
+  description: Ctrl+1恢复FitToPageDefaultMode（100%大小）
+  tags: []
+  steps:
+  # Ctrl+1恢复默认缩放
+  - action: keyboard_hot_key
+    key: ctrl+1
+    wait: 2.0
+  assert_steps:
+  - action: assert_element
+    ref: n227
+    selector:
+      name: DLineEditChildLineEdit
+      accessible_id: scaleEdit
+- id: suite_kb_shortcut_s3
+  name: kb_shortcut — Ctrl+S/Ctrl+Shift+S弹出另存为
+  description: Ctrl+S保存当前文档，Ctrl+Shift+S另存为
+  tags: []
+  steps:
+  # Ctrl+S保存
+  - action: keyboard_hot_key
+    key: ctrl+s
+    wait: 2.0
+  # 关闭可能弹出的保存对话框
+  - action: keyboard_press
+    key: escape
+    wait: 1.0
+  # Ctrl+Shift+S另存为
+  - action: keyboard_hot_key
+    key: ctrl+shift+s
+    wait: 2.0
+  # 关闭另存为对话框
+  - action: keyboard_press
+    key: escape
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n227
+    selector:
+      name: DLineEditChildLineEdit
+      accessible_id: scaleEdit
+teardown:
+- action: session_stop

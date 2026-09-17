@@ -1,0 +1,168 @@
+name: kb_alt_m_suite
+app: deepin-reader
+description: ''
+module: kb_alt_m
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_kb_alt_m_s1
+  name: kb_alt_m — 选中文本后Alt+M弹出右键菜单
+  description: 选中文档文本后按Alt+M弹出文档区域右键菜单
+  tags: []
+  steps:
+  # 点击缩略图按钮获取窗口焦点
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 1.0
+  # Alt+M模拟右键菜单（应用级处理，作用于当前焦点控件）
+  - action: keyboard_hot_key
+    key: alt+m
+    wait: 2.0
+  # 关闭菜单
+  - action: keyboard_press
+    key: escape
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+- id: suite_kb_alt_m_s2
+  name: kb_alt_m — 书签目录项Alt+M弹出右键菜单
+  description: 选中书签列表项后按Alt+M弹出书签右键菜单
+  tags: []
+  steps:
+  # 添加书签
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 2.0
+  - action: dtk_context_menu
+    ref: n8
+    selector:
+      role: form
+    items:
+    - 添加书签
+    wait: 3.0
+  # 切换到书签视图
+  - action: mouse_click
+    ref: n16
+    selector:
+      name: Button_bookmark
+      accessible_id: bookmark
+    wait: 2.0
+  # 点击书签列表项获取焦点
+  - action: mouse_click
+    ref: n20
+    selector:
+      name: View_ImageList
+      child_index: 0
+    wait: 1.0
+  # Alt+M模拟右键菜单
+  - action: keyboard_hot_key
+    key: alt+m
+    wait: 2.0
+  # 关闭菜单
+  - action: keyboard_press
+    key: escape
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n20
+    selector:
+      name: View_ImageList
+      role: list
+- id: suite_kb_alt_m_s3
+  name: kb_alt_m — 注释目录项Alt+M弹出右键菜单
+  description: 选中注释列表项后按Alt+M弹出注释右键菜单
+  tags: []
+  steps:
+  # 添加注释
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 2.0
+  - action: dtk_context_menu
+    ref: n8
+    selector:
+      role: form
+    items:
+    - 添加注释
+    wait: 3.0
+  # 切换到注释视图
+  - action: mouse_click
+    ref: n17
+    selector:
+      name: Button_annotation
+    wait: 2.0
+  # 点击注释列表项获取焦点
+  - action: mouse_click
+    ref: n25
+    selector:
+      name: View_ImageList
+      child_index: 0
+    wait: 1.0
+  # Alt+M模拟右键菜单
+  - action: keyboard_hot_key
+    key: alt+m
+    wait: 2.0
+  # 关闭菜单
+  - action: keyboard_press
+    key: escape
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n25
+    selector:
+      name: View_ImageList
+      role: list
+- id: suite_kb_alt_m_s4
+  name: kb_alt_m — 输入框内Alt+M弹出右键菜单
+  description: 选中缩放输入框内容后按Alt+M弹出文本编辑右键菜单
+  tags: []
+  steps:
+  # 点击缩放输入框获取焦点
+  - action: mouse_click
+    ref: n227
+    selector:
+      name: DLineEditChildLineEdit
+      accessible_id: scaleEdit
+    wait: 1.0
+  # 输入内容
+  - action: keyboard_type_text
+    text: '100'
+  # 全选输入框内容
+  - action: keyboard_hot_key
+    key: ctrl+a
+    wait: 1.0
+  # Alt+M模拟右键菜单
+  - action: keyboard_hot_key
+    key: alt+m
+    wait: 2.0
+  # 关闭菜单
+  - action: keyboard_press
+    key: escape
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n227
+    selector:
+      name: DLineEditChildLineEdit
+      accessible_id: scaleEdit
+teardown:
+- action: session_stop

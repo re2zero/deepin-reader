@@ -207,3 +207,11 @@ elements:
   n267:
     name: ArrowBtn
     role: button
+  n268:
+    name: SP_DecreaseElement
+    accessible_id: SP_DecreaseElement
+    role: button
+  n269:
+    name: SP_IncreaseElement
+    accessible_id: SP_IncreaseElement
+    role: button

@@ -1,0 +1,174 @@
+name: kb_dlg_tab_suite
+app: deepin-reader
+description: ''
+module: kb_dlg_tab
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_kb_dlg_tab_s1
+  name: kb_dlg_tab — 删除全部书签对话框Tab循环与回车
+  description: 右键书签选全部删除弹出DDialog，Tab在取消/删除按钮间循环，Enter执行选中
+  tags: []
+  steps:
+  # 添加书签
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 2.0
+  - action: dtk_context_menu
+    ref: n8
+    selector:
+      role: form
+    items:
+    - 添加书签
+    wait: 3.0
+  # 切换到书签视图
+  - action: mouse_click
+    ref: n16
+    selector:
+      name: Button_bookmark
+      accessible_id: bookmark
+    wait: 2.0
+  # 右键书签项选全部删除弹出对话框
+  - action: mouse_click
+    ref: n20
+    selector:
+      name: View_ImageList
+      child_index: 0
+    wait: 1.0
+  - action: dtk_context_menu
+    ref: n20
+    selector:
+      name: View_ImageList
+      child_index: 0
+    items:
+    - 全部删除
+    wait: 2.0
+  # Tab在对话框按钮间循环
+  - action: keyboard_press
+    key: tab
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+    wait: 1.0
+  # Enter执行选中按钮（取消）
+  - action: keyboard_press
+    key: return
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+- id: suite_kb_dlg_tab_s2
+  name: kb_dlg_tab — 删除全部注释对话框Tab循环与回车
+  description: 右键注释选全部删除弹出DDialog，Tab在取消/删除按钮间循环，Enter执行选中
+  tags: []
+  steps:
+  # 添加注释
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 2.0
+  - action: dtk_context_menu
+    ref: n8
+    selector:
+      role: form
+    items:
+    - 添加注释
+    wait: 3.0
+  # 切换到注释视图
+  - action: mouse_click
+    ref: n17
+    selector:
+      name: Button_annotation
+    wait: 2.0
+  # 右键注释项选全部删除弹出对话框
+  - action: mouse_click
+    ref: n25
+    selector:
+      name: View_ImageList
+      child_index: 0
+    wait: 1.0
+  - action: dtk_context_menu
+    ref: n25
+    selector:
+      name: View_ImageList
+      child_index: 0
+    items:
+    - 全部删除
+    wait: 2.0
+  # Tab在对话框按钮间循环
+  - action: keyboard_press
+    key: tab
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+    wait: 1.0
+  # Enter执行选中按钮（取消）
+  - action: keyboard_press
+    key: return
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+- id: suite_kb_dlg_tab_s3
+  name: kb_dlg_tab — 关闭已编辑文档对话框Tab循环与回车
+  description: 编辑文档后关闭弹出保存对话框，Tab在取消/丢弃/保存按钮间循环，Enter执行选中
+  tags: []
+  steps:
+  # 添加注释使文档变为已编辑状态
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 2.0
+  - action: dtk_context_menu
+    ref: n8
+    selector:
+      role: form
+    items:
+    - 添加注释
+    wait: 3.0
+  # 按Ctrl+W触发关闭文档（弹出保存对话框）
+  - action: keyboard_hot_key
+    key: ctrl+w
+    wait: 2.0
+  # Tab在对话框按钮间循环（取消/丢弃/保存）
+  - action: keyboard_press
+    key: tab
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+    wait: 1.0
+  # Enter执行选中按钮
+  - action: keyboard_press
+    key: return
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+teardown:
+- action: session_stop

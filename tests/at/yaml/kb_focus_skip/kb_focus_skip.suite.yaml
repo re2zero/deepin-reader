@@ -1,0 +1,63 @@
+name: kb_focus_skip_suite
+app: deepin-reader
+description: ''
+module: kb_focus_skip
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_kb_focus_skip_s1
+  name: kb_focus_skip — 右键菜单上下方向键跳过置灰项
+  description: 右键选中文本文档区域弹出菜单，方向键在可点击菜单项间切换，置灰项被跳过
+  tags: []
+  steps:
+  # 点击缩略图按钮获取窗口焦点
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 1.0
+  # 右键弹出文档区域菜单
+  - action: dtk_context_menu
+    ref: n8
+    selector:
+      role: form
+    items:
+    - 复制
+    wait: 2.0
+  # 方向键下导航菜单项（跳过置灰项如删除书签/第一页/前一页）
+  - action: keyboard_press
+    key: down
+    wait: 1.0
+  - action: keyboard_press
+    key: down
+    wait: 1.0
+  - action: keyboard_press
+    key: down
+    wait: 1.0
+  # 方向键上反向导航
+  - action: keyboard_press
+    key: up
+    wait: 1.0
+  - action: keyboard_press
+    key: up
+    wait: 1.0
+  # 关闭菜单
+  - action: keyboard_press
+    key: escape
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+teardown:
+- action: session_stop
