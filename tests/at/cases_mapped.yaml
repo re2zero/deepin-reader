@@ -2330,3 +2330,282 @@ cases:
       name: Button_SelectFile
       accessible_id: SelectFileBtn
     action: assert_element
+- id: suite_doc_open_s1
+  name: doc_open — docx多种打开方式
+  module: doc_open
+  annotation:
+    测试界面: 文档查看器主界面/导航页
+    测试功能: docx文档多种打开方式（命令行启动等价双击、点击选择文件按钮、拖拽不支持）
+    前置条件: deepin-reader 已启动
+    AT元素: n6 (Button_SelectFile, SelectFileBtn), n8 (Form_CentralDocPage), n3 (Form_CentralNavPage)
+    覆盖缺口: 1580679、1580673
+  steps:
+  - step_type: action
+    description: 双击docx文档打开（AT-SPI无法模拟桌面双击，以命令行启动等价）
+    action: session_start
+    command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.docx
+  - step_type: assert
+    description: docx文档页面可见（已转化为PDF显示）
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+  - step_type: action
+    description: 拖拽docx文档至窗口（AT-SPI无drag-and-drop API，不支持自动化）
+    action: unsupported
+    reason: AT-SPI无drag-and-drop API，拖拽操作不可自动化
+  - step_type: action
+    description: 重启deepin-reader进入无文档导航页
+    action: session_start
+    command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader
+  - step_type: action
+    description: 点击选择文件按钮
+    element_ref: n6
+    selector:
+      name: Button_SelectFile
+      accessible_id: SelectFileBtn
+    action: mouse_click
+  - step_type: action
+    description: 文件选择对话框为系统DFileDialog，按Esc退出
+    action: keyboard_press
+    key: escape
+  - step_type: assert
+    description: 无文档导航页可见
+    element_ref: n3
+    selector:
+      name: Form_CentralNavPage
+      role: form
+    action: assert_element
+- id: suite_doc_open_s2
+  name: doc_open — 退出文件选择界面
+  module: doc_open
+  annotation:
+    测试界面: 文档查看器导航页
+    测试功能: 按Ctrl+O弹出文件选择界面，点击取消或Esc退出
+    前置条件: deepin-reader 已启动，无文档打开
+    AT元素: n3 (Form_CentralNavPage)
+    覆盖缺口: 1580675
+  steps:
+  - step_type: action
+    description: 启动deepin-reader，无文档打开
+    action: session_start
+    command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader
+  - step_type: action
+    description: 按Ctrl+O打开文件选择对话框
+    action: keyboard_hot_key
+    key: ctrl+o
+  - step_type: action
+    description: 点击取消（系统DFileDialog取消按钮无accessible_name，用Esc退出）
+    action: keyboard_press
+    key: escape
+  - step_type: assert
+    description: 无文档导航页仍然可见
+    element_ref: n3
+    selector:
+      name: Form_CentralNavPage
+      role: form
+    action: assert_element
+- id: suite_doc_open_s3
+  name: doc_open — 保存提示_编辑后关闭_点击保存
+  module: doc_open
+  annotation:
+    测试界面: 文档查看器主界面 + 保存对话框
+    测试功能: 编辑docx文档后关闭弹出保存对话框，点击保存按钮
+    前置条件: deepin-reader 已打开docx文档
+    AT元素: n8 (Form_CentralDocPage), n224 (Button_ThumbnailToggle, Thumbnails), n265 (PTextEdit)
+    覆盖缺口: 1580589、1580669、1580665
+  steps:
+  - step_type: action
+    description: 启动deepin-reader打开docx文档
+    action: session_start
+    command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.docx
+  - step_type: action
+    description: 展开侧边栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: action
+    description: 右键添加注释使文档变为已编辑状态
+    action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 添加注释
+  - step_type: action
+    description: 输入注释文本
+    element_ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+    action: mouse_click
+  - step_type: action
+    description: 输入注释内容
+    action: keyboard_type_text
+    text: test-anno
+  - step_type: action
+    description: 点击文档区域确认注释
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: 按Ctrl+W关闭文档，弹出保存对话框
+    action: keyboard_hot_key
+    key: ctrl+w
+  - step_type: action
+    description: 点击弹框中的保存（DDialog默认焦点在推荐按钮"保存"，直接Enter）
+    action: keyboard_press
+    key: return
+  - step_type: action
+    description: docx保存触发另存为对话框，按Esc退出
+    action: keyboard_press
+    key: escape
+  - step_type: assert
+    description: 文档页面仍然可见
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+- id: suite_doc_open_s4
+  name: doc_open — 保存提示_编辑后关闭_点击不保存
+  module: doc_open
+  annotation:
+    测试界面: 文档查看器主界面 + 保存对话框
+    测试功能: 编辑docx文档后关闭弹出保存对话框，点击不保存（丢弃）按钮
+    前置条件: deepin-reader 已打开docx文档
+    AT元素: n8 (Form_CentralDocPage), n224 (Button_ThumbnailToggle, Thumbnails), n265 (PTextEdit), n3 (Form_CentralNavPage)
+    覆盖缺口: 1580589、1580669、1580665
+  steps:
+  - step_type: action
+    description: 启动deepin-reader打开docx文档
+    action: session_start
+    command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.docx
+  - step_type: action
+    description: 展开侧边栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: action
+    description: 右键添加注释使文档变为已编辑状态
+    action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 添加注释
+  - step_type: action
+    description: 输入注释文本
+    element_ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+    action: mouse_click
+  - step_type: action
+    description: 输入注释内容
+    action: keyboard_type_text
+    text: test-anno-2
+  - step_type: action
+    description: 点击文档区域确认注释
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: 按Ctrl+W关闭文档，弹出保存对话框
+    action: keyboard_hot_key
+    key: ctrl+w
+  - step_type: action
+    description: 点击弹框中的不保存（丢弃）— Tab到Discard按钮后Enter
+    action: keyboard_press
+    key: tab
+  - step_type: action
+    description: Tab到丢弃按钮
+    action: keyboard_press
+    key: tab
+  - step_type: action
+    description: Enter执行丢弃（不保存）
+    action: keyboard_press
+    key: return
+  - step_type: assert
+    description: 文档关闭后回到无文档导航页
+    element_ref: n3
+    selector:
+      name: Form_CentralNavPage
+      role: form
+    action: assert_element
+- id: suite_doc_open_s5
+  name: doc_open — Ctrl+S和Ctrl+Shift+S弹出另存为
+  module: doc_open
+  annotation:
+    测试界面: 文档查看器主界面 + 另存为对话框
+    测试功能: 编辑docx文档后按Ctrl+S/Ctrl+Shift+S弹出另存为界面
+    前置条件: deepin-reader 已打开docx文档
+    AT元素: n8 (Form_CentralDocPage), n224 (Button_ThumbnailToggle, Thumbnails), n265 (PTextEdit)
+    覆盖缺口: 1580641
+  steps:
+  - step_type: action
+    description: 启动deepin-reader打开docx文档
+    action: session_start
+    command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.docx
+  - step_type: action
+    description: 展开侧边栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: action
+    description: 右键添加注释使文档变为已编辑状态
+    action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 添加注释
+  - step_type: action
+    description: 输入注释文本
+    element_ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+    action: mouse_click
+  - step_type: action
+    description: 输入注释内容
+    action: keyboard_type_text
+    text: test-save
+  - step_type: action
+    description: 点击文档区域确认注释
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: 编辑后按Ctrl+S（docx触发saveAsCurrent → 另存为对话框）
+    action: keyboard_hot_key
+    key: ctrl+s
+  - step_type: action
+    description: 关闭另存为对话框
+    action: keyboard_press
+    key: escape
+  - step_type: action
+    description: 按Ctrl+Shift+S（另存为）
+    action: keyboard_hot_key
+    key: ctrl+shift+s
+  - step_type: action
+    description: 关闭另存为对话框
+    action: keyboard_press
+    key: escape
+  - step_type: assert
+    description: 文档页面仍然可见
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
