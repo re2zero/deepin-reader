@@ -1,0 +1,82 @@
+name: 注释复制_suite
+app: deepin-reader
+description: 复制注释内容并粘贴验证
+module: 注释复制
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+# Case 1: 侧栏右键复制注释内容
+- id: suite_anno_copy_s1
+  name: 注释复制 — 侧栏右键复制注释文本
+  description: 创建注释后，在侧栏注释列表右键"复制"，粘贴到搜索框验证内容
+  tags: []
+  steps:
+  # 展开侧边栏
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+    wait: 2.0
+  # 创建注释
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 添加注释
+    wait: 3.0
+  - action: mouse_click
+    ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+  - action: keyboard_type_text
+    text: copy-test-text
+    wait: 1.0
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  # 切换到注释视图
+  - action: mouse_click
+    ref: n17
+    selector:
+      name: Button_annotation
+    wait: 1.0
+  # 右键注释项 → 复制
+  - action: dtk_context_menu
+    selector:
+      name: View_ImageList
+      child_index: 0
+    items:
+    - 复制
+    wait: 1.0
+  # 打开搜索框粘贴验证
+  - action: dtk_main_menu
+    items:
+    - 搜索
+    wait: 1.0
+  - action: mouse_click
+    ref: n266
+    selector:
+      name: LineEdit
+      role: text
+  - action: keyboard_press
+    key: control+v
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n266
+    selector:
+      name: LineEdit
+      role: text
+teardown:
+- action: session_stop

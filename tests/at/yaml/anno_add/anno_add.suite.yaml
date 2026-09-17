@@ -1,0 +1,95 @@
+name: 注释添加_suite
+app: deepin-reader
+description: 添加高亮注释与图标注释
+module: 注释添加
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+# Case 1: 无选中文本 — 右键"添加注释"创建图标注释
+- id: suite_anno_add_s1
+  name: 注释添加 — 无选中区域添加图标注释
+  description: 文档区域右键菜单"添加注释"打开注释文本框，输入文字后点击外部确认
+  tags: []
+  steps:
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+    wait: 2.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 添加注释
+    wait: 3.0
+  - action: mouse_click
+    ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+  - action: keyboard_type_text
+    text: test-icon-anno
+    wait: 1.0
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: mouse_click
+    ref: n17
+    selector:
+      name: Button_annotation
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n25
+    selector:
+      name: View_ImageList
+      role: list
+# Case 2: 第二个图标注释
+- id: suite_anno_add_s2
+  name: 注释添加 — 添加第二个图标注释
+  description: 再次右键"添加注释"创建第二个注释，侧栏注释列表显示两条
+  tags: []
+  steps:
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 添加注释
+    wait: 3.0
+  - action: mouse_click
+    ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+  - action: keyboard_type_text
+    text: test-icon-anno-2
+    wait: 1.0
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: mouse_click
+    ref: n17
+    selector:
+      name: Button_annotation
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n25
+    selector:
+      name: View_ImageList
+      role: list
+teardown:
+- action: session_stop

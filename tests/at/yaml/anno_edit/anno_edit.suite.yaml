@@ -1,0 +1,149 @@
+name: 注释编辑_suite
+app: deepin-reader
+description: 编辑注释内容并点击外部确认
+module: 注释编辑
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+# Case 1: 创建注释后编辑内容
+- id: suite_anno_edit_s1
+  name: 注释编辑 — 编辑注释文本并点击外部确认
+  description: 创建图标注释后，点击侧栏注释项打开PTextEdit，修改文字后点击文档区域确认
+  tags: []
+  steps:
+  # 展开侧边栏
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+    wait: 2.0
+  # 创建注释
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 添加注释
+    wait: 3.0
+  - action: mouse_click
+    ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+  - action: keyboard_type_text
+    text: original-text
+    wait: 1.0
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  # 切换到注释视图
+  - action: mouse_click
+    ref: n17
+    selector:
+      name: Button_annotation
+    wait: 1.0
+  # 点击侧栏注释项，打开编辑
+  - action: mouse_click
+    ref: n25
+    selector:
+      name: View_ImageList
+      child_index: 0
+    wait: 2.0
+  # 编辑注释文本
+  - action: mouse_click
+    ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+  - action: keyboard_press
+    key: control+a
+  - action: keyboard_type_text
+    text: edited-text
+    wait: 1.0
+  # 点击外部确认
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+# Case 2: 编辑第二个注释
+- id: suite_anno_edit_s2
+  name: 注释编辑 — 切换注释后编辑内容
+  description: 创建第二个注释后，在侧栏切换到该注释并编辑内容
+  tags: []
+  steps:
+  # 创建第二个注释
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 添加注释
+    wait: 3.0
+  - action: mouse_click
+    ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+  - action: keyboard_type_text
+    text: second-anno
+    wait: 1.0
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  # 切换到注释视图并选择第二条
+  - action: mouse_click
+    ref: n17
+    selector:
+      name: Button_annotation
+    wait: 1.0
+  - action: mouse_click
+    ref: n25
+    selector:
+      name: View_ImageList
+      child_index: 1
+    wait: 2.0
+  # 编辑内容
+  - action: mouse_click
+    ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+  - action: keyboard_press
+    key: control+a
+  - action: keyboard_type_text
+    text: edited-second
+    wait: 1.0
+  # 点击外部确认
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+teardown:
+- action: session_stop

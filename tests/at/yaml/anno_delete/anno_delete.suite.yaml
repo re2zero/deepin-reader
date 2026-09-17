@@ -1,0 +1,118 @@
+name: 注释删除_suite
+app: deepin-reader
+description: 删除注释、取消高亮与快捷键删除
+module: 注释删除
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+# Case 1: 侧栏右键"删除注释"
+- id: suite_anno_delete_s1
+  name: 注释删除 — 侧栏右键删除注释
+  description: 创建注释后，在侧栏注释列表右键"删除注释"
+  tags: []
+  steps:
+  # 展开侧边栏
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+    wait: 2.0
+  # 创建注释
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 添加注释
+    wait: 3.0
+  - action: mouse_click
+    ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+  - action: keyboard_type_text
+    text: delete-test
+    wait: 1.0
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  # 切换到注释视图
+  - action: mouse_click
+    ref: n17
+    selector:
+      name: Button_annotation
+    wait: 1.0
+  # 右键注释项 → 删除注释
+  - action: dtk_context_menu
+    selector:
+      name: View_ImageList
+      child_index: 0
+    items:
+    - 删除注释
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n25
+    selector:
+      name: View_ImageList
+      role: list
+# Case 2: 侧栏选中注释后按 Delete 键删除
+- id: suite_anno_delete_s2
+  name: 注释删除 — 快捷键Delete删除注释
+  description: 创建注释后，在侧栏选中注释项按Delete键删除
+  tags: []
+  steps:
+  # 创建注释
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 添加注释
+    wait: 3.0
+  - action: mouse_click
+    ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+  - action: keyboard_type_text
+    text: delete-key-test
+    wait: 1.0
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  # 切换到注释视图并选中注释
+  - action: mouse_click
+    ref: n17
+    selector:
+      name: Button_annotation
+    wait: 1.0
+  - action: mouse_click
+    ref: n25
+    selector:
+      name: View_ImageList
+      child_index: 0
+    wait: 1.0
+  # 按 Delete 键删除
+  - action: keyboard_press
+    key: delete
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n25
+    selector:
+      name: View_ImageList
+      role: list
+teardown:
+- action: session_stop

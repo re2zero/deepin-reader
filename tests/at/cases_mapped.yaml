@@ -1345,3 +1345,749 @@ cases:
       name: Form_CentralDocPage
       role: form
     action: assert_element
+- id: suite_anno_add_s1
+  name: 注释添加 — 无选中区域添加图标注释
+  module: 注释添加
+  annotation:
+    测试界面: 注释添加
+    测试功能: 无选中区域右键"添加注释"创建图标注释
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素: n8 (Form_CentralDocPage), n265 (PTextEdit), n17 (Button_annotation), n25 (View_ImageList), n224 (Button_ThumbnailToggle)
+    覆盖缺口: 1581143, 1581125, 1581147, 1581187
+  steps:
+  - step_type: action
+    description: 展开侧边栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+    action: mouse_click
+  - step_type: action
+    description: 文档区域右键菜单"添加注释"
+    selector:
+      name: Form_CentralDocPage
+    action: dtk_context_menu
+    items:
+    - 添加注释
+  - step_type: action
+    description: 点击注释文本框
+    element_ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+    action: mouse_click
+  - step_type: action
+    description: 输入注释文字
+    action: keyboard_type_text
+    text: test-icon-anno
+  - step_type: action
+    description: 点击文档区域确认注释
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: 切换到注释视图
+    element_ref: n17
+    selector:
+      name: Button_annotation
+    action: mouse_click
+  - step_type: assert
+    description: 侧栏注释列表显示
+    element_ref: n25
+    selector:
+      name: View_ImageList
+      role: list
+    action: assert_element
+- id: suite_anno_add_s2
+  name: 注释添加 — 添加第二个图标注释
+  module: 注释添加
+  annotation:
+    测试界面: 注释添加
+    测试功能: 添加第二个图标注释，侧栏列表显示两条
+    前置条件: deepin-reader 已打开一个 PDF 文档且已有一条注释
+    AT元素: n8 (Form_CentralDocPage), n265 (PTextEdit), n17 (Button_annotation), n25 (View_ImageList)
+    覆盖缺口: 1581143, 1581187
+  steps:
+  - step_type: action
+    description: 文档区域右键菜单"添加注释"
+    selector:
+      name: Form_CentralDocPage
+    action: dtk_context_menu
+    items:
+    - 添加注释
+  - step_type: action
+    description: 点击注释文本框
+    element_ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+    action: mouse_click
+  - step_type: action
+    description: 输入注释文字
+    action: keyboard_type_text
+    text: test-icon-anno-2
+  - step_type: action
+    description: 点击文档区域确认注释
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: 切换到注释视图
+    element_ref: n17
+    selector:
+      name: Button_annotation
+    action: mouse_click
+  - step_type: assert
+    description: 侧栏注释列表显示
+    element_ref: n25
+    selector:
+      name: View_ImageList
+      role: list
+    action: assert_element
+- id: suite_anno_edit_s1
+  name: 注释编辑 — 编辑注释文本并点击外部确认
+  module: 注释编辑
+  annotation:
+    测试界面: 注释编辑
+    测试功能: 创建注释后编辑注释文本内容并点击外部确认
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素: n8 (Form_CentralDocPage), n265 (PTextEdit), n17 (Button_annotation), n25 (View_ImageList), n224 (Button_ThumbnailToggle)
+    覆盖缺口: 1581165, 1581151, 1580881, 1580959, 1580957
+  steps:
+  - step_type: action
+    description: 展开侧边栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+    action: mouse_click
+  - step_type: action
+    description: 文档区域右键菜单"添加注释"
+    selector:
+      name: Form_CentralDocPage
+    action: dtk_context_menu
+    items:
+    - 添加注释
+  - step_type: action
+    description: 点击注释文本框并输入原始文字
+    element_ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+    action: mouse_click
+  - step_type: action
+    description: 输入注释文字
+    action: keyboard_type_text
+    text: original-text
+  - step_type: action
+    description: 点击文档区域确认注释
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: 切换到注释视图
+    element_ref: n17
+    selector:
+      name: Button_annotation
+    action: mouse_click
+  - step_type: action
+    description: 点击侧栏注释项打开编辑
+    element_ref: n25
+    selector:
+      name: View_ImageList
+      child_index: 0
+    action: mouse_click
+  - step_type: action
+    description: 点击注释文本框
+    element_ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+    action: mouse_click
+  - step_type: action
+    description: 全选原文
+    action: keyboard_press
+    key: control+a
+  - step_type: action
+    description: 输入编辑后的文字
+    action: keyboard_type_text
+    text: edited-text
+  - step_type: action
+    description: 点击文档区域确认编辑
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: assert
+    description: 文档区域存在
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+- id: suite_anno_edit_s2
+  name: 注释编辑 — 切换注释后编辑内容
+  module: 注释编辑
+  annotation:
+    测试界面: 注释编辑
+    测试功能: 创建第二条注释后在侧栏切换并编辑内容
+    前置条件: deepin-reader 已打开一个 PDF 文档且已有一条注释
+    AT元素: n8 (Form_CentralDocPage), n265 (PTextEdit), n17 (Button_annotation), n25 (View_ImageList)
+    覆盖缺口: 1581165, 1580959, 1580957
+  steps:
+  - step_type: action
+    description: 文档区域右键菜单"添加注释"
+    selector:
+      name: Form_CentralDocPage
+    action: dtk_context_menu
+    items:
+    - 添加注释
+  - step_type: action
+    description: 点击注释文本框并输入文字
+    element_ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+    action: mouse_click
+  - step_type: action
+    description: 输入注释文字
+    action: keyboard_type_text
+    text: second-anno
+  - step_type: action
+    description: 点击文档区域确认注释
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: 切换到注释视图并选择第二条
+    element_ref: n17
+    selector:
+      name: Button_annotation
+    action: mouse_click
+  - step_type: action
+    description: 点击侧栏第二条注释项
+    element_ref: n25
+    selector:
+      name: View_ImageList
+      child_index: 1
+    action: mouse_click
+  - step_type: action
+    description: 点击注释文本框
+    element_ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+    action: mouse_click
+  - step_type: action
+    description: 全选原文
+    action: keyboard_press
+    key: control+a
+  - step_type: action
+    description: 输入编辑后的文字
+    action: keyboard_type_text
+    text: edited-second
+  - step_type: action
+    description: 点击文档区域确认编辑
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: assert
+    description: 文档区域存在
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+- id: suite_anno_copy_s1
+  name: 注释复制 — 侧栏右键复制注释文本
+  module: 注释复制
+  annotation:
+    测试界面: 注释复制
+    测试功能: 侧栏注释列表右键"复制"后粘贴到搜索框验证
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素: n8 (Form_CentralDocPage), n265 (PTextEdit), n17 (Button_annotation), n25 (View_ImageList), n266 (LineEdit), n224 (Button_ThumbnailToggle)
+    覆盖缺口: 1581167, 1581247, 1581121
+  steps:
+  - step_type: action
+    description: 展开侧边栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+    action: mouse_click
+  - step_type: action
+    description: 文档区域右键菜单"添加注释"
+    selector:
+      name: Form_CentralDocPage
+    action: dtk_context_menu
+    items:
+    - 添加注释
+  - step_type: action
+    description: 点击注释文本框并输入文字
+    element_ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+    action: mouse_click
+  - step_type: action
+    description: 输入注释文字
+    action: keyboard_type_text
+    text: copy-test-text
+  - step_type: action
+    description: 点击文档区域确认注释
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: 切换到注释视图
+    element_ref: n17
+    selector:
+      name: Button_annotation
+    action: mouse_click
+  - step_type: action
+    description: 右键注释项选择"复制"
+    selector:
+      name: View_ImageList
+      child_index: 0
+    action: dtk_context_menu
+    items:
+    - 复制
+  - step_type: action
+    description: 打开搜索框
+    action: dtk_main_menu
+    items:
+    - 搜索
+  - step_type: action
+    description: 点击搜索输入框
+    element_ref: n266
+    selector:
+      name: LineEdit
+      role: text
+    action: mouse_click
+  - step_type: action
+    description: 粘贴复制的注释文本
+    action: keyboard_press
+    key: control+v
+  - step_type: assert
+    description: 搜索输入框存在
+    element_ref: n266
+    selector:
+      name: LineEdit
+      role: text
+    action: assert_element
+- id: suite_anno_delete_s1
+  name: 注释删除 — 侧栏右键删除注释
+  module: 注释删除
+  annotation:
+    测试界面: 注释删除
+    测试功能: 侧栏注释列表右键"删除注释"
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素: n8 (Form_CentralDocPage), n265 (PTextEdit), n17 (Button_annotation), n25 (View_ImageList), n224 (Button_ThumbnailToggle)
+    覆盖缺口: 1581133, 1581191
+  steps:
+  - step_type: action
+    description: 展开侧边栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+    action: mouse_click
+  - step_type: action
+    description: 文档区域右键菜单"添加注释"
+    selector:
+      name: Form_CentralDocPage
+    action: dtk_context_menu
+    items:
+    - 添加注释
+  - step_type: action
+    description: 点击注释文本框并输入文字
+    element_ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+    action: mouse_click
+  - step_type: action
+    description: 输入注释文字
+    action: keyboard_type_text
+    text: delete-test
+  - step_type: action
+    description: 点击文档区域确认注释
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: 切换到注释视图
+    element_ref: n17
+    selector:
+      name: Button_annotation
+    action: mouse_click
+  - step_type: action
+    description: 右键注释项选择"删除注释"
+    selector:
+      name: View_ImageList
+      child_index: 0
+    action: dtk_context_menu
+    items:
+    - 删除注释
+  - step_type: assert
+    description: 侧栏注释列表存在
+    element_ref: n25
+    selector:
+      name: View_ImageList
+      role: list
+    action: assert_element
+- id: suite_anno_delete_s2
+  name: 注释删除 — 快捷键Delete删除注释
+  module: 注释删除
+  annotation:
+    测试界面: 注释删除
+    测试功能: 侧栏选中注释项后按Delete键删除
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素: n8 (Form_CentralDocPage), n265 (PTextEdit), n17 (Button_annotation), n25 (View_ImageList)
+    覆盖缺口: 1581009
+  steps:
+  - step_type: action
+    description: 文档区域右键菜单"添加注释"
+    selector:
+      name: Form_CentralDocPage
+    action: dtk_context_menu
+    items:
+    - 添加注释
+  - step_type: action
+    description: 点击注释文本框并输入文字
+    element_ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+    action: mouse_click
+  - step_type: action
+    description: 输入注释文字
+    action: keyboard_type_text
+    text: delete-key-test
+  - step_type: action
+    description: 点击文档区域确认注释
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: 切换到注释视图并选中注释
+    element_ref: n17
+    selector:
+      name: Button_annotation
+    action: mouse_click
+  - step_type: action
+    description: 点击侧栏注释项选中
+    element_ref: n25
+    selector:
+      name: View_ImageList
+      child_index: 0
+    action: mouse_click
+  - step_type: action
+    description: 按 Delete 键删除注释
+    action: keyboard_press
+    key: delete
+  - step_type: assert
+    description: 侧栏注释列表存在
+    element_ref: n25
+    selector:
+      name: View_ImageList
+      role: list
+    action: assert_element
+- id: suite_anno_catalog_s1
+  name: 注释目录 — 显示注释列表并点击跳转
+  module: 注释目录
+  annotation:
+    测试界面: 注释目录
+    测试功能: 创建多条注释后展开侧栏注释视图，点击注释项跳转
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素: n8 (Form_CentralDocPage), n265 (PTextEdit), n17 (Button_annotation), n25 (View_ImageList), n224 (Button_ThumbnailToggle)
+    覆盖缺口: 1581177, 1581179, 1581181, 1581157
+  steps:
+  - step_type: action
+    description: 展开侧边栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+    action: mouse_click
+  - step_type: action
+    description: 创建第一条注释
+    selector:
+      name: Form_CentralDocPage
+    action: dtk_context_menu
+    items:
+    - 添加注释
+  - step_type: action
+    description: 点击注释文本框并输入文字
+    element_ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+    action: mouse_click
+  - step_type: action
+    description: 输入注释文字
+    action: keyboard_type_text
+    text: catalog-anno-1
+  - step_type: action
+    description: 点击文档区域确认注释
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: 创建第二条注释
+    selector:
+      name: Form_CentralDocPage
+    action: dtk_context_menu
+    items:
+    - 添加注释
+  - step_type: action
+    description: 点击注释文本框并输入文字
+    element_ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+    action: mouse_click
+  - step_type: action
+    description: 输入注释文字
+    action: keyboard_type_text
+    text: catalog-anno-2
+  - step_type: action
+    description: 点击文档区域确认注释
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: 切换到注释视图
+    element_ref: n17
+    selector:
+      name: Button_annotation
+    action: mouse_click
+  - step_type: action
+    description: 点击第一条注释项跳转
+    element_ref: n25
+    selector:
+      name: View_ImageList
+      child_index: 0
+    action: mouse_click
+  - step_type: action
+    description: 点击第二条注释项跳转
+    element_ref: n25
+    selector:
+      name: View_ImageList
+      child_index: 1
+    action: mouse_click
+  - step_type: assert
+    description: 侧栏注释列表存在
+    element_ref: n25
+    selector:
+      name: View_ImageList
+      role: list
+    action: assert_element
+- id: suite_anno_catalog_s2
+  name: 注释目录 — 键盘上下键切换注释项
+  module: 注释目录
+  annotation:
+    测试界面: 注释目录
+    测试功能: 侧栏注释列表中使用键盘Up/Down键切换选中注释项
+    前置条件: deepin-reader 已打开一个 PDF 文档且有多条注释
+    AT元素: n25 (View_ImageList)
+    覆盖缺口: 1581171, 1580727
+  steps:
+  - step_type: action
+    description: 点击侧栏第一条注释项
+    element_ref: n25
+    selector:
+      name: View_ImageList
+      child_index: 0
+    action: mouse_click
+  - step_type: action
+    description: 键盘下键切换到第二条
+    action: keyboard_press
+    key: down
+  - step_type: action
+    description: 键盘上键切换回第一条
+    action: keyboard_press
+    key: up
+  - step_type: assert
+    description: 侧栏注释列表存在
+    element_ref: n25
+    selector:
+      name: View_ImageList
+      role: list
+    action: assert_element
+- id: suite_anno_icon_move_s1
+  name: 图标注释移动 — 同页拖拽与跨页限制
+  module: 图标注释移动
+  annotation:
+    测试界面: 图标注释移动
+    测试功能: 图标注释同页拖拽移动与跨页拖拽限制
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素: n8 (Form_CentralDocPage), n265 (PTextEdit), n224 (Button_ThumbnailToggle)
+    覆盖缺口: 1580953, 1580955, 1580951, 1580949
+    备注: AT-SPI 框架无 mouse_drag API，拖拽操作不支持自动化，标记为 unsupported
+  status: unsupported
+  steps:
+  - step_type: action
+    description: 展开侧边栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+    action: mouse_click
+  - step_type: action
+    description: 文档区域右键菜单"添加注释"
+    selector:
+      name: Form_CentralDocPage
+    action: dtk_context_menu
+    items:
+    - 添加注释
+  - step_type: action
+    description: 点击注释文本框并输入文字
+    element_ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+    action: mouse_click
+  - step_type: action
+    description: 输入注释文字
+    action: keyboard_type_text
+    text: move-test
+  - step_type: action
+    description: 点击文档区域确认注释
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: assert
+    description: 文档区域存在
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+- id: suite_anno_input_limit_s1
+  name: 注释输入限制 — 输入超长文本触发Tips提示
+  module: 注释输入限制
+  annotation:
+    测试界面: 注释输入限制
+    测试功能: 注释文本框输入超长文本后触发输入限制Tips提示
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素: n8 (Form_CentralDocPage), n265 (PTextEdit), n268 (Tips), n224 (Button_ThumbnailToggle)
+    覆盖缺口: 1581159, 1581145, 1580489
+  steps:
+  - step_type: action
+    description: 展开侧边栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+    action: mouse_click
+  - step_type: action
+    description: 文档区域右键菜单"添加注释"
+    selector:
+      name: Form_CentralDocPage
+    action: dtk_context_menu
+    items:
+    - 添加注释
+  - step_type: action
+    description: 点击注释文本框
+    element_ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+    action: mouse_click
+  - step_type: action
+    description: 输入1500个字符触发限制
+    action: keyboard_type_text
+    text: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+  - step_type: assert
+    description: Tips 输入限制提示出现
+    element_ref: n268
+    selector:
+      name: Tips
+      role: label
+    action: assert_element
+- id: suite_anno_ctx_dismiss_s1
+  name: 右键菜单关闭 — 右键注释菜单后点击外部关闭
+  module: 右键菜单关闭
+  annotation:
+    测试界面: 右键菜单关闭
+    测试功能: 侧栏右键注释弹出菜单后点击文档区域关闭菜单
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素: n8 (Form_CentralDocPage), n265 (PTextEdit), n17 (Button_annotation), n25 (View_ImageList), n224 (Button_ThumbnailToggle)
+    覆盖缺口: 1581161
+  steps:
+  - step_type: action
+    description: 展开侧边栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+    action: mouse_click
+  - step_type: action
+    description: 文档区域右键菜单"添加注释"
+    selector:
+      name: Form_CentralDocPage
+    action: dtk_context_menu
+    items:
+    - 添加注释
+  - step_type: action
+    description: 点击注释文本框并输入文字
+    element_ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+    action: mouse_click
+  - step_type: action
+    description: 输入注释文字
+    action: keyboard_type_text
+    text: dismiss-test
+  - step_type: action
+    description: 点击文档区域确认注释
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: 切换到注释视图
+    element_ref: n17
+    selector:
+      name: Button_annotation
+    action: mouse_click
+  - step_type: action
+    description: 右键注释项弹出菜单
+    selector:
+      name: View_ImageList
+      child_index: 0
+    action: dtk_context_menu
+    items:
+    - 复制
+  - step_type: action
+    description: 点击文档区域关闭菜单
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: assert
+    description: 文档区域存在，菜单已关闭
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element

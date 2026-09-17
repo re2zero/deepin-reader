@@ -207,3 +207,6 @@ elements:
   n267:
     name: ArrowBtn
     role: button
+  n268:
+    name: Tips
+    role: label

@@ -1,0 +1,123 @@
+name: 注释目录_suite
+app: deepin-reader
+description: 注释目录显示、跳转与切换
+module: 注释目录
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+# Case 1: 注释目录显示与跳转
+- id: suite_anno_catalog_s1
+  name: 注释目录 — 显示注释列表并点击跳转
+  description: 创建多条注释后，展开侧栏注释视图，点击注释项跳转到对应位置
+  tags: []
+  steps:
+  # 展开侧边栏
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+    wait: 2.0
+  # 创建第一条注释
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 添加注释
+    wait: 3.0
+  - action: mouse_click
+    ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+  - action: keyboard_type_text
+    text: catalog-anno-1
+    wait: 1.0
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  # 创建第二条注释
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 添加注释
+    wait: 3.0
+  - action: mouse_click
+    ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+  - action: keyboard_type_text
+    text: catalog-anno-2
+    wait: 1.0
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  # 切换到注释视图
+  - action: mouse_click
+    ref: n17
+    selector:
+      name: Button_annotation
+    wait: 1.0
+  # 点击第一条注释项跳转
+  - action: mouse_click
+    ref: n25
+    selector:
+      name: View_ImageList
+      child_index: 0
+    wait: 2.0
+  # 点击第二条注释项跳转
+  - action: mouse_click
+    ref: n25
+    selector:
+      name: View_ImageList
+      child_index: 1
+    wait: 2.0
+  assert_steps:
+  - action: assert_element
+    ref: n25
+    selector:
+      name: View_ImageList
+      role: list
+# Case 2: 键盘上下键切换注释
+- id: suite_anno_catalog_s2
+  name: 注释目录 — 键盘上下键切换注释项
+  description: 在侧栏注释列表中使用键盘Up/Down键切换选中注释项
+  tags: []
+  steps:
+  # 确保在注释视图，选中第一条
+  - action: mouse_click
+    ref: n25
+    selector:
+      name: View_ImageList
+      child_index: 0
+    wait: 1.0
+  # 键盘下键切换到第二条
+  - action: keyboard_press
+    key: down
+    wait: 1.0
+  # 键盘上键切换回第一条
+  - action: keyboard_press
+    key: up
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n25
+    selector:
+      name: View_ImageList
+      role: list
+teardown:
+- action: session_stop
