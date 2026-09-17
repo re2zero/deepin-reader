@@ -1,0 +1,47 @@
+name: ctx_copy_suite
+app: deepin-reader
+description: ''
+module: ctx_copy
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_ctx_copy_s1
+  name: ctx_copy — 选中文本右键复制
+  description: 选中文档文本后右键弹出菜单，点击复制选项
+  tags: []
+  steps:
+  # 点击文档区域获取焦点
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  # Ctrl+A全选文本
+  - action: keyboard_hot_key
+    key: ctrl+a
+    wait: 2.0
+  # 右键选中文本区域，弹出DOC_MENU_SELECT_TEXT菜单，点击复制
+  - action: dtk_context_menu
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    items:
+    - 复制
+    wait: 2.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+teardown:
+- action: session_stop

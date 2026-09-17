@@ -3212,3 +3212,303 @@ cases:
       name: Form_CentralDocPage
       role: form
     action: assert_element
+
+- id: suite_kb_nav_home_end_s1
+  name: kb_nav_home_end — Ctrl+Home/Ctrl+End跳转首末页
+  module: kb_nav_home_end
+  annotation:
+    测试界面: 快捷键_定位与预览
+    测试功能: Ctrl+Home定位首页、Ctrl+End定位末页
+    前置条件: deepin-reader 已打开文档
+    AT元素: n8 (Form_CentralDocPage), n259 (Label_TotalPage)
+    覆盖缺口: 1581241, 1580409
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 点击文档区域获取焦点
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: Ctrl+Home跳转首页
+    action: keyboard_hot_key
+    key: ctrl+home
+  - step_type: action
+    description: Ctrl+End跳转末页
+    action: keyboard_hot_key
+    key: ctrl+end
+  - step_type: assert
+    description: 总页数标签存在
+    element_ref: n259
+    selector:
+      name: Label_TotalPage
+      role: label
+    action: assert_element
+- id: suite_kb_nav_home_end_s2
+  name: kb_nav_home_end — Ctrl+Shift+/快捷键预览
+  module: kb_nav_home_end
+  annotation:
+    测试界面: 快捷键_定位与预览
+    测试功能: Ctrl+Shift+/弹出快捷键预览窗口
+    前置条件: deepin-reader 已打开文档
+    AT元素: n8 (Form_CentralDocPage)
+    覆盖缺口: 1580407, 1580405
+  steps:
+  - step_type: action
+    description: 点击文档区域获取焦点
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: Ctrl+Shift+/弹出快捷键预览（启动deepin-shortcut-viewer外部进程）
+    action: keyboard_hot_key
+    key: ctrl+shift+/
+  - step_type: action
+    description: 关闭快捷键预览窗口
+    action: keyboard_press
+    key: escape
+  - step_type: assert
+    description: 主窗口文档区域存在
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+- id: suite_kb_ctrl1_sync_s1
+  name: kb_ctrl1_sync — Ctrl+1默认大小后下拉框同步
+  module: kb_ctrl1_sync
+  annotation:
+    测试界面: 视图调整_Ctrl+1同步
+    测试功能: 按Ctrl+1恢复默认大小后点击百分比下拉框验证缩放菜单
+    前置条件: deepin-reader 已打开文档
+    AT元素: n8 (Form_CentralDocPage), n267 (ArrowBtn), n227 (scaleEdit)
+    覆盖缺口: 1580767
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 点击文档区域获取焦点
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: Ctrl+1恢复默认缩放
+    action: keyboard_hot_key
+    key: ctrl+1
+  - step_type: action
+    description: 点击缩放下拉箭头按钮弹出缩放菜单
+    element_ref: n267
+    selector:
+      name: ArrowBtn
+      role: button
+    action: mouse_click
+  - step_type: action
+    description: 关闭缩放菜单
+    action: keyboard_press
+    key: escape
+  - step_type: assert
+    description: 缩放输入框存在
+    element_ref: n227
+    selector:
+      name: DLineEditChildLineEdit
+      accessible_id: scaleEdit
+    action: assert_element
+- id: suite_kb_alt_ah_s1
+  name: kb_alt_ah — 未选中文本Alt+A弹出提示
+  module: kb_alt_ah
+  annotation:
+    测试界面: Alt+A与Alt+H_提示
+    测试功能: 未选中文本时按Alt+A弹出请选择文本提示
+    前置条件: deepin-reader 已打开文档
+    AT元素: n8 (Form_CentralDocPage), n268 (Tips)
+    覆盖缺口: 1580761
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 点击文档区域获取焦点（未选中文本）
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: Alt+A添加注释（未选中文本应弹出提示）
+    action: keyboard_hot_key
+    key: alt+a
+  - step_type: assert
+    description: 提示标签存在
+    element_ref: n268
+    selector:
+      name: Tips
+      role: label
+    action: assert_element
+- id: suite_kb_alt_ah_s2
+  name: kb_alt_ah — 未选中文本Alt+H弹出提示
+  module: kb_alt_ah
+  annotation:
+    测试界面: Alt+A与Alt+H_提示
+    测试功能: 未选中文本时按Alt+H弹出请选择文本提示
+    前置条件: deepin-reader 已打开文档
+    AT元素: n8 (Form_CentralDocPage), n268 (Tips)
+    覆盖缺口: 1580761
+  steps:
+  - step_type: action
+    description: 点击文档区域获取焦点（未选中文本）
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: Alt+H添加高亮（未选中文本应弹出提示）
+    action: keyboard_hot_key
+    key: alt+h
+  - step_type: assert
+    description: 提示标签存在
+    element_ref: n268
+    selector:
+      name: Tips
+      role: label
+    action: assert_element
+- id: suite_ctx_copy_s1
+  name: ctx_copy — 选中文本右键复制
+  module: ctx_copy
+  annotation:
+    测试界面: 右键菜单_选中文本_复制
+    测试功能: 选中文档文本后右键弹出菜单点击复制
+    前置条件: deepin-reader 已打开文档
+    AT元素: n8 (Form_CentralDocPage)
+    覆盖缺口: 1581121, 1581247, 1581119
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 点击文档区域获取焦点
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: Ctrl+A全选文本
+    action: keyboard_hot_key
+    key: ctrl+a
+  - step_type: action
+    description: 右键选中文本区域弹出菜单并点击复制
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: dtk_context_menu
+    items:
+    - 复制
+  - step_type: assert
+    description: 主窗口文档区域存在
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+- id: suite_ctx_sel_vs_unsel_s1
+  name: ctx_sel_vs_unsel — 选中区域与非选中区域右键菜单对比
+  module: ctx_sel_vs_unsel
+  annotation:
+    测试界面: 右键菜单_选中文本后_分区域右击
+    测试功能: 选中文本后右键选中区域弹出高亮菜单，右键非选中区域弹出翻页菜单
+    前置条件: deepin-reader 已打开文档
+    AT元素: n8 (Form_CentralDocPage)
+    覆盖缺口: 1580785
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 点击文档区域获取焦点
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: Ctrl+A全选文本
+    action: keyboard_hot_key
+    key: ctrl+a
+  - step_type: action
+    description: 右键选中文本区域弹出高亮菜单并点击高亮
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: dtk_context_menu
+    items:
+    - 高亮
+  - step_type: action
+    description: 右键非选中区域弹出翻页菜单并点击第一页
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: dtk_context_menu
+    items:
+    - 第一页
+  - step_type: assert
+    description: 主窗口文档区域存在
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+- id: suite_ctx_djvu_no_sel_s1
+  name: ctx_djvu_no_sel — DJVU文档未选中文本右键菜单
+  module: ctx_djvu_no_sel
+  annotation:
+    测试界面: 右键菜单_DJVU_未选中文本
+    测试功能: 打开DJVU文档未选中文本时右键弹出默认菜单
+    前置条件: deepin-reader 已打开DJVU文档
+    AT元素: n8 (Form_CentralDocPage)
+    覆盖缺口: 1580705
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开DJVU文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.djvu
+  - step_type: action
+    description: 点击文档区域获取焦点（未选中文本）
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: 右键非选中区域弹出默认菜单并点击搜索
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: dtk_context_menu
+    items:
+    - 搜索
+  - step_type: assert
+    description: 主窗口文档区域存在
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element

@@ -1,0 +1,43 @@
+name: ctx_djvu_no_sel_suite
+app: deepin-reader
+description: ''
+module: ctx_djvu_no_sel
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.djvu
+  wait: 3.0
+suites:
+- id: suite_ctx_djvu_no_sel_s1
+  name: ctx_djvu_no_sel — DJVU文档未选中文本右键菜单
+  description: 打开DJVU文档，未选中文本时右键弹出默认菜单
+  tags: []
+  steps:
+  # 点击文档区域获取焦点（未选中文本）
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  # 右键非选中区域，弹出DOC_MENU_DEFAULT菜单，点击搜索
+  - action: dtk_context_menu
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    items:
+    - 搜索
+    wait: 2.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+teardown:
+- action: session_stop

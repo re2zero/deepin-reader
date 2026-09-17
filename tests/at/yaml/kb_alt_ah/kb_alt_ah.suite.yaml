@@ -1,0 +1,60 @@
+name: kb_alt_ah_suite
+app: deepin-reader
+description: ''
+module: kb_alt_ah
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_kb_alt_ah_s1
+  name: kb_alt_ah — 未选中文本Alt+A弹出提示
+  description: 未选中文本时按Alt+A弹出"请选择文本"提示
+  tags: []
+  steps:
+  # 点击文档区域获取焦点（未选中文本）
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  # Alt+A添加注释（未选中文本应弹出提示）
+  - action: keyboard_hot_key
+    key: alt+a
+    wait: 2.0
+  assert_steps:
+  - action: assert_element
+    ref: n268
+    selector:
+      name: Tips
+      role: label
+- id: suite_kb_alt_ah_s2
+  name: kb_alt_ah — 未选中文本Alt+H弹出提示
+  description: 未选中文本时按Alt+H弹出"请选择文本"提示
+  tags: []
+  steps:
+  # 点击文档区域获取焦点（未选中文本）
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  # Alt+H添加高亮（未选中文本应弹出提示）
+  - action: keyboard_hot_key
+    key: alt+h
+    wait: 2.0
+  assert_steps:
+  - action: assert_element
+    ref: n268
+    selector:
+      name: Tips
+      role: label
+teardown:
+- action: session_stop

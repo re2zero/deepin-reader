@@ -1,0 +1,68 @@
+name: kb_nav_home_end_suite
+app: deepin-reader
+description: ''
+module: kb_nav_home_end
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_kb_nav_home_end_s1
+  name: kb_nav_home_end — Ctrl+Home/Ctrl+End跳转首末页
+  description: Ctrl+Home定位首页，Ctrl+End定位末页
+  tags: []
+  steps:
+  # 点击文档区域获取焦点
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  # Ctrl+Home跳转首页
+  - action: keyboard_hot_key
+    key: ctrl+home
+    wait: 2.0
+  # Ctrl+End跳转末页
+  - action: keyboard_hot_key
+    key: ctrl+end
+    wait: 2.0
+  assert_steps:
+  - action: assert_element
+    ref: n259
+    selector:
+      name: Label_TotalPage
+      role: label
+- id: suite_kb_nav_home_end_s2
+  name: kb_nav_home_end — Ctrl+Shift+/快捷键预览
+  description: 按Ctrl+Shift+/弹出快捷键预览窗口
+  tags: []
+  steps:
+  # 点击文档区域获取焦点
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  # Ctrl+Shift+/弹出快捷键预览（启动deepin-shortcut-viewer外部进程）
+  - action: keyboard_hot_key
+    key: ctrl+shift+/
+    wait: 3.0
+  # 关闭快捷键预览窗口
+  - action: keyboard_press
+    key: escape
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+teardown:
+- action: session_stop

@@ -1,0 +1,49 @@
+name: kb_ctrl1_sync_suite
+app: deepin-reader
+description: ''
+module: kb_ctrl1_sync
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_kb_ctrl1_sync_s1
+  name: kb_ctrl1_sync — Ctrl+1默认大小后下拉框同步
+  description: 按Ctrl+1恢复FitToPageDefaultMode，点击百分比下拉框ArrowBtn验证缩放菜单弹出
+  tags: []
+  steps:
+  # 点击文档区域获取焦点
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  # Ctrl+1恢复默认缩放（FitToPageDefaultMode）
+  - action: keyboard_hot_key
+    key: ctrl+1
+    wait: 2.0
+  # 点击缩放下拉箭头按钮弹出缩放菜单
+  - action: mouse_click
+    ref: n267
+    selector:
+      name: ArrowBtn
+      role: button
+    wait: 2.0
+  # 关闭弹出的缩放菜单
+  - action: keyboard_press
+    key: escape
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n227
+    selector:
+      name: DLineEditChildLineEdit
+      accessible_id: scaleEdit
+teardown:
+- action: session_stop

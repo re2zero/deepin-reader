@@ -1,0 +1,56 @@
+name: ctx_sel_vs_unsel_suite
+app: deepin-reader
+description: ''
+module: ctx_sel_vs_unsel
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_ctx_sel_vs_unsel_s1
+  name: ctx_sel_vs_unsel — 选中区域与非选中区域右键菜单对比
+  description: 选中文本后右键选中区域弹出高亮菜单，右键非选中区域弹出翻页菜单
+  tags: []
+  steps:
+  # 点击文档区域获取焦点
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  # Ctrl+A全选文本
+  - action: keyboard_hot_key
+    key: ctrl+a
+    wait: 2.0
+  # 右键选中文本区域，弹出DOC_MENU_SELECT_TEXT菜单，点击高亮
+  - action: dtk_context_menu
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    items:
+    - 高亮
+    wait: 2.0
+  # 右键非选中区域，弹出DOC_MENU_DEFAULT菜单，点击第一页
+  - action: dtk_context_menu
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    items:
+    - 第一页
+    wait: 2.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+teardown:
+- action: session_stop
