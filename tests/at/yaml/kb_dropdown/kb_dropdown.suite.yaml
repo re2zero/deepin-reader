@@ -1,0 +1,140 @@
+name: kb_dropdown_suite
+app: deepin-reader
+description: '阶段十三 13.6：键盘 — 下拉菜单与目录切换'
+module: kb_dropdown
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+# Case 13.6: 键盘下拉菜单与目录切换（覆盖 1580863、1580869、1580865、1580867、1580773、1581043）
+- id: suite_kb_dropdown_s1
+  name: kb_dropdown — 键盘下拉菜单与目录切换
+  description: >-
+    Tab选中百分比输入框下拉按钮后Enter展开菜单，方向键切换；
+    Tab选中主菜单后Enter展开；
+    右击主视图界面弹出右键菜单；
+    左侧栏目录界面方向键切换；
+    百分比框/页码框输入数值后Enter跳转；
+    点击百分比+/-按钮
+  tags: []
+  steps:
+  # 点击文档区域获取焦点
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  # Tab选中百分比输入框下拉按钮，Enter展开
+  - action: keyboard_press
+    key: tab
+    wait: 0.5
+  - action: keyboard_press
+    key: tab
+    wait: 0.5
+  - action: keyboard_press
+    key: return
+    wait: 1.0
+  # 上下方向键切换菜单项
+  - action: keyboard_press
+    key: down
+    wait: 0.5
+  - action: keyboard_press
+    key: up
+    wait: 0.5
+  # Esc关闭菜单
+  - action: keyboard_press
+    key: escape
+    wait: 1.0
+  # 右击主视图界面弹出右键菜单
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    items:
+    - 搜索
+    wait: 1.0
+  # Esc关闭搜索框
+  - action: keyboard_press
+    key: escape
+    wait: 1.0
+  # 展开左侧栏，切换到目录视图
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 2.0
+  - action: mouse_click
+    ref: n15
+    selector:
+      name: Button_catalog
+      accessible_id: catalog
+    wait: 1.0
+  # 左侧栏目录界面按上下方向键
+  - action: keyboard_press
+    key: down
+    wait: 0.5
+  - action: keyboard_press
+    key: up
+    wait: 0.5
+  # 百分比框输入数值后Enter
+  - action: mouse_click
+    ref: n227
+    selector:
+      name: DLineEditChildLineEdit
+      accessible_id: scaleEdit
+    wait: 1.0
+  - action: keyboard_type_text
+    text: '100'
+    wait: 0.5
+  - action: keyboard_press
+    key: return
+    wait: 2.0
+  # 页码框输入数值后Enter
+  - action: mouse_click
+    ref: n156
+    selector:
+      name: pageEdit
+      role: text
+    wait: 1.0
+  - action: keyboard_type_text
+    text: '2'
+    wait: 0.5
+  - action: keyboard_press
+    key: return
+    wait: 2.0
+  # 点击百分比+按钮
+  - action: mouse_click
+    ref: n270
+    selector:
+      name: SP_IncreaseElement
+      accessible_id: SP_IncreaseElement
+    wait: 1.0
+  # 点击百分比-按钮
+  - action: mouse_click
+    ref: n269
+    selector:
+      name: SP_DecreaseElement
+      accessible_id: SP_DecreaseElement
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+teardown:
+- action: session_stop

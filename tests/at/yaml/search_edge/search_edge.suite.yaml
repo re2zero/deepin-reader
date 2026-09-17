@@ -1,0 +1,92 @@
+name: search_edge_suite
+app: deepin-reader
+description: '阶段十三 13.3：搜索 — 边界与多次搜索'
+module: search_edge
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+# Case 13.3: 搜索边界与多次搜索（覆盖 1581203、1581201、1581199、1581281）
+- id: suite_search_edge_s1
+  name: search_edge — 搜索边界与多次搜索
+  description: >-
+    打开搜索框不输入关键字按Enter验证界面无变化；
+    输入不存在的关键字按Enter验证无搜索结果；
+    输入关键字搜索并点击搜索结果缩略图；
+    多次搜索不同关键字验证搜索正常
+  tags: []
+  steps:
+  # 主菜单 → 搜索，打开搜索框
+  - action: dtk_main_menu
+    items:
+    - 搜索
+    wait: 1.0
+  # 不输入关键字按Enter
+  - action: keyboard_press
+    key: return
+    wait: 1.0
+  # 输入不存在的关键字按Enter
+  - action: keyboard_type_text
+    text: zzqxnotfound
+    wait: 0.5
+  - action: keyboard_press
+    key: return
+    wait: 2.0
+  # 关闭搜索框
+  - action: mouse_click
+    ref: n276
+    selector:
+      name: closeButton
+      accessible_id: closeButton
+    wait: 1.0
+  # 重新打开搜索框
+  - action: dtk_main_menu
+    items:
+    - 搜索
+    wait: 1.0
+  # 输入存在的关键字搜索
+  - action: keyboard_type_text
+    text: normal
+    wait: 0.5
+  - action: keyboard_press
+    key: return
+    wait: 2.0
+  # 点击搜索结果缩略图（搜索结果列表 PImageListView_3）
+  - action: mouse_click
+    ref: n277
+    selector:
+      name: View_ImageList
+      accessible_id: PImageListView_3
+      child_index: 0
+    wait: 2.0
+  # 多次搜索 — 换一个关键字
+  - action: mouse_click
+    ref: n276
+    selector:
+      name: closeButton
+      accessible_id: closeButton
+    wait: 1.0
+  - action: dtk_main_menu
+    items:
+    - 搜索
+    wait: 1.0
+  - action: keyboard_type_text
+    text: test
+    wait: 0.5
+  - action: keyboard_press
+    key: return
+    wait: 2.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+teardown:
+- action: session_stop

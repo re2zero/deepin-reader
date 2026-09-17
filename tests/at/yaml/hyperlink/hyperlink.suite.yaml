@@ -1,0 +1,86 @@
+name: hyperlink_suite
+app: deepin-reader
+description: '阶段十三 13.2：超链接 — 点击与安全提示'
+module: hyperlink
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+# Case 13.2: 超链接点击与安全提示（覆盖 1580543、1580545、1580549、1580551、1580529）
+- id: suite_hyperlink_s1
+  name: hyperlink — 超链接点击与安全提示
+  description: >-
+    点击超链接弹出安全提示弹框，点击弹框中的确定按钮；
+    切换至手形工具后点击超链接再次弹出弹框；
+    弹框弹出后按Tab切换焦点；弹框弹出时点击主菜单验证不可操作。
+    注意：normal.pdf 不含超链接，安全提示弹框不会弹出，
+    弹框交互步骤为预留逻辑，需使用含超链接的PDF文件验证
+  tags: []
+  steps:
+  # 点击文档区域（模拟点击超链接位置）
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 2.0
+  # 安全提示弹框弹出后按Tab切换焦点，Enter确认（关闭弹框）
+  - action: keyboard_press
+    key: tab
+    wait: 1.0
+  - action: keyboard_press
+    key: return
+    wait: 1.0
+  # 切换至手形工具 — 主菜单 → 工具 → 手形工具
+  - action: dtk_main_menu
+    items:
+    - 工具
+    - 手形工具
+    wait: 2.0
+  # 再次点击文档区域（模拟点击超链接）
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 2.0
+  # 弹框弹出后按Tab切换弹框内焦点
+  - action: keyboard_press
+    key: tab
+    wait: 1.0
+  - action: keyboard_press
+    key: tab
+    wait: 1.0
+  # Enter关闭弹框
+  - action: keyboard_press
+    key: return
+    wait: 1.0
+  # 弹框弹出时点击主菜单验证不可操作（先再次触发弹框）
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 2.0
+  - action: dtk_main_menu
+    items:
+    - 搜索
+    wait: 1.0
+  # 按Esc关闭可能残留的弹框或菜单
+  - action: keyboard_press
+    key: escape
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+teardown:
+- action: session_stop

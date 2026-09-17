@@ -1,0 +1,116 @@
+name: anno_ctx_cancel_suite
+app: deepin-reader
+description: '阶段十三 13.7：注释 — 右键菜单取消'
+module: anno_ctx_cancel
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+# Case 13.7: 注释右键菜单取消（覆盖 1581149、1581163、1580947）
+- id: suite_anno_ctx_cancel_s1
+  name: anno_ctx_cancel — 注释右键菜单取消
+  description: >-
+    创建注释后切换到注释视图，右键注释项弹出菜单，
+    左键点击注释框外区域（文档区域）使菜单消失；
+    再次右键注释项弹出菜单，右键注释框外区域使菜单消失
+  tags: []
+  steps:
+  # 展开侧边栏
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 2.0
+  # 右键文档区域添加注释
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    items:
+    - 添加注释
+    wait: 3.0
+  # 输入注释内容
+  - action: mouse_click
+    ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+    wait: 1.0
+  - action: keyboard_type_text
+    text: cancel-test
+    wait: 1.0
+  # 点击文档区域退出注释编辑
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  # 切换到注释视图
+  - action: mouse_click
+    ref: n17
+    selector:
+      name: Button_annotation
+    wait: 1.0
+  # 右键注释项弹出菜单
+  - action: mouse_click
+    ref: n25
+    selector:
+      name: View_ImageList
+      child_index: 0
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: View_ImageList
+      child_index: 0
+    items:
+    - 复制
+    wait: 1.0
+  # 左键点击注释框外区域（文档区域）使菜单消失
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  # 再次右键注释项弹出菜单
+  - action: mouse_click
+    ref: n25
+    selector:
+      name: View_ImageList
+      child_index: 0
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: View_ImageList
+      child_index: 0
+    items:
+    - 复制
+    wait: 1.0
+  # 右键点击注释框外区域（文档区域）使菜单消失
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    items:
+    - 搜索
+    wait: 1.0
+  # Esc关闭可能残留的菜单
+  - action: keyboard_press
+    key: escape
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+teardown:
+- action: session_stop

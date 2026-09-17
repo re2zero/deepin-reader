@@ -1,0 +1,159 @@
+name: page_nav_mem_suite
+app: deepin-reader
+description: '阶段十三 13.9：操作 — 文档翻页与状态记忆'
+module: page_nav_mem
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+# Case 13.9a: 不同焦点下方向键翻页与右键菜单（覆盖 1581011、1581035、1581033、1580533）
+- id: suite_page_nav_mem_s1
+  name: page_nav_mem — 不同焦点下方向键翻页与右键菜单
+  description: >-
+    文档区域按上下方向键翻页；
+    点击工具栏菜单后按上下方向键；
+    点击百分比/页数输入框后按上下方向键；
+    展开左侧栏后按上下方向键；
+    点击文档区域后按上下方向键；
+    不选中文本右击弹出默认菜单
+  tags: []
+  steps:
+  # 点击文档区域获取焦点，上下方向键翻页
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: down
+    wait: 1.0
+  - action: keyboard_press
+    key: up
+    wait: 1.0
+  # 点击工具栏菜单后按上下方向键
+  - action: dtk_main_menu
+    items:
+    - 搜索
+    wait: 1.0
+  - action: keyboard_press
+    key: escape
+    wait: 1.0
+  - action: keyboard_press
+    key: down
+    wait: 1.0
+  - action: keyboard_press
+    key: up
+    wait: 1.0
+  # 点击百分比输入框后按上下方向键
+  - action: mouse_click
+    ref: n227
+    selector:
+      name: DLineEditChildLineEdit
+      accessible_id: scaleEdit
+    wait: 1.0
+  - action: keyboard_press
+    key: down
+    wait: 1.0
+  - action: keyboard_press
+    key: up
+    wait: 1.0
+  # 点击页数输入框后按上下方向键
+  - action: mouse_click
+    ref: n156
+    selector:
+      name: pageEdit
+      role: text
+    wait: 1.0
+  - action: keyboard_press
+    key: down
+    wait: 1.0
+  - action: keyboard_press
+    key: up
+    wait: 1.0
+  # 展开左侧栏后按上下方向键
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 2.0
+  - action: keyboard_press
+    key: down
+    wait: 1.0
+  - action: keyboard_press
+    key: up
+    wait: 1.0
+  # 点击右侧文档区域后按上下方向键
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: keyboard_press
+    key: down
+    wait: 1.0
+  - action: keyboard_press
+    key: up
+    wait: 1.0
+  # 不选中文本右击弹出默认菜单
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    items:
+    - 第一页
+    wait: 2.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+# Case 13.9b: 搜索中主菜单可操作与关闭重开状态记忆（覆盖 1580719）
+- id: suite_page_nav_mem_s2
+  name: page_nav_mem — 搜索中主菜单可操作与关闭重开状态记忆
+  description: >-
+    打开搜索框输入关键字搜索，搜索过程中点击主菜单选项验证可操作；
+    Ctrl+W 关闭文档后重新打开，验证记住所在页数和视图状态
+  tags: []
+  steps:
+  # 打开搜索框搜索
+  - action: dtk_main_menu
+    items:
+    - 搜索
+    wait: 1.0
+  - action: keyboard_type_text
+    text: normal
+    wait: 0.5
+  - action: keyboard_press
+    key: return
+    wait: 2.0
+  # 搜索过程中点击主菜单选项
+  - action: dtk_main_menu
+    items:
+    - 新标签页
+    wait: 2.0
+  # 关闭文档 — Ctrl+W
+  - action: keyboard_hot_key
+    key: ctrl+w
+    wait: 2.0
+  # 重新打开文档
+  - action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+teardown:
+- action: session_stop

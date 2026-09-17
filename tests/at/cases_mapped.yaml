@@ -3817,3 +3817,1029 @@ cases:
       name: PlayBtn
       role: button
     action: assert_element
+- id: suite_view_adj_s1
+  name: view_adj — 菜单_各百分比与窗口切换
+  module: view_adj
+  annotation:
+    测试界面: 视图调整
+    测试功能: 菜单各百分比与窗口切换
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素: n224 (Button_ThumbnailToggle), n8 (Form_CentralDocPage), n227 (DLineEditChildLineEdit), n267 (ArrowBtn)
+    覆盖缺口: 1581029, 1581027, 1581031, 1580717
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 展开侧边栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: action
+    description: 点击缩放下拉箭头选择双页显示
+    selector:
+      name: ArrowBtn
+      role: button
+      popup: click
+    action: dtk_context_menu
+    items:
+    - 双页显示
+  - step_type: action
+    description: 选择适应宽度
+    selector:
+      name: ArrowBtn
+      role: button
+      popup: click
+    action: dtk_context_menu
+    items:
+    - 适应宽度
+  - step_type: action
+    description: 选择适应高度
+    selector:
+      name: ArrowBtn
+      role: button
+      popup: click
+    action: dtk_context_menu
+    items:
+    - 适应高度
+  - step_type: action
+    description: 右键文档区域左旋转
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: dtk_context_menu
+    items:
+    - 左旋转
+  - step_type: action
+    description: 右键文档区域右旋转
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: dtk_context_menu
+    items:
+    - 右旋转
+  - step_type: action
+    description: 缩放输入框输入10%
+    element_ref: n227
+    selector:
+      name: DLineEditChildLineEdit
+      accessible_id: scaleEdit
+    action: mouse_click
+  - step_type: action
+    description: 输入10并回车
+    action: keyboard_type_text
+    text: '10'
+  - step_type: action
+    description: 回车确认
+    action: keyboard_press
+    key: return
+  - step_type: action
+    description: 缩放输入框输入500%
+    element_ref: n227
+    selector:
+      name: DLineEditChildLineEdit
+      accessible_id: scaleEdit
+    action: mouse_click
+  - step_type: action
+    description: 输入500并回车
+    action: keyboard_type_text
+    text: '500'
+  - step_type: action
+    description: 回车确认
+    action: keyboard_press
+    key: return
+  - step_type: action
+    description: Alt+Space最大化窗口
+    action: keyboard_hot_key
+    key: alt+space
+  - step_type: action
+    description: 按X最大化
+    action: keyboard_press
+    key: x
+  - step_type: action
+    description: Alt+Space还原窗口
+    action: keyboard_hot_key
+    key: alt+space
+  - step_type: action
+    description: 按R还原
+    action: keyboard_press
+    key: r
+  - step_type: assert
+    description: 主窗口文档区域存在
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+- id: suite_hyperlink_s1
+  name: hyperlink — 点击与安全提示
+  module: hyperlink
+  annotation:
+    测试界面: 超链接
+    测试功能: 点击超链接与安全提示弹框
+    前置条件: deepin-reader 已打开含超链接的 PDF 文档
+    AT元素: n8 (Form_CentralDocPage)
+    覆盖缺口: 1580543, 1580545, 1580549, 1580551, 1580529
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开含超链接的文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 点击文档区域超链接
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: 安全提示弹框Tab切换焦点后Enter确认
+    action: keyboard_press
+    key: tab
+  - step_type: action
+    description: 回车确认安全提示
+    action: keyboard_press
+    key: return
+  - step_type: action
+    description: 切换至手形工具后点击超链接
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: 安全提示弹框Tab切换后Enter确认
+    action: keyboard_press
+    key: tab
+  - step_type: action
+    description: 回车确认安全提示
+    action: keyboard_press
+    key: return
+  - step_type: assert
+    description: 主窗口文档区域存在
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+- id: suite_search_edge_s1
+  name: search_edge — 边界与多次搜索
+  module: search_edge
+  annotation:
+    测试界面: 搜索
+    测试功能: 搜索边界条件与多次搜索
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素: n8 (Form_CentralDocPage), n276 (closeButton), n277 (View_ImageList, PImageListView_3)
+    覆盖缺口: 1581203, 1581201, 1581199, 1581281
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 主菜单打开搜索框
+    action: dtk_main_menu
+    items:
+    - 搜索
+  - step_type: action
+    description: 不输入关键字按Enter
+    action: keyboard_press
+    key: return
+  - step_type: action
+    description: 输入不存在的关键字
+    action: keyboard_type_text
+    text: zzqxnotfound
+  - step_type: action
+    description: 回车搜索
+    action: keyboard_press
+    key: return
+  - step_type: action
+    description: 关闭搜索框
+    element_ref: n276
+    selector:
+      name: closeButton
+      accessible_id: closeButton
+    action: mouse_click
+  - step_type: action
+    description: 重新打开搜索框
+    action: dtk_main_menu
+    items:
+    - 搜索
+  - step_type: action
+    description: 输入存在的关键字
+    action: keyboard_type_text
+    text: normal
+  - step_type: action
+    description: 回车搜索
+    action: keyboard_press
+    key: return
+  - step_type: action
+    description: 点击搜索结果缩略图
+    element_ref: n277
+    selector:
+      name: View_ImageList
+      accessible_id: PImageListView_3
+      child_index: 0
+    action: mouse_click
+  - step_type: action
+    description: 关闭搜索框
+    element_ref: n276
+    selector:
+      name: closeButton
+      accessible_id: closeButton
+    action: mouse_click
+  - step_type: action
+    description: 重新打开搜索框
+    action: dtk_main_menu
+    items:
+    - 搜索
+  - step_type: action
+    description: 输入另一个关键字
+    action: keyboard_type_text
+    text: test
+  - step_type: action
+    description: 回车搜索
+    action: keyboard_press
+    key: return
+  - step_type: assert
+    description: 主窗口文档区域存在
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+- id: suite_sidebar_toggle_s1
+  name: sidebar_toggle — 适合页面/高度/宽度后收起再展开左侧栏
+  module: sidebar_toggle
+  annotation:
+    测试界面: 左侧栏
+    测试功能: 适合页面/高度/宽度后收起再展开左侧栏
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素: n224 (Button_ThumbnailToggle), n8 (Form_CentralDocPage), n267 (ArrowBtn)
+    覆盖缺口: 1580905, 1580909, 1580903
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 展开侧边栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: action
+    description: 适合页面后收起左侧栏
+    selector:
+      name: ArrowBtn
+      role: button
+      popup: click
+    action: dtk_context_menu
+    items:
+    - 适合页面
+  - step_type: action
+    description: 收起左侧栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: action
+    description: 展开左侧栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: action
+    description: 适应高度后收起再展开左侧栏
+    selector:
+      name: ArrowBtn
+      role: button
+      popup: click
+    action: dtk_context_menu
+    items:
+    - 适应高度
+  - step_type: action
+    description: 收起左侧栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: action
+    description: 展开左侧栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: action
+    description: 适应宽度后收起再展开左侧栏
+    selector:
+      name: ArrowBtn
+      role: button
+      popup: click
+    action: dtk_context_menu
+    items:
+    - 适应宽度
+  - step_type: action
+    description: 收起左侧栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: action
+    description: 展开左侧栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: assert
+    description: 主窗口文档区域存在
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+- id: suite_sidebar_toggle_s2
+  name: sidebar_toggle — 搜索结果缩略图显示后收起再展开左侧栏
+  module: sidebar_toggle
+  annotation:
+    测试界面: 左侧栏
+    测试功能: 搜索结果缩略图显示后收起再展开左侧栏
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素: n224 (Button_ThumbnailToggle), n8 (Form_CentralDocPage), n276 (closeButton)
+    覆盖缺口: 1580907
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 展开侧边栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: action
+    description: 主菜单打开搜索框
+    action: dtk_main_menu
+    items:
+    - 搜索
+  - step_type: action
+    description: 输入关键字搜索
+    action: keyboard_type_text
+    text: normal
+  - step_type: action
+    description: 回车搜索
+    action: keyboard_press
+    key: return
+  - step_type: action
+    description: 收起左侧栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: action
+    description: 展开左侧栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: assert
+    description: 主窗口文档区域存在
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+- id: suite_sidebar_toggle_s3
+  name: sidebar_toggle — 鼠标移出移入左侧栏
+  module: sidebar_toggle
+  annotation:
+    测试界面: 左侧栏
+    测试功能: 鼠标移出移入左侧栏（AT-SPI无mouse_move，以收起展开替代）
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素: n224 (Button_ThumbnailToggle), n8 (Form_CentralDocPage), n267 (ArrowBtn)
+    覆盖缺口: 1580913, 1580911, 1580899, 1580901
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 双页显示后收起再展开左侧栏
+    selector:
+      name: ArrowBtn
+      role: button
+      popup: click
+    action: dtk_context_menu
+    items:
+    - 双页显示
+  - step_type: action
+    description: 收起左侧栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: action
+    description: 展开左侧栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: action
+    description: 适应高度后收起再展开
+    selector:
+      name: ArrowBtn
+      role: button
+      popup: click
+    action: dtk_context_menu
+    items:
+    - 适应高度
+  - step_type: action
+    description: 收起左侧栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: action
+    description: 展开左侧栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: action
+    description: 适应宽度后收起再展开
+    selector:
+      name: ArrowBtn
+      role: button
+      popup: click
+    action: dtk_context_menu
+    items:
+    - 适应宽度
+  - step_type: action
+    description: 收起左侧栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: action
+    description: 展开左侧栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: assert
+    description: 主窗口文档区域存在
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+- id: suite_view_persist_s1
+  name: view_persist — 多窗口多标签页视图保持
+  module: view_persist
+  annotation:
+    测试界面: 视图保持
+    测试功能: 多窗口多标签页视图状态保持
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素: n8 (Form_CentralDocPage), n267 (ArrowBtn), n227 (DLineEditChildLineEdit)
+    覆盖缺口: 1580329, 1580363, 1580331, 1580353
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 调整页面视图 — 适合页面
+    selector:
+      name: ArrowBtn
+      role: button
+      popup: click
+    action: dtk_context_menu
+    items:
+    - 适合页面
+  - step_type: action
+    description: 主菜单新标签页打开文档
+    action: dtk_main_menu
+    items:
+    - 新标签页
+  - step_type: action
+    description: 主菜单新窗口打开文档
+    action: dtk_main_menu
+    items:
+    - 新窗口
+  - step_type: action
+    description: 缩放输入框输入100%验证视图保持
+    element_ref: n227
+    selector:
+      name: DLineEditChildLineEdit
+      accessible_id: scaleEdit
+    action: mouse_click
+  - step_type: action
+    description: 输入100并回车
+    action: keyboard_type_text
+    text: '100'
+  - step_type: action
+    description: 回车确认
+    action: keyboard_press
+    key: return
+  - step_type: assert
+    description: 主窗口文档区域存在
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+- id: suite_kb_dropdown_s1
+  name: kb_dropdown — 键盘下拉菜单与目录切换
+  module: kb_dropdown
+  annotation:
+    测试界面: 键盘
+    测试功能: 下拉菜单与目录切换
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素: n8 (Form_CentralDocPage), n224 (Button_ThumbnailToggle), n15 (Button_catalog), n227 (DLineEditChildLineEdit), n156 (pageEdit), n269 (SP_DecreaseElement), n270 (SP_IncreaseElement)
+    覆盖缺口: 1580863, 1580869, 1580865, 1580867, 1580773, 1581043
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 点击文档区域获取焦点
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: Tab选中百分比下拉按钮Enter展开
+    action: keyboard_press
+    key: tab
+  - step_type: action
+    description: Tab切换
+    action: keyboard_press
+    key: tab
+  - step_type: action
+    description: Enter展开菜单
+    action: keyboard_press
+    key: return
+  - step_type: action
+    description: 上下方向键切换菜单项
+    action: keyboard_press
+    key: down
+  - step_type: action
+    description: 上方向键
+    action: keyboard_press
+    key: up
+  - step_type: action
+    description: Esc关闭菜单
+    action: keyboard_press
+    key: escape
+  - step_type: action
+    description: 右击主视图弹出右键菜单
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: dtk_context_menu
+    items:
+    - 搜索
+  - step_type: action
+    description: Esc关闭搜索框
+    action: keyboard_press
+    key: escape
+  - step_type: action
+    description: 展开左侧栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: action
+    description: 切换到目录视图
+    element_ref: n15
+    selector:
+      name: Button_catalog
+      accessible_id: catalog
+    action: mouse_click
+  - step_type: action
+    description: 目录界面按上下方向键
+    action: keyboard_press
+    key: down
+  - step_type: action
+    description: 上方向键
+    action: keyboard_press
+    key: up
+  - step_type: action
+    description: 百分比框输入数值
+    element_ref: n227
+    selector:
+      name: DLineEditChildLineEdit
+      accessible_id: scaleEdit
+    action: mouse_click
+  - step_type: action
+    description: 输入100
+    action: keyboard_type_text
+    text: '100'
+  - step_type: action
+    description: 回车跳转
+    action: keyboard_press
+    key: return
+  - step_type: action
+    description: 页码框输入数值
+    element_ref: n156
+    selector:
+      name: pageEdit
+      role: text
+    action: mouse_click
+  - step_type: action
+    description: 输入2
+    action: keyboard_type_text
+    text: '2'
+  - step_type: action
+    description: 回车跳转
+    action: keyboard_press
+    key: return
+  - step_type: action
+    description: 点击百分比+按钮
+    element_ref: n270
+    selector:
+      name: SP_IncreaseElement
+      accessible_id: SP_IncreaseElement
+    action: mouse_click
+  - step_type: action
+    description: 点击百分比-按钮
+    element_ref: n269
+    selector:
+      name: SP_DecreaseElement
+      accessible_id: SP_DecreaseElement
+    action: mouse_click
+  - step_type: assert
+    description: 主窗口文档区域存在
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+- id: suite_anno_ctx_cancel_s1
+  name: anno_ctx_cancel — 注释右键菜单取消
+  module: anno_ctx_cancel
+  annotation:
+    测试界面: 注释
+    测试功能: 右键菜单取消
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素: n224 (Button_ThumbnailToggle), n8 (Form_CentralDocPage), n265 (PTextEdit), n17 (Button_annotation), n25 (View_ImageList)
+    覆盖缺口: 1581149, 1581163, 1580947
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 展开侧边栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: action
+    description: 右键文档区域添加注释
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: dtk_context_menu
+    items:
+    - 添加注释
+  - step_type: action
+    description: 输入注释内容
+    element_ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+    action: mouse_click
+  - step_type: action
+    description: 输入注释文本
+    action: keyboard_type_text
+    text: cancel-test
+  - step_type: action
+    description: 点击文档区域退出注释编辑
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: 切换到注释视图
+    element_ref: n17
+    selector:
+      name: Button_annotation
+    action: mouse_click
+  - step_type: action
+    description: 右键注释项弹出菜单
+    element_ref: n25
+    selector:
+      name: View_ImageList
+      child_index: 0
+    action: mouse_click
+  - step_type: action
+    description: 右键菜单点击复制
+    selector:
+      name: View_ImageList
+      child_index: 0
+    action: dtk_context_menu
+    items:
+    - 复制
+  - step_type: action
+    description: 左键点击文档区域使菜单消失
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: 再次右键注释项弹出菜单
+    element_ref: n25
+    selector:
+      name: View_ImageList
+      child_index: 0
+    action: mouse_click
+  - step_type: action
+    description: 右键菜单点击复制
+    selector:
+      name: View_ImageList
+      child_index: 0
+    action: dtk_context_menu
+    items:
+    - 复制
+  - step_type: action
+    description: 右键点击文档区域使菜单消失
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: dtk_context_menu
+    items:
+    - 搜索
+  - step_type: action
+    description: Esc关闭可能残留的菜单
+    action: keyboard_press
+    key: escape
+  - step_type: assert
+    description: 主窗口文档区域存在
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+- id: suite_slide_ui_s1
+  name: slide_ui — 幻灯片播放时UI
+  module: slide_ui
+  annotation:
+    测试界面: 幻灯片
+    测试功能: 幻灯片播放时UI
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素: n8 (Form_CentralDocPage), n262 (PlayBtn), n263 (PreBtn), n264 (NextBtn)
+    覆盖缺口: 1580439
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 点击文档区域获取焦点
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: 右键文档区域选择幻灯片放映
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: dtk_context_menu
+    items:
+    - 幻灯片放映
+  - step_type: assert
+    description: 幻灯片播放按钮PlayBtn存在
+    element_ref: n262
+    selector:
+      name: PlayBtn
+      role: button
+    action: assert_element
+  - step_type: assert
+    description: 幻灯片上一页按钮PreBtn存在
+    element_ref: n263
+    selector:
+      name: PreBtn
+      role: button
+    action: assert_element
+  - step_type: assert
+    description: 幻灯片下一页按钮NextBtn存在
+    element_ref: n264
+    selector:
+      name: NextBtn
+      role: button
+    action: assert_element
+  - step_type: action
+    description: Escape退出幻灯片模式（鼠标移至/移开菜单栏AT-SPI无mouse_move，标记unsupported）
+    action: keyboard_press
+    key: escape
+  - step_type: assert
+    description: 主窗口文档区域存在
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+- id: suite_page_nav_mem_s1
+  name: page_nav_mem — 不同焦点下方向键翻页与右键菜单
+  module: page_nav_mem
+  annotation:
+    测试界面: 操作
+    测试功能: 不同焦点下方向键翻页与右键菜单
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素: n8 (Form_CentralDocPage), n227 (DLineEditChildLineEdit), n156 (pageEdit), n224 (Button_ThumbnailToggle)
+    覆盖缺口: 1581011, 1581035, 1581033, 1580533
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 点击文档区域获取焦点
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: 上下方向键翻页
+    action: keyboard_press
+    key: down
+  - step_type: action
+    description: 上方向键翻页
+    action: keyboard_press
+    key: up
+  - step_type: action
+    description: 点击工具栏菜单后按上下方向键
+    action: dtk_main_menu
+    items:
+    - 搜索
+  - step_type: action
+    description: Esc关闭菜单
+    action: keyboard_press
+    key: escape
+  - step_type: action
+    description: 下方向键
+    action: keyboard_press
+    key: down
+  - step_type: action
+    description: 上方向键
+    action: keyboard_press
+    key: up
+  - step_type: action
+    description: 点击百分比输入框后按上下方向键
+    element_ref: n227
+    selector:
+      name: DLineEditChildLineEdit
+      accessible_id: scaleEdit
+    action: mouse_click
+  - step_type: action
+    description: 下方向键
+    action: keyboard_press
+    key: down
+  - step_type: action
+    description: 上方向键
+    action: keyboard_press
+    key: up
+  - step_type: action
+    description: 点击页数输入框后按上下方向键
+    element_ref: n156
+    selector:
+      name: pageEdit
+      role: text
+    action: mouse_click
+  - step_type: action
+    description: 下方向键
+    action: keyboard_press
+    key: down
+  - step_type: action
+    description: 上方向键
+    action: keyboard_press
+    key: up
+  - step_type: action
+    description: 展开左侧栏后按上下方向键
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: action
+    description: 下方向键
+    action: keyboard_press
+    key: down
+  - step_type: action
+    description: 上方向键
+    action: keyboard_press
+    key: up
+  - step_type: action
+    description: 点击文档区域后按上下方向键
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: mouse_click
+  - step_type: action
+    description: 下方向键
+    action: keyboard_press
+    key: down
+  - step_type: action
+    description: 上方向键
+    action: keyboard_press
+    key: up
+  - step_type: action
+    description: 不选中文本右击弹出默认菜单
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: dtk_context_menu
+    items:
+    - 第一页
+  - step_type: assert
+    description: 主窗口文档区域存在
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+- id: suite_page_nav_mem_s2
+  name: page_nav_mem — 搜索中主菜单可操作与关闭重开状态记忆
+  module: page_nav_mem
+  annotation:
+    测试界面: 操作
+    测试功能: 搜索中主菜单可操作与关闭重开状态记忆
+    前置条件: deepin-reader 已打开一个 PDF 文档
+    AT元素: n8 (Form_CentralDocPage)
+    覆盖缺口: 1580719
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 主菜单打开搜索框
+    action: dtk_main_menu
+    items:
+    - 搜索
+  - step_type: action
+    description: 输入关键字搜索
+    action: keyboard_type_text
+    text: normal
+  - step_type: action
+    description: 回车搜索
+    action: keyboard_press
+    key: return
+  - step_type: action
+    description: 搜索过程中点击主菜单选项
+    action: dtk_main_menu
+    items:
+    - 新标签页
+  - step_type: action
+    description: Ctrl+W关闭文档
+    action: keyboard_hot_key
+    key: ctrl+w
+  - step_type: action
+    description: 重新打开文档验证状态记忆
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: assert
+    description: 主窗口文档区域存在
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element

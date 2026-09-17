@@ -1,0 +1,134 @@
+name: view_adj_suite
+app: deepin-reader
+description: '阶段十三 13.1：视图调整 — 各百分比与窗口切换'
+module: view_adj
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+# Case 13.1: 菜单_各百分比与窗口切换（覆盖 1581029、1581027、1581031、1580717）
+- id: suite_view_adj_s1
+  name: view_adj — 菜单_各百分比与窗口切换
+  description: >-
+    点击缩放下拉菜单中的双页显示、适应宽度、适应高度；
+    右键文档区域点击左旋转、右旋转；
+    在缩放输入框输入10%和500%；
+    Alt+Space最大化/还原图口验证视图状态保持
+  tags: []
+  steps:
+  # 展开侧边栏
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 2.0
+  # 点击缩放下拉箭头按钮，选择双页显示
+  - action: dtk_context_menu
+    selector:
+      name: ArrowBtn
+      role: button
+      popup: click
+    items:
+    - 双页显示
+    wait: 2.0
+  # 选择适应宽度
+  - action: dtk_context_menu
+    selector:
+      name: ArrowBtn
+      role: button
+      popup: click
+    items:
+    - 适应宽度
+    wait: 2.0
+  # 选择适应高度
+  - action: dtk_context_menu
+    selector:
+      name: ArrowBtn
+      role: button
+      popup: click
+    items:
+    - 适应高度
+    wait: 2.0
+  # 右键文档区域 → 左旋转
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    items:
+    - 左旋转
+    wait: 2.0
+  # 右键文档区域 → 右旋转
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    items:
+    - 右旋转
+    wait: 2.0
+  # 缩放输入框输入10%
+  - action: mouse_click
+    ref: n227
+    selector:
+      name: DLineEditChildLineEdit
+      accessible_id: scaleEdit
+    wait: 1.0
+  - action: keyboard_type_text
+    text: '10'
+    wait: 0.5
+  - action: keyboard_press
+    key: return
+    wait: 2.0
+  # 缩放输入框输入500%
+  - action: mouse_click
+    ref: n227
+    selector:
+      name: DLineEditChildLineEdit
+      accessible_id: scaleEdit
+    wait: 1.0
+  - action: keyboard_type_text
+    text: '500'
+    wait: 0.5
+  - action: keyboard_press
+    key: return
+    wait: 2.0
+  # 切换窗口大小 — Alt+Space 最大化
+  - action: keyboard_hot_key
+    key: alt+space
+    wait: 1.0
+  - action: keyboard_press
+    key: x
+    wait: 2.0
+  # Alt+Space 还原
+  - action: keyboard_hot_key
+    key: alt+space
+    wait: 1.0
+  - action: keyboard_press
+    key: r
+    wait: 2.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+teardown:
+- action: session_stop

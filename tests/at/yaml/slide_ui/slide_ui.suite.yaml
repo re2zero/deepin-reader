@@ -1,0 +1,73 @@
+name: slide_ui_suite
+app: deepin-reader
+description: '阶段十三 13.8：幻灯片 — 播放时UI'
+module: slide_ui
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+# Case 13.8: 幻灯片播放时UI（覆盖 1580439）
+- id: suite_slide_ui_s1
+  name: slide_ui — 幻灯片播放时UI
+  description: >-
+    右键文档区域选择幻灯片放映进入幻灯片模式，
+    验证幻灯片播放按钮（PlayBtn/PreBtn/NextBtn）存在；
+    鼠标移至/移开菜单栏的步骤因 AT-SPI 无 mouse_move API 无法自动化，
+    标记为unsupported，仅验证幻灯片模式可进入并可退出
+  tags: []
+  steps:
+  # 点击文档区域获取焦点
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  # 右键文档区域 → 幻灯片放映，进入幻灯片模式
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    items:
+    - 幻灯片放映
+    wait: 3.0
+  # 验证幻灯片播放按钮 PlayBtn 存在
+  - action: assert_element
+    ref: n262
+    selector:
+      name: PlayBtn
+      role: button
+    wait: 1.0
+  # 验证幻灯片上一页按钮 PreBtn 存在
+  - action: assert_element
+    ref: n263
+    selector:
+      name: PreBtn
+      role: button
+    wait: 1.0
+  # 验证幻灯片下一页按钮 NextBtn 存在
+  - action: assert_element
+    ref: n264
+    selector:
+      name: NextBtn
+      role: button
+    wait: 1.0
+  # 鼠标移至/移开菜单栏步骤 — AT-SPI 无 mouse_move API，标记 unsupported
+  # 此处用 Escape 退出幻灯片模式替代
+  - action: keyboard_press
+    key: escape
+    wait: 2.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+teardown:
+- action: session_stop

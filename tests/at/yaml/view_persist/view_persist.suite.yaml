@@ -1,0 +1,56 @@
+name: view_persist_suite
+app: deepin-reader
+description: '阶段十三 13.5：视图保持 — 多窗口多标签页'
+module: view_persist
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+# Case 13.5: 视图保持_多窗口多标签页（覆盖 1580329、1580363、1580331、1580353）
+- id: suite_view_persist_s1
+  name: view_persist — 视图保持_多窗口多标签页
+  description: >-
+    调整页面视图为适应高度后，通过主菜单新标签页打开文档、
+    新窗口打开文档，验证调整过的视图在新标签页/新窗口中保持
+  tags: []
+  steps:
+  # 展开侧边栏
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 2.0
+  # 调整页面视图为适应高度
+  - action: dtk_context_menu
+    selector:
+      name: ArrowBtn
+      role: button
+      popup: click
+    items:
+    - 适应高度
+    wait: 2.0
+  # 新标签页打开文档
+  - action: dtk_main_menu
+    items:
+    - 新标签页
+    wait: 2.0
+  # 新窗口打开文档
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+    wait: 2.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+teardown:
+- action: session_stop

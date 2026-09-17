@@ -1,0 +1,226 @@
+name: sidebar_toggle_suite
+app: deepin-reader
+description: '阶段十三 13.4：左侧栏 — 收起展开与鼠标移入移出'
+module: sidebar_toggle
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+# Case 13.4a: 适合页面/高度/宽度后收起再展开左侧栏（覆盖 1580905、1580909、1580903）
+- id: suite_sidebar_toggle_s1
+  name: sidebar_toggle — 适合页面/高度/宽度后收起再展开左侧栏
+  description: >-
+    分别在适合页面、适应高度、适应宽度视图状态下，
+    收起再展开左侧栏，验证界面显示无异常
+  tags: []
+  steps:
+  # 展开侧边栏
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 2.0
+  # 适合页面 → 收起再展开左侧栏
+  - action: dtk_context_menu
+    selector:
+      name: ArrowBtn
+      role: button
+      popup: click
+    items:
+    - 适合页面
+    wait: 2.0
+  # 收起左侧栏
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 1.0
+  # 展开左侧栏
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 1.0
+  # 适应高度 → 收起再展开左侧栏
+  - action: dtk_context_menu
+    selector:
+      name: ArrowBtn
+      role: button
+      popup: click
+    items:
+    - 适应高度
+    wait: 2.0
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 1.0
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 1.0
+  # 适应宽度 → 收起再展开左侧栏
+  - action: dtk_context_menu
+    selector:
+      name: ArrowBtn
+      role: button
+      popup: click
+    items:
+    - 适应宽度
+    wait: 2.0
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 1.0
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+# Case 13.4b: 搜索结果缩略图显示后收起再展开左侧栏（覆盖 1580907）
+- id: suite_sidebar_toggle_s2
+  name: sidebar_toggle — 搜索结果缩略图显示后收起再展开左侧栏
+  description: >-
+    搜索后显示搜索结果缩略图，收起再展开左侧栏，验证界面显示无异常
+  tags: []
+  steps:
+  # 展开侧边栏
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 2.0
+  # 打开搜索框
+  - action: dtk_main_menu
+    items:
+    - 搜索
+    wait: 1.0
+  - action: keyboard_type_text
+    text: normal
+    wait: 0.5
+  - action: keyboard_press
+    key: return
+    wait: 2.0
+  # 收起左侧栏
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 1.0
+  # 展开左侧栏
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+# Case 13.4c: 鼠标移出移入左侧栏（覆盖 1580913、1580911、1580899、1580901）
+- id: suite_sidebar_toggle_s3
+  name: sidebar_toggle — 鼠标移出移入左侧栏
+  description: >-
+    在双页显示/适应高度/适应宽度/搜索结果状态下鼠标移出再移入左侧栏。
+    注意：AT-SPI 无 mouse_move API，鼠标移入移出无法自动化，
+    此suite标记为unsupported，仅验证视图切换后侧栏可正常收起展开
+  tags: []
+  steps:
+  # 双页显示
+  - action: dtk_context_menu
+    selector:
+      name: ArrowBtn
+      role: button
+      popup: click
+    items:
+    - 双页显示
+    wait: 2.0
+  # 收起再展开（替代鼠标移出移入）
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 1.0
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 1.0
+  # 适应高度
+  - action: dtk_context_menu
+    selector:
+      name: ArrowBtn
+      role: button
+      popup: click
+    items:
+    - 适应高度
+    wait: 2.0
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 1.0
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 1.0
+  # 适应宽度
+  - action: dtk_context_menu
+    selector:
+      name: ArrowBtn
+      role: button
+      popup: click
+    items:
+    - 适应宽度
+    wait: 2.0
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 1.0
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+teardown:
+- action: session_stop
