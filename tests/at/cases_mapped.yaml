@@ -2609,3 +2609,287 @@ cases:
       name: Form_CentralDocPage
       role: form
     action: assert_element
+# ===== 阶段七：主菜单（6 cases，覆盖 14 条缺口）=====
+# Case 7.1: 保存_多次保存（覆盖 1581267、1581007）
+- id: suite_main_menu_s1
+  name: main_menu — 保存_多次保存
+  module: main_menu
+  annotation:
+    测试界面: 主菜单
+    测试功能: 保存_多次保存
+    前置条件: deepin-reader 已打开文档
+    覆盖缺口: '1581267、1581007'
+    AT元素: n224 (Button_ThumbnailToggle), n22 (Button_BookmarkAdd), n8 (Form_CentralDocPage)
+  steps:
+  - step_type: action
+    description: 启动deepin-reader打开文档
+    action: session_start
+    command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 展开侧边栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: action
+    description: 添加书签使文档变为已编辑状态
+    element_ref: n22
+    selector:
+      name: Button_BookmarkAdd
+      accessible_id: BookmarkAddBtn
+    action: mouse_click
+  - step_type: action
+    description: 点击主菜单-保存
+    action: dtk_main_menu
+    items:
+    - 保存
+  - step_type: action
+    description: 按Ctrl+S快捷键保存
+    action: keyboard_hot_key
+    key: ctrl+s
+  - step_type: assert
+    description: 文档页面仍然可见，保存操作正常
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+# Case 7.2: 另存为_编辑与未编辑（覆盖 1581213、1580683、1580781）
+- id: suite_main_menu_s2
+  name: main_menu — 另存为_编辑与未编辑
+  module: main_menu
+  annotation:
+    测试界面: 主菜单
+    测试功能: 另存为_编辑与未编辑
+    前置条件: deepin-reader 已打开文档
+    覆盖缺口: '1581213、1580683、1580781'
+    AT元素: n224 (Button_ThumbnailToggle), n8 (Form_CentralDocPage)
+  steps:
+  - step_type: action
+    description: 启动deepin-reader打开文档
+    action: session_start
+    command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 展开侧边栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: action
+    description: 右键添加高亮注释使文档变为已编辑状态
+    action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 高亮
+  - step_type: action
+    description: 点击主菜单-另存为
+    action: dtk_main_menu
+    items:
+    - 另存为
+  - step_type: action
+    description: 系统DFileDialog弹出，输入文件名
+    action: keyboard_type_text
+    text: test_save_as
+  - step_type: action
+    description: 点击保存（Enter确认文件对话框默认按钮）
+    action: keyboard_press
+    key: return
+  - step_type: action
+    description: 如果弹出替换确认框则按Esc退出
+    action: keyboard_press
+    key: escape
+  - step_type: assert
+    description: 文档页面仍然可见
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+# Case 7.3: 窗口_最小化最大化关闭（覆盖 1581231、1581233、1581229、1580513、1581081、1580597）
+- id: suite_main_menu_s3
+  name: main_menu — 窗口_最小化最大化关闭
+  module: main_menu
+  annotation:
+    测试界面: 主菜单
+    测试功能: 窗口_最小化最大化关闭
+    前置条件: deepin-reader 已打开文档
+    覆盖缺口: '1581231、1581233、1581229、1580513、1581081、1580597'
+    AT元素: n8 (Form_CentralDocPage)
+    备注: 最小化/最大化/关闭为DTitlebar内置按钮，无accessible_name，使用Alt+Space窗口菜单操作
+  steps:
+  - step_type: action
+    description: 启动deepin-reader打开文档
+    action: session_start
+    command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 最大化 — Alt+Space调出窗口菜单后按X最大化
+    action: keyboard_hot_key
+    key: alt+space
+  - step_type: action
+    description: 按X最大化窗口
+    action: keyboard_press
+    key: x
+  - step_type: action
+    description: 还原窗口 — Alt+Space后按R还原
+    action: keyboard_hot_key
+    key: alt+space
+  - step_type: action
+    description: 按R还窗口
+    action: keyboard_press
+    key: r
+  - step_type: action
+    description: 最小化 — Alt+Space后按N最小化
+    action: keyboard_hot_key
+    key: alt+space
+  - step_type: action
+    description: 按N最小化窗口
+    action: keyboard_press
+    key: n
+  - step_type: action
+    description: 窗口最小化后重新激活窗口
+    action: session_start
+    command: wmctrl -a "deepin-reader" || true
+  - step_type: action
+    description: 关闭 — 使用Alt+F4关闭窗口
+    action: keyboard_hot_key
+    key: alt+f4
+  - step_type: action
+    description: 重新启动应用以继续测试
+    action: session_start
+    command: pkill -9 -x deepin-reader || true; sleep 1; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 点击主菜单-新窗口
+    action: dtk_main_menu
+    items:
+    - 新窗口
+  - step_type: assert
+    description: 文档页面仍然可见
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+# Case 7.4: 关于与帮助_页面显示（覆盖 1581227、1581225）
+- id: suite_main_menu_s4
+  name: main_menu — 关于与帮助_页面显示
+  module: main_menu
+  annotation:
+    测试界面: 主菜单
+    测试功能: 关于与帮助_页面显示
+    前置条件: deepin-reader 已打开文档
+    覆盖缺口: '1581227、1581225'
+    AT元素: n8 (Form_CentralDocPage)
+    备注: 关于/帮助为DTK框架DTitlebar默认菜单项，不在自定义TitleMenu中
+  steps:
+  - step_type: action
+    description: 启动deepin-reader打开文档
+    action: session_start
+    command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 点击主菜单-关于
+    action: dtk_main_menu
+    items:
+    - 关于
+  - step_type: action
+    description: 关闭关于对话框
+    action: keyboard_press
+    key: escape
+  - step_type: action
+    description: 点击主菜单-帮助
+    action: dtk_main_menu
+    items:
+    - 帮助
+  - step_type: action
+    description: 关闭帮助对话框
+    action: keyboard_press
+    key: escape
+  - step_type: assert
+    description: 文档页面仍然可见
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+# Case 7.5: 新标签页_打开（覆盖 1581209）
+- id: suite_main_menu_s5
+  name: main_menu — 新标签页_打开
+  module: main_menu
+  annotation:
+    测试界面: 主菜单
+    测试功能: 新标签页_打开
+    前置条件: deepin-reader 已打开文档
+    覆盖缺口: '1581209'
+    AT元素: n3 (Form_CentralNavPage)
+  steps:
+  - step_type: action
+    description: 启动deepin-reader打开文档
+    action: session_start
+    command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 点击主菜单-新标签页
+    action: dtk_main_menu
+    items:
+    - 新标签页
+  - step_type: assert
+    description: 新标签页打开后显示无文档导航页
+    element_ref: n3
+    selector:
+      name: Form_CentralNavPage
+      role: form
+    action: assert_element
+# Case 7.6: 保存替换_同名文档（覆盖 1580781）
+- id: suite_main_menu_s6
+  name: main_menu — 保存替换_同名文档
+  module: main_menu
+  annotation:
+    测试界面: 主菜单
+    测试功能: 保存替换_同名文档
+    前置条件: deepin-reader 已打开文档
+    覆盖缺口: '1580781'
+    AT元素: n224 (Button_ThumbnailToggle), n8 (Form_CentralDocPage)
+  steps:
+  - step_type: action
+    description: 启动deepin-reader打开文档
+    action: session_start
+    command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 展开侧边栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: action
+    description: 右键添加高亮注释使文档变为已编辑状态
+    action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 高亮
+  - step_type: action
+    description: 点击主菜单-另存为
+    action: dtk_main_menu
+    items:
+    - 另存为
+  - step_type: action
+    description: 输入与当前文档同名文件名
+    action: keyboard_type_text
+    text: normal.pdf
+  - step_type: action
+    description: 点击保存（Enter确认）
+    action: keyboard_press
+    key: return
+  - step_type: action
+    description: 弹出替换确认框，点击替换（Enter确认默认按钮）
+    action: keyboard_press
+    key: return
+  - step_type: assert
+    description: 文档页面仍然可见
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element

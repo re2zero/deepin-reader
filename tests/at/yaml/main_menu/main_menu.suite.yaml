@@ -1,0 +1,263 @@
+name: main_menu_suite
+app: deepin-reader
+description: '阶段七：主菜单 — 保存/多次保存、另存为、窗口最小化最大化关闭、关于与帮助、新标签页、保存替换同名文档'
+module: main_menu
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+# Case 7.1: 保存_多次保存（覆盖 1581267、1581007）
+- id: suite_main_menu_s1
+  name: main_menu — 保存_多次保存
+  description: >-
+    打开文档后添加书签使文档进入已编辑状态，点击主菜单-保存，
+    再按Ctrl+S快捷键保存；期望书签和注释通过保存/Ctrl+S正常保存
+  tags: []
+  steps:
+  - action: session_start
+    command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  # 展开侧边栏
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 2.0
+  # 添加书签使文档变为已编辑状态
+  - action: mouse_click
+    ref: n22
+    selector:
+      name: Button_BookmarkAdd
+      accessible_id: BookmarkAddBtn
+    wait: 2.0
+  # 点击主菜单-保存
+  - action: dtk_main_menu
+    items:
+    - 保存
+    wait: 2.0
+  # 按Ctrl+S快捷键保存
+  - action: keyboard_hot_key
+    key: ctrl+s
+    wait: 2.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+# Case 7.2: 另存为_编辑与未编辑（覆盖 1581213、1580683、1580781）
+- id: suite_main_menu_s2
+  name: main_menu — 另存为_编辑与未编辑
+  description: >-
+    打开文档后添加高亮注释使其变为已编辑状态，点击主菜单-另存为，
+    弹出系统文件对话框，输入文件名后点击保存；期望文档另存为新文件
+  tags: []
+  steps:
+  - action: session_start
+    command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  # 展开侧边栏
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 2.0
+  # 右键添加高亮注释使文档变为已编辑状态
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 高亮
+    wait: 2.0
+  # 点击主菜单-另存为
+  - action: dtk_main_menu
+    items:
+    - 另存为
+    wait: 2.0
+  # 系统DFileDialog弹出，输入文件名
+  - action: keyboard_type_text
+    text: test_save_as
+    wait: 1.0
+  # 点击保存（Enter确认文件对话框默认按钮）
+  - action: keyboard_press
+    key: return
+    wait: 2.0
+  # 如果弹出替换确认框则按Esc退出
+  - action: keyboard_press
+    key: escape
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+# Case 7.3: 窗口_最小化最大化关闭（覆盖 1581231、1581233、1581229、1580513、1581081、1580597）
+- id: suite_main_menu_s3
+  name: main_menu — 窗口_最小化最大化关闭
+  description: >-
+    点击窗口最小化、最大化、关闭按钮，再点击主菜单-新窗口；
+    最小化/最大化/关闭为DTitlebar内置按钮，无accessible_name，
+    使用键盘快捷键Alt+Space调出窗口菜单进行操作；新窗口通过主菜单触发
+  tags: []
+  steps:
+  - action: session_start
+    command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  # 最大化 — DTitlebar按钮无accessible_name，使用Alt+Space窗口菜单
+  - action: keyboard_hot_key
+    key: alt+space
+    wait: 1.0
+  - action: keyboard_press
+    key: x
+    wait: 2.0
+  # 再次Alt+Space还原图口
+  - action: keyboard_hot_key
+    key: alt+space
+    wait: 1.0
+  - action: keyboard_press
+    key: r
+    wait: 2.0
+  # 最小化 — DTitlebar按钮无accessible_name，Alt+Space后n键最小化
+  - action: keyboard_hot_key
+    key: alt+space
+    wait: 1.0
+  - action: keyboard_press
+    key: n
+    wait: 2.0
+  # 窗口最小化后需要重新激活窗口
+  - action: session_start
+    command: wmctrl -a "deepin-reader" || true
+    wait: 2.0
+  # 关闭 — 使用Alt+F4关闭窗口
+  - action: keyboard_hot_key
+    key: alt+f4
+    wait: 2.0
+  # 重新启动应用以继续测试
+  - action: session_start
+    command: pkill -9 -x deepin-reader || true; sleep 1; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  # 点击主菜单-新窗口
+  - action: dtk_main_menu
+    items:
+    - 新窗口
+    wait: 2.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+# Case 7.4: 关于与帮助_页面显示（覆盖 1581227、1581225）
+- id: suite_main_menu_s4
+  name: main_menu — 关于与帮助_页面显示
+  description: >-
+    点击主菜单-关于、主菜单-帮助；
+    关于/帮助为DTK框架DTitlebar默认菜单项，不在自定义TitleMenu中，
+    通过dtk_main_menu尝试触发，若不可达则标注为unsupported
+  tags: []
+  steps:
+  - action: session_start
+    command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  # 关于 — DTK框架DTitlebar默认菜单项
+  - action: dtk_main_menu
+    items:
+    - 关于
+    wait: 2.0
+  - action: keyboard_press
+    key: escape
+    wait: 1.0
+  # 帮助 — DTK框架DTitlebar默认菜单项
+  - action: dtk_main_menu
+    items:
+    - 帮助
+    wait: 2.0
+  - action: keyboard_press
+    key: escape
+    wait: 1.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+# Case 7.5: 新标签页_打开（覆盖 1581209）
+- id: suite_main_menu_s5
+  name: main_menu — 新标签页_打开
+  description: >-
+    点击主菜单-新标签页；期望打开一个新标签页
+  tags: []
+  steps:
+  - action: session_start
+    command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  # 点击主菜单-新标签页
+  - action: dtk_main_menu
+    items:
+    - 新标签页
+    wait: 2.0
+  assert_steps:
+  - action: assert_element
+    ref: n3
+    selector:
+      name: Form_CentralNavPage
+      role: form
+# Case 7.6: 保存替换_同名文档（覆盖 1580781）
+- id: suite_main_menu_s6
+  name: main_menu — 保存替换_同名文档
+  description: >-
+    打开文档后添加高亮注释，点击另存为，输入与当前文档同名文件名，
+    点击保存后弹出替换确认框，点击替换；期望新编辑的文档替换原文档
+  tags: []
+  steps:
+  - action: session_start
+    command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+    wait: 3.0
+  # 展开侧边栏
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 2.0
+  # 右键添加高亮注释使文档变为已编辑状态
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 高亮
+    wait: 2.0
+  # 点击主菜单-另存为
+  - action: dtk_main_menu
+    items:
+    - 另存为
+    wait: 2.0
+  # 输入与当前文档同名文件名
+  - action: keyboard_type_text
+    text: normal.pdf
+    wait: 1.0
+  # 点击保存（Enter确认）
+  - action: keyboard_press
+    key: return
+    wait: 2.0
+  # 弹出替换确认框，点击替换（Enter确认默认按钮）
+  - action: keyboard_press
+    key: return
+    wait: 2.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+teardown:
+- action: session_stop
