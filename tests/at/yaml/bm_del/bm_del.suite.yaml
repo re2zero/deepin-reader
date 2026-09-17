@@ -1,0 +1,83 @@
+name: bm_del_suite
+app: deepin-reader
+description: ''
+module: bm_del
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_bm_del_s1
+  name: bm_del — 书签删除快捷键与点击跳转
+  description: 选中书签缩略图后按Delete删除书签，点击书签缩略图跳转到相应页面
+  tags: []
+  steps:
+  # 展开左侧栏（缩略图按钮）
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 2.0
+  # 切换到书签视图
+  - action: mouse_click
+    ref: n16
+    selector:
+      name: Button_bookmark
+      accessible_id: bookmark
+    wait: 2.0
+  # 添加第一个书签
+  - action: mouse_click
+    ref: n22
+    selector:
+      name: Button_BookmarkAdd
+      accessible_id: BookmarkAddBtn
+    wait: 1.0
+  # 添加第二个书签（确保有多个书签用于删除后跳转测试）
+  - action: mouse_click
+    ref: n22
+    selector:
+      name: Button_BookmarkAdd
+      accessible_id: BookmarkAddBtn
+    wait: 1.0
+  # 选中书签缩略图（点击书签列表第一项）
+  - action: mouse_click
+    ref: n20
+    selector:
+      name: View_ImageList
+      accessible_id: PImageListView
+      child_index: 0
+    wait: 1.0
+  # 按Delete键删除选中书签
+  - action: keyboard_press
+    key: delete
+    wait: 1.0
+  # 点击剩余书签缩略图验证跳转
+  - action: mouse_click
+    ref: n20
+    selector:
+      name: View_ImageList
+      accessible_id: PImageListView
+      child_index: 0
+    wait: 2.0
+  assert_steps:
+  # 验证文档页面仍然可见（跳转成功）
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+  # 验证书签列表仍存在（删除后还有剩余书签）
+  - action: assert_element
+    ref: n20
+    selector:
+      name: View_ImageList
+      accessible_id: PImageListView
+      role: list
+teardown:
+- action: session_stop

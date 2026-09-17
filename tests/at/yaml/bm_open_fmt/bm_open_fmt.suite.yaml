@@ -1,0 +1,55 @@
+name: bm_open_fmt_suite
+app: deepin-reader
+description: ''
+module: bm_open_fmt
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_bm_open_fmt_s1
+  name: bm_open_fmt — 打开PDF文档
+  description: 打开PDF文档验证正常打开
+  tags: []
+  steps: []
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+- id: suite_bm_open_fmt_s2
+  name: bm_open_fmt — 打开DOCX文档
+  description: 重新启动打开DOCX文档验证正常打开
+  tags: []
+  steps:
+  - action: session_start
+    command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.docx
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+- id: suite_bm_open_fmt_s3
+  name: bm_open_fmt — 打开损坏文档提示异常
+  description: 打开损坏的PDF文档验证提示异常信息
+  tags: []
+  steps:
+  - action: session_start
+    command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/broken.pdf
+    wait: 3.0
+  assert_steps:
+  - action: assert_element
+    ref: n268
+    selector:
+      name: Tips
+      role: label
+teardown:
+- action: session_stop

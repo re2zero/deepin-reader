@@ -1,0 +1,55 @@
+name: bm_no_doc_suite
+app: deepin-reader
+description: ''
+module: bm_no_doc
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader
+  wait: 3.0
+suites:
+- id: suite_bm_no_doc_s1
+  name: bm_no_doc — 未打开文档界面显示
+  description: 未打开文档时缩略图图标置灰，菜单弹框中仅部分菜单可点击
+  tags: []
+  steps:
+  # 验证未打开文档时显示CentralNavPage（无文档页面）
+  # 点击工具栏左侧图标（选择文件按钮）
+  - action: mouse_click
+    ref: n6
+    selector:
+      name: Button_SelectFile
+      accessible_id: SelectFileBtn
+    wait: 2.0
+  # 关闭可能弹出的文件对话框
+  - action: keyboard_press
+    key: escape
+    wait: 1.0
+  # 点击菜单图标，验证菜单弹出
+  - action: dtk_main_menu
+    items:
+    - 搜索
+    wait: 2.0
+  # 关闭菜单
+  - action: keyboard_press
+    key: escape
+    wait: 1.0
+  assert_steps:
+  # 验证无文档页面可见（未打开文档状态）
+  - action: assert_element
+    ref: n3
+    selector:
+      name: Form_CentralNavPage
+      role: form
+  # 验证选择文件按钮可见
+  - action: assert_element
+    ref: n6
+    selector:
+      name: Button_SelectFile
+      accessible_id: SelectFileBtn
+teardown:
+- action: session_stop

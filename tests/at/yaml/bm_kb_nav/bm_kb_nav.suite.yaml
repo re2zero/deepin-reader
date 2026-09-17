@@ -1,0 +1,79 @@
+name: bm_kb_nav_suite
+app: deepin-reader
+description: ''
+module: bm_kb_nav
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+- id: suite_bm_kb_nav_s1
+  name: bm_kb_nav — 书签缩略图上下方向键切换
+  description: 选中书签缩略图后按上下方向键切换书签，文档跟随变化
+  tags: []
+  steps:
+  # 展开左侧栏
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    wait: 2.0
+  # 切换到书签视图
+  - action: mouse_click
+    ref: n16
+    selector:
+      name: Button_bookmark
+      accessible_id: bookmark
+    wait: 2.0
+  # 添加第一个书签
+  - action: mouse_click
+    ref: n22
+    selector:
+      name: Button_BookmarkAdd
+      accessible_id: BookmarkAddBtn
+    wait: 1.0
+  # 添加第二个书签
+  - action: mouse_click
+    ref: n22
+    selector:
+      name: Button_BookmarkAdd
+      accessible_id: BookmarkAddBtn
+    wait: 1.0
+  # 选中书签缩略图
+  - action: mouse_click
+    ref: n20
+    selector:
+      name: View_ImageList
+      accessible_id: PImageListView
+      child_index: 0
+    wait: 1.0
+  # 按下方向键切换到下一个书签
+  - action: keyboard_press
+    key: down
+    wait: 1.0
+  # 按上方向键切换回上一个书签
+  - action: keyboard_press
+    key: up
+    wait: 1.0
+  assert_steps:
+  # 验证文档页面可见（跟随切换正常）
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+  # 验证书签列表仍然存在
+  - action: assert_element
+    ref: n20
+    selector:
+      name: View_ImageList
+      accessible_id: PImageListView
+      role: list
+teardown:
+- action: session_stop

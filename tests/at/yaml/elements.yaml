@@ -1,7 +1,8 @@
 elements:
-  n6:
-    name: Button_SelectFile
-  n224:
+ n6:
+   name: Button_SelectFile
+   accessible_id: SelectFileBtn
+ n224:
     name: Button_ThumbnailToggle
     accessible_id: Thumbnails
   n14:
@@ -95,10 +96,11 @@ elements:
   n19:
     name: Form_BookMarkWidget
     role: form
-  n20:
-    name: View_ImageList
-    role: list
-  n24:
+ n20:
+   name: View_ImageList
+   role: list
+   accessible_id: PImageListView
+ n24:
     name: Form_NotesWidget
     role: form
   n25:

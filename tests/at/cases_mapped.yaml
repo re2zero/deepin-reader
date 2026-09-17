@@ -2091,3 +2091,242 @@ cases:
       name: Form_CentralDocPage
       role: form
     action: assert_element
+- id: suite_bm_del_s1
+  name: bm_del — 书签删除快捷键与点击跳转
+  module: bm_del
+  annotation:
+    测试界面: 左侧栏书签视图
+    测试功能: 书签删除快捷键与点击跳转
+    前置条件: deepin-reader 已打开文档且已有书签
+    AT元素: n224 (Thumbnails), n16 (bookmark), n22 (BookmarkAddBtn), n20 (PImageListView)
+  steps:
+  - step_type: action
+    description: 展开左侧栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: action
+    description: 切换到书签视图
+    element_ref: n16
+    selector:
+      name: Button_bookmark
+      accessible_id: bookmark
+    action: mouse_click
+  - step_type: action
+    description: 添加第一个书签
+    element_ref: n22
+    selector:
+      name: Button_BookmarkAdd
+      accessible_id: BookmarkAddBtn
+    action: mouse_click
+  - step_type: action
+    description: 添加第二个书签
+    element_ref: n22
+    selector:
+      name: Button_BookmarkAdd
+      accessible_id: BookmarkAddBtn
+    action: mouse_click
+  - step_type: action
+    description: 选中书签缩略图
+    element_ref: n20
+    selector:
+      name: View_ImageList
+      accessible_id: PImageListView
+      child_index: 0
+    action: mouse_click
+  - step_type: action
+    description: 按Delete键删除书签
+    action: keyboard_press
+    key: delete
+  - step_type: action
+    description: 点击剩余书签缩略图验证跳转
+    element_ref: n20
+    selector:
+      name: View_ImageList
+      accessible_id: PImageListView
+      child_index: 0
+    action: mouse_click
+  - step_type: assert
+    description: 文档页面可见（跳转成功）
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+  - step_type: assert
+    description: 书签列表仍存在
+    element_ref: n20
+    selector:
+      name: View_ImageList
+      accessible_id: PImageListView
+      role: list
+    action: assert_element
+- id: suite_bm_kb_nav_s1
+  name: bm_kb_nav — 书签缩略图上下方向键切换
+  module: bm_kb_nav
+  annotation:
+    测试界面: 左侧栏书签视图
+    测试功能: 书签缩略图键盘方向键切换
+    前置条件: deepin-reader 已打开文档且已有多个书签
+    AT元素: n224 (Thumbnails), n16 (bookmark), n22 (BookmarkAddBtn), n20 (PImageListView)
+  steps:
+  - step_type: action
+    description: 展开左侧栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: action
+    description: 切换到书签视图
+    element_ref: n16
+    selector:
+      name: Button_bookmark
+      accessible_id: bookmark
+    action: mouse_click
+  - step_type: action
+    description: 添加第一个书签
+    element_ref: n22
+    selector:
+      name: Button_BookmarkAdd
+      accessible_id: BookmarkAddBtn
+    action: mouse_click
+  - step_type: action
+    description: 添加第二个书签
+    element_ref: n22
+    selector:
+      name: Button_BookmarkAdd
+      accessible_id: BookmarkAddBtn
+    action: mouse_click
+  - step_type: action
+    description: 选中书签缩略图
+    element_ref: n20
+    selector:
+      name: View_ImageList
+      accessible_id: PImageListView
+      child_index: 0
+    action: mouse_click
+  - step_type: action
+    description: 按下方向键切换到下一个书签
+    action: keyboard_press
+    key: down
+  - step_type: action
+    description: 按上方向键切换回上一个书签
+    action: keyboard_press
+    key: up
+  - step_type: assert
+    description: 文档页面可见（跟随切换正常）
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+  - step_type: assert
+    description: 书签列表仍然存在
+    element_ref: n20
+    selector:
+      name: View_ImageList
+      accessible_id: PImageListView
+      role: list
+    action: assert_element
+- id: suite_bm_open_fmt_s1
+  name: bm_open_fmt — 打开PDF文档
+  module: bm_open_fmt
+  annotation:
+    测试界面: 文档查看器主界面
+    测试功能: 打开PDF文档
+    前置条件: deepin-reader 已打开文档
+    AT元素: n8 (Form_CentralDocPage)
+  steps:
+  - step_type: assert
+    description: PDF文档页面可见
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+- id: suite_bm_open_fmt_s2
+  name: bm_open_fmt — 打开DOCX文档
+  module: bm_open_fmt
+  annotation:
+    测试界面: 文档查看器主界面
+    测试功能: 打开DOCX文档
+    前置条件: deepin-reader 已打开文档
+    AT元素: n8 (Form_CentralDocPage)
+  steps:
+  - step_type: action
+    description: 重新启动打开DOCX文档
+    action: session_start
+    command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.docx
+  - step_type: assert
+    description: DOCX文档页面可见
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+- id: suite_bm_open_fmt_s3
+  name: bm_open_fmt — 打开损坏文档提示异常
+  module: bm_open_fmt
+  annotation:
+    测试界面: 文档查看器主界面
+    测试功能: 打开损坏文档提示异常
+    前置条件: deepin-reader 已打开文档
+    AT元素: n268 (Tips, label, 异常提示)
+  steps:
+  - step_type: action
+    description: 重新启动打开损坏文档
+    action: session_start
+    command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/broken.pdf
+  - step_type: assert
+    description: 异常提示标签出现
+    element_ref: n268
+    selector:
+      name: Tips
+      role: label
+    action: assert_element
+- id: suite_bm_no_doc_s1
+  name: bm_no_doc — 未打开文档界面显示
+  module: bm_no_doc
+  annotation:
+    测试界面: 主界面无文档打开
+    测试功能: 未打开文档时界面显示
+    前置条件: deepin-reader 已启动未打开文档
+    AT元素: n6 (SelectFileBtn), n3 (Form_CentralNavPage)
+  steps:
+  - step_type: action
+    description: 点击工具栏左侧图标（选择文件按钮）
+    element_ref: n6
+    selector:
+      name: Button_SelectFile
+      accessible_id: SelectFileBtn
+    action: mouse_click
+  - step_type: action
+    description: 关闭可能弹出的文件对话框
+    action: keyboard_press
+    key: escape
+  - step_type: action
+    description: 点击菜单图标弹出菜单
+    action: dtk_main_menu
+    items:
+    - 搜索
+  - step_type: action
+    description: 关闭菜单
+    action: keyboard_press
+    key: escape
+  - step_type: assert
+    description: 无文档页面可见（未打开文档状态）
+    element_ref: n3
+    selector:
+      name: Form_CentralNavPage
+      role: form
+    action: assert_element
+  - step_type: assert
+    description: 选择文件按钮可见
+    element_ref: n6
+    selector:
+      name: Button_SelectFile
+      accessible_id: SelectFileBtn
+    action: assert_element
