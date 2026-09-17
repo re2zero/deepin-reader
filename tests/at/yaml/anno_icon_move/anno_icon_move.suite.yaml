@@ -1,0 +1,59 @@
+name: 图标注释移动_suite
+app: deepin-reader
+description: 图标注释移动限制（同页移动与跨页移动）
+module: 图标注释移动
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+# Case 1: 图标注释同页拖拽移动与跨页拖拽限制
+- id: suite_anno_icon_move_s1
+  name: 图标注释移动 — 同页拖拽与跨页限制
+  description: >-
+    图标注释拖拽移动：同页拖拽应成功移动位置，跨页拖拽应被限制。
+    AT-SPI 框架无 mouse_drag API，拖拽操作不支持自动化，本用例标记为 unsupported。
+  status: unsupported
+  tags: []
+  steps:
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+    wait: 2.0
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 添加注释
+    wait: 3.0
+  - action: mouse_click
+    ref: n265
+    selector:
+      name: PTextEdit
+      role: text
+  - action: keyboard_type_text
+    text: move-test
+    wait: 1.0
+  - action: mouse_click
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    wait: 1.0
+  # 以下步骤需要 mouse_drag 操作，AT-SPI 框架不支持
+  # 拖拽图标注释到同页其他位置 — unsupported (mouse_drag)
+  # 拖拽图标注释到其他页面 — unsupported (mouse_drag)
+  assert_steps:
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+teardown:
+- action: session_stop
