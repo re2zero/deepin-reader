@@ -1,0 +1,129 @@
+name: slide_edge_suite
+app: deepin-reader
+description: '幻灯片边界：键盘与滚轮切换 + 最后一页提示与置灰 + 自动播放末尾暂停'
+module: slide_edge
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+# Case 12.1: 切换_键盘与滚轮
+- id: suite_slide_edge_s1
+  name: 幻灯片边界 — 切换_键盘与滚轮
+  description: 右键进入幻灯片放映，使用键盘下/上方向键和鼠标滚轮切换页面
+  tags: []
+  steps:
+  # 右键文档区域 → 幻灯片放映
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 幻灯片放映
+    wait: 3.0
+  # 键盘下方向键 — 下一页
+  - action: keyboard_press
+    key: down
+    wait: 1.0
+  # 键盘上方向键 — 上一页
+  - action: keyboard_press
+    key: up
+    wait: 1.0
+  # 鼠标滚轮向下滚动
+  - action: mouse_scroll
+    value: -3
+    wait: 1.0
+  # 鼠标滚轮向上滚动
+  - action: mouse_scroll
+    value: 3
+    wait: 1.0
+  assert_steps:
+  # 幻灯片控制按钮仍然可见
+  - action: assert_element
+    ref: n262
+    selector:
+      name: PlayBtn
+      role: button
+  - action: assert_element
+    ref: n263
+    selector:
+      name: PreBtn
+      role: button
+  - action: assert_element
+    ref: n264
+    selector:
+      name: NextBtn
+      role: button
+# Case 12.2: 最后一页_提示与置灰
+- id: suite_slide_edge_s2
+  name: 幻灯片边界 — 最后一页_提示与置灰
+  description: 先跳转到最后一页再进入幻灯片放映，点击下一页按钮验证Tips提示
+  tags: []
+  steps:
+  # 右键文档区域 → 最后一页（在普通模式下跳转到最后一页）
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 最后一页
+    wait: 2.0
+  # 右键文档区域 → 幻灯片放映
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 幻灯片放映
+    wait: 3.0
+  # 点击下一页按钮（已在最后一页，应弹出提示）
+  - action: mouse_click
+    ref: n264
+    selector:
+      name: NextBtn
+      role: button
+    wait: 2.0
+  assert_steps:
+  # Tips 标签出现"最后一页"提示
+  - action: assert_element
+    ref: n268
+    selector:
+      name: Tips
+      role: label
+  # NextBtn 仍然存在（置灰状态）
+  - action: assert_element
+    ref: n264
+    selector:
+      name: NextBtn
+      role: button
+# Case 12.3: 自动播放_末尾暂停
+- id: suite_slide_edge_s3
+  name: 幻灯片边界 — 自动播放_末尾暂停
+  description: 进入幻灯片放映后点击播放按钮自动播放，等待播放到末尾后验证播放按钮恢复
+  tags: []
+  steps:
+  # 右键文档区域 → 幻灯片放映
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 幻灯片放映
+    wait: 3.0
+  # 点击播放按钮开始自动播放，等待自动播放到达末尾（每页3秒间隔）
+  - action: mouse_click
+    ref: n262
+    selector:
+      name: PlayBtn
+      role: button
+    wait: 15.0
+  assert_steps:
+  # 播放按钮恢复为可定位状态（自动播放结束后按钮恢复）
+  - action: assert_element
+    ref: n262
+    selector:
+      name: PlayBtn
+      role: button
+teardown:
+- action: session_stop

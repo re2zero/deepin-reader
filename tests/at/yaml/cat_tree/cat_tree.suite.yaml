@@ -1,0 +1,83 @@
+name: cat_tree_suite
+app: deepin-reader
+description: '目录树层级收起展开 + 不可读取页数文档跳转'
+module: cat_tree
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+# Case 10.1: 层级收起展开
+- id: suite_cat_tree_s1
+  name: 目录 — 层级收起展开
+  description: 打开侧边栏目录视图，点击目录树节点展开/收起子层级
+  tags: []
+  steps:
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+    wait: 2.0
+  - action: mouse_click
+    ref: n15
+    selector:
+      name: Button_catalog
+    wait: 1.0
+  # 点击目录树顶层节点展开子层级
+  - action: mouse_click
+    ref: n163
+    selector:
+      name: View_CatalogTree
+      accessible_id: PTree
+  # 再次点击收起
+  - action: mouse_click
+    ref: n163
+    selector:
+      name: View_CatalogTree
+      accessible_id: PTree
+  assert_steps:
+  - action: assert_element
+    ref: n163
+    selector:
+      name: View_CatalogTree
+      accessible_id: PTree
+# Case 10.2: 不可读取页数_跳转
+- id: suite_cat_tree_s2
+  name: 目录 — 不可读取页数文档跳转
+  description: 打开无法读取页数的文档(broken.pdf)，在页码输入框输入页码3并回车，验证Tips提示
+  tags: []
+  steps:
+  # 重启应用打开 broken.pdf
+  - action: session_start
+    command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/broken.pdf
+    wait: 3.0
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+    wait: 2.0
+  # 点击页码输入框
+  - action: mouse_click
+    ref: n156
+    selector:
+      name: pageEdit
+      role: text
+  - action: keyboard_type_text
+    text: '3'
+  - action: keyboard_press
+    key: return
+    wait: 2.0
+  assert_steps:
+  # Tips 标签出现提示信息
+  - action: assert_element
+    ref: n268
+    selector:
+      name: Tips
+      role: label
+teardown:
+- action: session_stop

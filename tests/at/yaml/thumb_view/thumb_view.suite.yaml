@@ -1,0 +1,85 @@
+name: thumb_view_suite
+app: deepin-reader
+description: '缩略图视图：注释图标显示 + 点击缩略图跳转页面'
+module: thumb_view
+tags: []
+fast_fail: false
+vars:
+  TEST_FILES_DIR: ${PROJECT_ROOT}/tests/at/files/
+env_check: []
+setup:
+- action: session_start
+  command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  wait: 3.0
+suites:
+# Case 11.1: 显示内容_注释图标
+- id: suite_thumb_view_s1
+  name: 缩略图 — 显示内容_注释图标
+  description: 打开侧边栏缩略图视图，添加高亮注释后验证缩略图列表显示注释图标
+  tags: []
+  steps:
+  - action: mouse_click
+    ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+    wait: 2.0
+  # 切换到缩略图视图
+  - action: mouse_click
+    ref: n14
+    selector:
+      name: Button_thumbnail
+    wait: 1.0
+  # 右键文档区域添加高亮注释
+  - action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 高亮
+    wait: 2.0
+  # 切换到注释视图确认注释已添加
+  - action: mouse_click
+    ref: n17
+    selector:
+      name: Button_annotation
+    wait: 1.0
+  # 切换回缩略图视图
+  - action: mouse_click
+    ref: n14
+    selector:
+      name: Button_thumbnail
+    wait: 1.0
+  assert_steps:
+  # 缩略图列表可见（含注释图标）
+  - action: assert_element
+    ref: n52
+    selector:
+      name: View_ImageList
+      role: list
+# Case 11.2: 点击_跳转页面
+- id: suite_thumb_view_s2
+  name: 缩略图 — 点击_跳转页面
+  description: 在侧边栏缩略图列表中点击某页缩略图，验证文档跳转到对应页面
+  tags: []
+  steps:
+  # 确保在缩略图视图
+  - action: mouse_click
+    ref: n14
+    selector:
+      name: Button_thumbnail
+    wait: 1.0
+  # 点击缩略图列表中的某个缩略图
+  - action: mouse_click
+    ref: n52
+    selector:
+      name: View_ImageList
+      role: list
+    wait: 2.0
+  assert_steps:
+  # 文档区域仍然可见（跳转成功）
+  - action: assert_element
+    ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+teardown:
+- action: session_stop

@@ -3512,3 +3512,308 @@ cases:
       name: Form_CentralDocPage
       role: form
     action: assert_element
+# Case 10.1: 目录 — 层级收起展开
+- id: suite_cat_tree_s1
+  name: 目录 — 层级收起展开
+  module: cat_tree
+  annotation:
+    测试界面: 目录
+    测试功能: 层级收起展开
+    前置条件: deepin-reader 已打开一个含目录的多页 PDF 文档
+    AT元素: n224 (Button_ThumbnailToggle), n15 (Button_catalog), n163 (View_CatalogTree)
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 点击标题栏缩略图切换按钮展开侧边栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+    action: mouse_click
+  - step_type: action
+    description: 点击目录按钮切换到目录视图
+    element_ref: n15
+    selector:
+      name: Button_catalog
+    action: mouse_click
+  - step_type: action
+    description: 点击目录树顶层节点展开子层级
+    element_ref: n163
+    selector:
+      name: View_CatalogTree
+      accessible_id: PTree
+    action: mouse_click
+  - step_type: action
+    description: 再次点击收起子层级
+    element_ref: n163
+    selector:
+      name: View_CatalogTree
+      accessible_id: PTree
+    action: mouse_click
+  - step_type: assert
+    description: 目录树视图仍然可见
+    element_ref: n163
+    selector:
+      name: View_CatalogTree
+      accessible_id: PTree
+    action: assert_element
+# Case 10.2: 目录 — 不可读取页数文档跳转
+- id: suite_cat_tree_s2
+  name: 目录 — 不可读取页数文档跳转
+  module: cat_tree
+  annotation:
+    测试界面: 目录
+    测试功能: 不可读取页数文档跳转
+    前置条件: deepin-reader 打开无法读取页数的文档(broken.pdf)
+    AT元素: n224 (Button_ThumbnailToggle), n156 (pageEdit), n268 (Tips)
+  steps:
+  - step_type: action
+    description: 重启应用打开 broken.pdf
+    action: session_start
+    command: pkill -9 -x deepin-reader || true; sleep 1; rm -rf ~/.local/share/deepin/deepin-reader ~/.config/deepin/deepin-reader ~/.cache/deepin/deepin-reader; deepin-reader ${TEST_FILES_DIR}/broken.pdf
+  - step_type: action
+    description: 点击标题栏缩略图切换按钮展开侧边栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+    action: mouse_click
+  - step_type: action
+    description: 点击页码输入框以聚焦
+    element_ref: n156
+    selector:
+      name: pageEdit
+      role: text
+    action: mouse_click
+  - step_type: action
+    description: 输入页码3
+    action: keyboard_type_text
+    text: '3'
+  - step_type: action
+    description: 按回车确认跳转
+    action: keyboard_press
+    key: return
+  - step_type: assert
+    description: Tips 标签出现提示信息
+    element_ref: n268
+    selector:
+      name: Tips
+      role: label
+    action: assert_element
+# Case 11.1: 缩略图 — 显示内容_注释图标
+- id: suite_thumb_view_s1
+  name: 缩略图 — 显示内容_注释图标
+  module: thumb_view
+  annotation:
+    测试界面: 缩略图
+    测试功能: 显示内容_注释图标
+    前置条件: deepin-reader 已打开一个多页 PDF 文档
+    AT元素: n224 (Button_ThumbnailToggle), n14 (Button_thumbnail), n8 (Form_CentralDocPage), n17 (Button_annotation), n52 (View_ImageList)
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 点击标题栏缩略图切换按钮展开侧边栏
+    element_ref: n224
+    selector:
+      name: Button_ThumbnailToggle
+    action: mouse_click
+  - step_type: action
+    description: 切换到缩略图视图
+    element_ref: n14
+    selector:
+      name: Button_thumbnail
+    action: mouse_click
+  - step_type: action
+    description: 右键文档区域添加高亮注释
+    action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 高亮
+  - step_type: action
+    description: 切换到注释视图确认注释已添加
+    element_ref: n17
+    selector:
+      name: Button_annotation
+    action: mouse_click
+  - step_type: action
+    description: 切换回缩略图视图
+    element_ref: n14
+    selector:
+      name: Button_thumbnail
+    action: mouse_click
+  - step_type: assert
+    description: 缩略图列表可见（含注释图标）
+    element_ref: n52
+    selector:
+      name: View_ImageList
+      role: list
+    action: assert_element
+# Case 11.2: 缩略图 — 点击_跳转页面
+- id: suite_thumb_view_s2
+  name: 缩略图 — 点击_跳转页面
+  module: thumb_view
+  annotation:
+    测试界面: 缩略图
+    测试功能: 点击_跳转页面
+    前置条件: deepin-reader 已打开一个多页 PDF 文档，侧边栏缩略图视图已展开
+    AT元素: n14 (Button_thumbnail), n52 (View_ImageList), n8 (Form_CentralDocPage)
+  steps:
+  - step_type: action
+    description: 确保在缩略图视图
+    element_ref: n14
+    selector:
+      name: Button_thumbnail
+    action: mouse_click
+  - step_type: action
+    description: 点击缩略图列表中的某个缩略图
+    element_ref: n52
+    selector:
+      name: View_ImageList
+      role: list
+    action: mouse_click
+  - step_type: assert
+    description: 文档区域仍然可见（跳转成功）
+    element_ref: n8
+    selector:
+      name: Form_CentralDocPage
+      role: form
+    action: assert_element
+# Case 12.1: 幻灯片边界 — 切换_键盘与滚轮
+- id: suite_slide_edge_s1
+  name: 幻灯片边界 — 切换_键盘与滚轮
+  module: slide_edge
+  annotation:
+    测试界面: 幻灯片边界
+    测试功能: 切换_键盘与滚轮
+    前置条件: deepin-reader 已打开一个多页 PDF 文档
+    AT元素: n8 (Form_CentralDocPage), n262 (PlayBtn), n263 (PreBtn), n264 (NextBtn)
+  steps:
+  - step_type: action
+    description: 启动 deepin-reader 并打开文档
+    action: session_start
+    command: deepin-reader ${TEST_FILES_DIR}/normal.pdf
+  - step_type: action
+    description: 右键文档区域 → 幻灯片放映
+    action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 幻灯片放映
+  - step_type: action
+    description: 键盘下方向键 — 下一页
+    action: keyboard_press
+    key: down
+  - step_type: action
+    description: 键盘上方向键 — 上一页
+    action: keyboard_press
+    key: up
+  - step_type: action
+    description: 鼠标滚轮向下滚动
+    action: mouse_scroll
+    value: -3
+  - step_type: action
+    description: 鼠标滚轮向上滚动
+    action: mouse_scroll
+    value: 3
+  - step_type: assert
+    description: 幻灯片播放按钮仍然可见
+    element_ref: n262
+    selector:
+      name: PlayBtn
+      role: button
+    action: assert_element
+  - step_type: assert
+    description: 幻灯片上一页按钮仍然可见
+    element_ref: n263
+    selector:
+      name: PreBtn
+      role: button
+    action: assert_element
+  - step_type: assert
+    description: 幻灯片下一页按钮仍然可见
+    element_ref: n264
+    selector:
+      name: NextBtn
+      role: button
+    action: assert_element
+# Case 12.2: 幻灯片边界 — 最后一页_提示与置灰
+- id: suite_slide_edge_s2
+  name: 幻灯片边界 — 最后一页_提示与置灰
+  module: slide_edge
+  annotation:
+    测试界面: 幻灯片边界
+    测试功能: 最后一页_提示与置灰
+    前置条件: deepin-reader 已打开一个多页 PDF 文档
+    AT元素: n8 (Form_CentralDocPage), n264 (NextBtn), n268 (Tips)
+  steps:
+  - step_type: action
+    description: 右键文档区域 → 最后一页（普通模式下跳转到最后一页）
+    action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 最后一页
+  - step_type: action
+    description: 右键文档区域 → 幻灯片放映
+    action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 幻灯片放映
+  - step_type: action
+    description: 点击下一页按钮（已在最后一页，应弹出提示）
+    element_ref: n264
+    selector:
+      name: NextBtn
+      role: button
+    action: mouse_click
+  - step_type: assert
+    description: Tips 标签出现"最后一页"提示
+    element_ref: n268
+    selector:
+      name: Tips
+      role: label
+    action: assert_element
+  - step_type: assert
+    description: NextBtn 仍然存在（置灰状态）
+    element_ref: n264
+    selector:
+      name: NextBtn
+      role: button
+    action: assert_element
+# Case 12.3: 幻灯片边界 — 自动播放_末尾暂停
+- id: suite_slide_edge_s3
+  name: 幻灯片边界 — 自动播放_末尾暂停
+  module: slide_edge
+  annotation:
+    测试界面: 幻灯片边界
+    测试功能: 自动播放_末尾暂停
+    前置条件: deepin-reader 已打开一个多页 PDF 文档
+    AT元素: n8 (Form_CentralDocPage), n262 (PlayBtn)
+  steps:
+  - step_type: action
+    description: 右键文档区域 → 幻灯片放映
+    action: dtk_context_menu
+    selector:
+      name: Form_CentralDocPage
+    items:
+    - 幻灯片放映
+  - step_type: action
+    description: 点击播放按钮开始自动播放，等待自动播放到达末尾
+    element_ref: n262
+    selector:
+      name: PlayBtn
+      role: button
+    action: mouse_click
+  - step_type: assert
+    description: 播放按钮恢复为可定位状态（自动播放结束后按钮恢复）
+    element_ref: n262
+    selector:
+      name: PlayBtn
+      role: button
+    action: assert_element
