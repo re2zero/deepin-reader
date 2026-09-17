@@ -2607,6 +2607,325 @@ cases:
     element_ref: n8
     selector:
       name: Form_CentralDocPage
+- id: suite_tab_add_scroll
+  name: 标签页管理 — 添加_多标签页与滚动
+  module: 标签页管理
+  annotation:
+    测试界面: 标签页管理
+    测试功能: 添加多标签页与标签栏左右滚动
+    前置条件: deepin-reader 已打开文档
+    AT元素: n208 (Form_DocTabBar), n209 (normal.pdf, page tab list), n210 (normal.pdf, page tab), n213 (DTabBarAddButton, button), n271 (向左滚动, button), n272 (向右滚动, button)
+    覆盖缺口: 1581071, 1581073, 1581293
+  steps:
+  - step_type: action
+    description: 通过主菜单点击新标签页
+    action: dtk_main_menu
+    items:
+    - 新标签页
+  - step_type: action
+    description: 文件对话框不支持自动化，按 Escape 关闭
+    action: keyboard_press
+    key: escape
+  - step_type: action
+    description: 点击标签栏右侧+按钮
+    element_ref: n213
+    selector:
+      name: DTabBarAddButton
+      role: button
+    action: mouse_click
+  - step_type: action
+    description: 文件对话框不支持自动化，按 Escape 关闭
+    action: keyboard_press
+    key: escape
+  - step_type: action
+    description: 点击左移按钮
+    element_ref: n271
+    selector:
+      name: 向左滚动
+      role: button
+    action: mouse_click
+  - step_type: action
+    description: 点击右移按钮
+    element_ref: n272
+    selector:
+      name: 向右滚动
+      role: button
+    action: mouse_click
+  - step_type: assert
+    description: 标签栏容器存在
+    element_ref: n208
+    selector:
+      name: Form_DocTabBar
+      role: form
+    action: assert_element
+  - step_type: assert
+    description: 标签页 normal.pdf 存在
+    element_ref: n210
+    selector:
+      name: normal.pdf
+      role: page tab
+    action: assert_element
+- id: suite_tab_close_save
+  name: 标签页管理 — 关闭_保存提示
+  module: 标签页管理
+  annotation:
+    测试界面: 标签页管理
+    测试功能: 关闭已修改文档标签页触发保存提示对话框，点击保存和不保存
+    前置条件: deepin-reader 已打开多份文档
+    AT元素: n208 (Form_DocTabBar), n210 (normal.pdf, page tab), n224 (Button_ThumbnailToggle), n16 (Button_bookmark), n22 (Button_BookmarkAdd), n273 (关闭, push button), n274 (保 存, push button), n275 (不保存, push button)
+    覆盖缺口: 1581269, 1581273
+  steps:
+  - step_type: action
+    description: 展开侧边栏
+    element_ref: n224
+    selector:
+      accessible_id: Thumbnails
+    action: mouse_click
+  - step_type: action
+    description: 切换到书签视图
+    element_ref: n16
+    selector:
+      accessible_id: bookmark
+    action: mouse_click
+  - step_type: action
+    description: 添加书签使文档变为已修改状态
+    element_ref: n22
+    selector:
+      accessible_id: BookmarkAddBtn
+    action: mouse_click
+  - step_type: action
+    description: 点击当前标签页关闭按钮触发保存提示对话框
+    element_ref: n273
+    selector:
+      name: 关闭
+      role: push button
+    action: mouse_click
+  - step_type: action
+    description: 点击保存对话框中的保存按钮
+    element_ref: n274
+    selector:
+      name: 保 存
+      role: push button
+    action: mouse_click
+  - step_type: action
+    description: 在新当前标签页添加书签使其变为已修改状态
+    element_ref: n22
+    selector:
+      accessible_id: BookmarkAddBtn
+    action: mouse_click
+  - step_type: action
+    description: 点击当前标签页关闭按钮触发保存提示对话框
+    element_ref: n273
+    selector:
+      name: 关闭
+      role: push button
+    action: mouse_click
+  - step_type: action
+    description: 点击保存对话框中的不保存按钮
+    element_ref: n275
+    selector:
+      name: 不保存
+      role: push button
+    action: mouse_click
+  - step_type: assert
+    description: 标签栏容器存在
+    element_ref: n208
+    selector:
+      name: Form_DocTabBar
+      role: form
+    action: assert_element
+  - step_type: assert
+    description: 标签页 normal.pdf 存在
+    element_ref: n210
+    selector:
+      name: normal.pdf
+      role: page tab
+    action: assert_element
+- id: suite_tab_drag_sort
+  name: 标签页管理 — 拖拽_排序调整
+  module: 标签页管理
+  status: unsupported
+  reason: AT-SPI 框架无 mouse_drag API，标签页拖拽排序及拖拽至窗口外操作不支持自动化
+  annotation:
+    测试界面: 标签页管理
+    测试功能: 长按标签页拖拽调整排序及拖拽至窗口外
+    前置条件: deepin-reader 已打开多份文档
+    AT元素: n208 (Form_DocTabBar)
+    覆盖缺口: 1581265, 1580989
+  steps:
+  - step_type: action
+    description: 长按标签页拖拽调整排序 — 不支持自动化
+    action: unsupported
+    reason: AT-SPI 框架无 mouse_drag API，标签页拖拽排序操作不支持自动化
+  - step_type: action
+    description: 拖拽标签页至窗口外 — 不支持自动化
+    action: unsupported
+    reason: AT-SPI 框架无 mouse_drag API，拖拽标签页至窗口外不支持自动化
+  - step_type: assert
+    description: 标签栏容器存在
+    element_ref: n208
+    selector:
+      name: Form_DocTabBar
+      role: form
+    action: assert_element
+- id: suite_tab_multi_window_drag
+  name: 标签页管理 — 多窗口_文档互拖
+  module: 标签页管理
+  status: unsupported
+  reason: AT-SPI 框架无 mouse_drag API，跨窗口文档拖拽不支持自动化
+  annotation:
+    测试界面: 标签页管理
+    测试功能: 双击文档打开、拖拽文档至另一窗口及窗口外
+    前置条件: deepin-reader 已打开多个窗口
+    AT元素: n0 (Form_DMainWindow)
+    覆盖缺口: 1581089, 1581087, 1581085, 1581083, 1580603
+  steps:
+  - step_type: action
+    description: 双击另一份文档 — 不支持自动化
+    action: unsupported
+    reason: AT-SPI 框架无 mouse_drag API，双击文档及跨窗口拖拽操作不支持自动化
+  - step_type: action
+    description: 拖拽文档至另一窗口 — 不支持自动化
+    action: unsupported
+    reason: AT-SPI 框架无 mouse_drag API，拖拽文档至另一窗口不支持自动化
+  - step_type: action
+    description: 拖拽文档至窗口外 — 不支持自动化
+    action: unsupported
+    reason: AT-SPI 框架无 mouse_drag API，拖拽文档至窗口外不支持自动化
+  - step_type: assert
+    description: 主窗口存在
+    element_ref: n0
+    selector:
+      name: Form_DMainWindow
+      role: form
+    action: assert_element
+- id: suite_tab_search_independent
+  name: 标签页管理 — 多标签页_搜索独立
+  module: 标签页管理
+  annotation:
+    测试界面: 标签页管理
+    测试功能: 在不同标签页中独立搜索，点击当前页搜索框关闭按钮仅关闭当前页搜索
+    前置条件: deepin-reader 已打开多个标签页
+    AT元素: n210 (normal.pdf, page tab), n243 (DLineEditChildLineEdit, text), n257 (FindPrevButton, button), n258 (FindNextButton, button), n276 (closeButton)
+    覆盖缺口: 1581079, 1581077
+  steps:
+  - step_type: action
+    description: 标签页1通过主菜单打开搜索
+    action: dtk_main_menu
+    items:
+    - 搜索
+  - step_type: action
+    description: 输入搜索关键字
+    action: keyboard_type_text
+    text: normal
+  - step_type: action
+    description: 按回车执行搜索
+    action: keyboard_press
+    key: return
+  - step_type: action
+    description: 切换到另一个标签页
+    element_ref: n210
+    selector:
+      name: normal.pdf
+      role: page tab
+    action: mouse_click
+  - step_type: action
+    description: 标签页2通过主菜单打开搜索
+    action: dtk_main_menu
+    items:
+    - 搜索
+  - step_type: action
+    description: 输入不同的搜索关键字
+    action: keyboard_type_text
+    text: test
+  - step_type: action
+    description: 按回车执行搜索
+    action: keyboard_press
+    key: return
+  - step_type: action
+    description: 点击当前页搜索框关闭按钮
+    element_ref: n276
+    selector:
+      accessible_id: closeButton
+    action: mouse_click
+  - step_type: assert
+    description: 搜索输入框存在
+    element_ref: n243
+    selector:
+      name: DLineEditChildLineEdit
+      role: text
+    action: assert_element
+  - step_type: assert
+    description: 上一个搜索按钮存在
+    element_ref: n257
+    selector:
+      name: FindPrevButton
+      role: button
+    action: assert_element
+  - step_type: assert
+    description: 下一个搜索按钮存在
+    element_ref: n258
+    selector:
+      name: FindNextButton
+      role: button
+    action: assert_element
+- id: suite_tab_drag_functional
+  name: 标签页管理 — 拖拽文档后_功能正常
+  module: 标签页管理
+  status: unsupported
+  reason: AT-SPI 框架无 mouse_drag API，拖拽文档至窗口操作不支持自动化，后续功能验证无法执行
+  annotation:
+    测试界面: 标签页管理
+    测试功能: 拖拽文档至窗口后点击各功能按钮验证功能正常
+    前置条件: deepin-reader 已打开文档
+    AT元素: n0 (Form_DMainWindow)
+    覆盖缺口: 1580989
+  steps:
+  - step_type: action
+    description: 拖拽文档至窗口 — 不支持自动化
+    action: unsupported
+    reason: AT-SPI 框架无 mouse_drag API，拖拽文档至窗口操作不支持自动化
+  - step_type: action
+    description: 点击各功能按钮 — 拖拽前置条件无法满足
+    action: unsupported
+    reason: 拖拽前置条件无法自动化，后续功能验证无法执行
+  - step_type: assert
+    description: 主窗口存在
+    element_ref: n0
+    selector:
+      name: Form_DMainWindow
+      role: form
+    action: assert_element
+- id: suite_tab_new_window_open
+  name: 标签页管理 — 新窗口_打开文档
+  module: 标签页管理
+  annotation:
+    测试界面: 标签页管理
+    测试功能: 通过主菜单新建窗口，在新窗口中打开文档
+    前置条件: deepin-reader 已打开文档
+    AT元素: n0 (Form_DMainWindow), n6 (Button_SelectFile)
+    覆盖缺口: 1580603
+  steps:
+  - step_type: action
+    description: 通过主菜单新建窗口
+    action: dtk_main_menu
+    items:
+    - 新窗口
+  - step_type: action
+    description: 新窗口已创建，点击打开文件按钮
+    element_ref: n6
+    selector:
+      name: Button_SelectFile
+    action: mouse_click
+  - step_type: action
+    description: 文件对话框不支持自动化，按 Escape 关闭
+    action: keyboard_press
+    key: escape
+  - step_type: assert
+    description: 主窗口存在
+    element_ref: n0
+    selector:
+      name: Form_DMainWindow
       role: form
     action: assert_element
 # ===== 阶段七：主菜单（6 cases，覆盖 14 条缺口）=====

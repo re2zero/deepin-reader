@@ -220,3 +220,21 @@ elements:
     name: SP_IncreaseElement
     accessible_id: SP_IncreaseElement
     role: button
+  n271:
+    name: 向左滚动
+    role: button
+  n272:
+    name: 向右滚动
+    role: button
+  n273:
+    name: 关闭
+    role: push button
+  n274:
+    name: 保 存
+    role: push button
+  n275:
+    name: 不保存
+    role: push button
+  n276:
+    name: closeButton
+    accessible_id: closeButton
