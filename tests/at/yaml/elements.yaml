@@ -3,16 +3,21 @@ elements:
     name: Button_SelectFile
   n224:
     name: Button_ThumbnailToggle
+    accessible_id: Thumbnails
   n14:
     name: Button_thumbnail
   n15:
     name: Button_catalog
+    accessible_id: catalog
   n163:
     name: View_CatalogTree
+    accessible_id: PTree
   n16:
     name: Button_bookmark
+    accessible_id: bookmark
   n22:
     name: Button_BookmarkAdd
+    accessible_id: BookmarkAddBtn
   n17:
     name: Button_annotation
   n49:
@@ -40,6 +45,7 @@ elements:
     role: button
   n227:
     name: DLineEditChildLineEdit
+    accessible_id: scaleEdit
   Form_CentralDocPage:
     name: Form_CentralDocPage
   Form_scaleEdit_P:
@@ -116,6 +122,7 @@ elements:
   n159:
     name: Button_ThumbnailNext
     role: button
+    accessible_id: thumbnailNextBtn
   n161:
     name: Form_CatalogWidget
     role: form

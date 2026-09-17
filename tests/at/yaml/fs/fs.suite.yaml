@@ -22,7 +22,7 @@ suites:
   - action: mouse_click
     ref: n224
     selector:
-      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
     wait: 2.0
   - action: keyboard_press
     key: f11
@@ -40,7 +40,7 @@ suites:
   - action: mouse_click
     ref: n224
     selector:
-      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
     wait: 2.0
   - action: keyboard_press
     key: f11
@@ -123,7 +123,7 @@ suites:
   - action: mouse_click
     ref: n224
     selector:
-      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
     wait: 2.0
   # 点击新建标签页按钮
   - action: mouse_click
@@ -172,7 +172,7 @@ suites:
   - action: mouse_click
     ref: n159
     selector:
-      name: Button_ThumbnailNext
+      accessible_id: thumbnailNextBtn
     wait: 1.0
   - action: keyboard_press
     key: f11
@@ -190,17 +190,17 @@ suites:
   - action: mouse_click
     ref: n224
     selector:
-      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
     wait: 2.0
   - action: mouse_click
     ref: n15
     selector:
-      name: Button_catalog
+      accessible_id: catalog
     wait: 1.0
   - action: mouse_click
     ref: n163
     selector:
-      name: View_CatalogTree
+      accessible_id: PTree
     wait: 1.0
   - action: keyboard_press
     key: f11
@@ -218,17 +218,17 @@ suites:
   - action: mouse_click
     ref: n224
     selector:
-      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
     wait: 2.0
   - action: mouse_click
     ref: n16
     selector:
-      name: Button_bookmark
+      accessible_id: bookmark
     wait: 1.0
   - action: mouse_click
     ref: n22
     selector:
-      name: Button_BookmarkAdd
+      accessible_id: BookmarkAddBtn
     wait: 1.0
   - action: keyboard_press
     key: f11
@@ -307,7 +307,7 @@ suites:
   - action: mouse_click
     ref: n227
     selector:
-      name: DLineEditChildLineEdit
+      accessible_id: scaleEdit
     wait: 1.0
   - action: keyboard_type_text
     text: '120'

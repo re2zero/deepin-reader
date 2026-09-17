@@ -920,7 +920,7 @@ cases:
     description: 点击缩略图切换按钮隐藏侧边栏
     element_ref: n224
     selector:
-      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
     action: mouse_click
   - step_type: action
     description: 按F11进入全屏
@@ -941,7 +941,7 @@ cases:
     description: 点击缩略图切换按钮展开侧边栏
     element_ref: n224
     selector:
-      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
     action: mouse_click
   - step_type: action
     description: 展开侧边栏后按F11进入全屏
@@ -1064,7 +1064,7 @@ cases:
     description: 点击缩略图切换按钮
     element_ref: n224
     selector:
-      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
     action: mouse_click
   - step_type: action
     description: 点击新建标签页按钮
@@ -1126,7 +1126,7 @@ cases:
     description: 翻到下一页
     element_ref: n159
     selector:
-      name: Button_ThumbnailNext
+      accessible_id: thumbnailNextBtn
     action: mouse_click
   - step_type: action
     description: 翻页后按F11退出全屏
@@ -1147,19 +1147,19 @@ cases:
     description: 展开侧边栏并切换到目录视图
     element_ref: n224
     selector:
-      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
     action: mouse_click
   - step_type: action
     description: 点击目录按钮
     element_ref: n15
     selector:
-      name: Button_catalog
+      accessible_id: catalog
     action: mouse_click
   - step_type: action
     description: 点击目录树
     element_ref: n163
     selector:
-      name: View_CatalogTree
+      accessible_id: PTree
     action: mouse_click
   - step_type: action
     description: 选中目录后按F11退出全屏
@@ -1180,19 +1180,19 @@ cases:
     description: 展开侧边栏并切换到书签视图
     element_ref: n224
     selector:
-      name: Button_ThumbnailToggle
+      accessible_id: Thumbnails
     action: mouse_click
   - step_type: action
     description: 点击书签按钮
     element_ref: n16
     selector:
-      name: Button_bookmark
+      accessible_id: bookmark
     action: mouse_click
   - step_type: action
     description: 点击添加书签按钮
     element_ref: n22
     selector:
-      name: Button_BookmarkAdd
+      accessible_id: BookmarkAddBtn
     action: mouse_click
   - step_type: action
     description: 添加书签后按F11退出全屏
@@ -1288,7 +1288,7 @@ cases:
     description: 点击缩放输入框
     element_ref: n227
     selector:
-      name: DLineEditChildLineEdit
+      accessible_id: scaleEdit
     action: mouse_click
   - step_type: action
     description: 输入缩放比例
